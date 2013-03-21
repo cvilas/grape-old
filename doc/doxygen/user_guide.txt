@@ -1,0 +1,54 @@
+A Brief User's Guide to Setting Up Doxygen for a Project
+========================================================
+
+1. Getting started
+------------------
+
+Install the following packages via Synaptic:
+	Doxygen
+	graphviz
+
+Copy the following contents from this directory to your source tree (recommended
+location <project>/doc/
+	images
+	templates
+	doxygen.cfg
+	doxydoc.h
+
+
+2. Organise documentation structure
+-----------------------------------
+
+A very useful feature of Doxygen is that it allows grouping bits of documentation 
+into categories (modules, member groups and pages - see http://www.doxygen.nl/grouping.html). 
+Give some thought to how you should organise your documentation. The structure of the 
+documentation can be used to reveal the structure of the software (for example, 
+by grouping documentation of related classes together), hence, making it easier for 
+the user to follow the design of the software and to find related information. Once you 
+have a structure planned out, modify the following files to implement it:
+
+doxydoc.h: 
+	- Add documentation that goes on the Main Page.
+	- Define top level groups that will be shown in the Modules page
+	- Revisit this file periodically during software implementation to
+	  update sections if required. Groups can be defined anywhere in the
+	  source code.
+
+doxygen.cfg:
+	- Modify to suit your project. At the very least, you will need to 
+	  change the following tags:
+		PROJECT_NAME
+		INPUT 
+		OUTPUT_DIRECTORY
+	- When adding new files to the source tree, update the INPUT tag to explicitly 
+	  specify path to them to ensure doxygen will process them. You could also 
+	  set a top level directory as INPUt and set the RECURSIVE tag to YES to 
+	  recurse into sub-directories and blindly process all files. But this may
+	  end up doing more harm than good by cluttering up the output generated
+	  by doxygen. 
+
+3. Document your source code
+----------------------------
+Follow the company coding style for documentation. Otherwise, pick one of the doxygen supported
+styles. 
+

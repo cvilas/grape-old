@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#location for documentation files
+DOC_OUTPUT_DIR="./"
+
+#update sources from svn
+
+#remove old docs
+
+#doxygenate. Not sure if two passes is better than one.
+doxygen doxygen.cfg
+doxygen doxygen.cfg
