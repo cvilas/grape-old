@@ -19,9 +19,6 @@ namespace Grape
 /// \class IPort
 /// \ingroup io
 /// \brief Abtract interface definition for communication ports
-/// \todo 
-/// - clear out stringstream every time new error is set, but avoid unnecessary memory allocation
-/// - convenience function to set error string and code
 class IPort
 {
 public:
@@ -96,7 +93,7 @@ private:
 std::string IPort::getLastError(int& errorCode)
 //-----------------------------------------------------------------------------
 {
-    errorCode = _errorCode;
+    _errorCode = errorCode;
     return _errorStream.str();
 }
 
