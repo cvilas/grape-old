@@ -16,6 +16,12 @@ namespace Grape
 /// \class SerialPort
 /// \ingroup io
 /// \brief Serial port communication class
+/// \todo
+/// - set character size (cs5,6,7,8), stop bits, parity
+/// - set hardware, software or no flow control
+/// - set canonical or raw mode
+/// - other input options (mapping NL, CR, etc)
+/// - set read timeout
 class GRAPE_DLL_API SerialPort : public IPort
 {
 public:
@@ -48,13 +54,6 @@ public:
     /// \see open
     bool setBaudRate(BaudRate baud);
 
-    /// \todo
-    /// - set character size (cs5,6,7,8), stop bits, parity
-    /// - set hardware, software or no flow control
-    /// - set canonical or raw mode
-    /// - other input options (mapping NL, CR, etc)
-    /// - set read timeout
-
     bool open();
     void close();
     bool isOpen();
@@ -62,7 +61,6 @@ public:
     int write(const std::vector<char>& buffer);
     bool waitForRead(int timeoutMs);
     bool waitForWrite(int timeoutMs);
-    std::string getLastError(int& errorCode);
 
 private:
     class SerialPortP* _pImpl; //!< platform specific private implementation
