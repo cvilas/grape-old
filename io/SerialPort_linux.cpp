@@ -15,6 +15,10 @@
 #include <errno.h>
 #include <string.h>
 
+#ifndef FNDELAY
+#   define FNDELAY  O_NDELAY // required for android
+#endif
+
 namespace Grape
 {
 
