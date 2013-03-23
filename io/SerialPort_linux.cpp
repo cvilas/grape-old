@@ -30,6 +30,8 @@ public:
 public:
     SerialPortP() : _portFd(-1), _portName("") {}
     ~SerialPortP() {}
+    bool getAttributes(struct termios&);
+    bool setAttributes(struct termios&);
 public:
     int _portFd;
     std::string _portName;
@@ -38,6 +40,20 @@ public:
 
 // linux baud constants from termios.h
 const int SerialPortP::baud[SerialPort::BAUD_MAX] = {B4800, B9600, B19200, B38400, B57600, B115200, B230400};
+
+//==============================================================================
+bool SerialPortP::getAttributes(struct termios& tops)
+//==============================================================================
+{
+    return (tcgetattr (_portFd, &tops) == 0 );
+}
+
+//------------------------------------------------------------------------------
+bool SerialPortP::setAttributes(struct termios& tops)
+//------------------------------------------------------------------------------
+{
+    return ( tcsetattr (_portFd, TCSANOW, &tops) == 0 );
+}
 
 //==============================================================================
 SerialPort::SerialPort()
@@ -77,19 +93,121 @@ bool SerialPort::setBaudRate(BaudRate baud)
     }
 
     struct termios tops;
-    if( tcgetattr (_pImpl->_portFd, &tops) < 0 )        // get the current attributes
+    if( !_pImpl->getAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setBaudRate]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::setBaudRate(getAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
     cfsetispeed (&tops, SerialPortP::baud[baud]); // set input baud rate
     cfsetospeed (&tops, SerialPortP::baud[baud]); // set output baud rate
-    tops.c_cflag |= (CLOCAL | CREAD); // enable receiver and set local mode
 
-    if( tcsetattr (_pImpl->_portFd, TCSANOW, &tops) < 0 )       // set new attributes
+    if( !_pImpl->setAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setBaudRate]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::setBaudRate(setAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool SerialPort::setDataFormat(DataFormat fmt)
+//------------------------------------------------------------------------------
+{
+    struct termios tops;
+    if( !_pImpl->getAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    switch(fmt)
+    {
+    case D8N1:
+        tops.c_cflag &= ~PARENB;
+        tops.c_cflag &= ~CSTOPB;
+        tops.c_cflag &= ~CSIZE;
+        tops.c_cflag |= CS8;
+        tops.c_iflag &= ~(INPCK | ISTRIP);
+        break;
+    case D7E1:
+        tops.c_cflag |= PARENB;
+        tops.c_cflag &= ~PARODD;
+        tops.c_cflag &= ~CSTOPB;
+        tops.c_cflag &= ~CSIZE;
+        tops.c_cflag |= CS7;
+        tops.c_iflag |= (INPCK | ISTRIP);
+        break;
+    case D7O1:
+        tops.c_cflag |= PARENB;
+        tops.c_cflag |= PARODD;
+        tops.c_cflag &= ~CSTOPB;
+        tops.c_cflag &= ~CSIZE;
+        tops.c_cflag |= CS7;
+        tops.c_iflag |= (INPCK | ISTRIP);
+        break;
+    default:
+        setError(-1) << "[SerialPort::setDataFormat]: Unsupported data format" << std::endl;
+        return false;
+    };
+
+    if( !_pImpl->setAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool SerialPort::enableHardwareFlowControl(bool enable)
+//------------------------------------------------------------------------------
+{
+    struct termios tops;
+    if( !_pImpl->getAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    (enable) ? (tops.c_cflag |= CRTSCTS) : (tops.c_cflag &= ~CRTSCTS);
+
+    if( !_pImpl->setAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
+//------------------------------------------------------------------------------
+{
+    struct termios tops;
+    if( !_pImpl->getAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    if( enable )
+    {
+        tops.c_cflag |= (IXON | IXOFF | IXANY);
+        tops.c_cc[VSTART] = xon;
+        tops.c_cc[VSTOP] = xoff;
+    }
+    else
+    {
+        tops.c_cflag &= ~(IXON | IXOFF | IXANY);
+    }
+
+    if( !_pImpl->setAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -103,12 +221,51 @@ bool SerialPort::open()
     close();
 
     // try to open port
-    _pImpl->_portFd = ::open( _pImpl->_portName.c_str(), O_RDWR | O_NOCTTY /*| O_NDELAY*/);
-        // O_NDELAY: don't care what state the DCD line is in
+    _pImpl->_portFd = ::open( _pImpl->_portName.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+
+    // O_NDELAY: don't care what state the DCD signal line is in
 
     if( !isOpen() )
     {
         setError(-1) << "[SerialPort::open]: Unable to open " << _pImpl->_portName << std::endl;
+        return false;
+    }
+
+    // basic configuration
+    // - enable non-blocking read
+    // - enable raw data input mode (as opposed to canonical)
+    // - enable receiver, local mode
+
+    struct termios tops;
+    if( !_pImpl->getAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::open(getAttributes)]: " << strerror(errno) << std::endl;
+        return false;
+    }
+
+    fcntl(_pImpl->_portFd, F_SETFL, FNDELAY); // enable non-blocking read
+
+    // timeouts (VTIME) are ignored because we set the NDELAY option above
+    tops.c_cc[VMIN] = 0;    // minimum number of characters to read
+    tops.c_cc[VTIME] = 0;   // timeout, in tenth of seconds, waiting for first character
+
+    cfmakeraw(&tops); // raw mode
+
+    // the above sets the following terminal attributes
+    //termios_p->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+    //                | INLCR | IGNCR | ICRNL | IXON);
+    //termios_p->c_oflag &= ~OPOST;
+    //termios_p->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+    //termios_p->c_cflag &= ~(CSIZE | PARENB);
+    //termios_p->c_cflag |= CS8;
+
+    tops.c_cflag |= (CLOCAL | CREAD); // enable receiver and set local mode
+    tops.c_iflag |= IGNCR; // ignore any CRs
+
+    // apply..
+    if( !_pImpl->setAttributes(tops) )
+    {
+        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -215,69 +372,5 @@ bool SerialPort::waitForWrite(int timeoutMs)
 
     return true;
 }
-
-/*
-//------------------------------------------------------------------------------
-bool SerialPort::open(const std::string &port, unsigned int baud)
-//------------------------------------------------------------------------------
-{
-    // get current port settings
-    struct termios tops;
-    if( tcgetattr (portFd_, &tops) < 0 )        // get the current attributes
-    {
-        close();
-        std::cerr << "[SerialPort::open] Unable to read attributes for " << port << std::endl;
-        return false;
-    }
-
-    // set parameters for the serial port
-    // 230400 baud, 8 data bits (CS8), 1 stop bit(~CSTOPB),
-    // no parity(~PARENB), enable receiver (CREAD) and no flow control (~(IXON|IXOFF))
-
-    cfmakeraw(&tops);                                       // set up for binary IO
-    // above should be equivalent to:
-    //tops.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-    //        | INLCR | IGNCR | ICRNL | IXON);
-    //tops.c_oflag &= ~OPOST;
-    //tops.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-    //tops.c_cflag &= ~(CSIZE | PARENB);
-    //tops.c_cflag |= CS8;
-
-    cfsetispeed (&tops, baud);                             // set input baud rate
-    cfsetospeed (&tops, baud);                             // set output baud rate
-
-    // debug - minimal
-    tops.c_lflag &= ~ECHO; // turn off echo
-    tops.c_iflag |= IGNCR; // ignore any CRs
-
-    tops.c_cflag |= (CS8 | CLOCAL | CREAD);                 // 8 data bits, local connection, enable receive
-
-    tops.c_cflag &= ~(IXON|IXOFF);                          // disable flow control
-    tops.c_cflag &= ~(CSTOPB);                              // 1 stop bit
-    tops.c_cflag &= ~(PARENB);                              // no parity
-    tops.c_cc[VMIN] = 0;                                    // timeout (below) to receive the first character
-    tops.c_cc[VTIME] = (1 + RECV_TIMEOUT_SEC * 10);      // timeout, in tenth of seconds (100 ms)
-
-    if( tcsetattr (portFd_, TCSANOW, &tops) < 0 )       // set new attributes
-    {
-        close();
-        std::cerr << "[SerialPort::open] Unable to set attributes for " << port << std::endl;
-        return false;
-    }
-    if( tcflush(portFd_, TCIOFLUSH) < 0 )
-    {
-        close();
-        std::cerr << "[SerialPort::open] Unable to flush " << port << std::endl;
-        return false;
-    }
-
-    //memset(&tops, 0, sizeof(tops));
-    //tcgetattr(portFd_, &tops);
-    //speed_t baud = cfgetospeed( &tops);
-
-    return true;
-}
-
-*/
 
 } // Grape
