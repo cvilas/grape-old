@@ -80,15 +80,15 @@ public:
 
     /// \copydoc IPort::open()
     /// After open, the serial port must be configured with baud rate, data format, and
-    /// flow control options. A typical configuration is shown below:
+    /// flow control options. By default, all flow control is disabled.
+    /// A typical configuration is shown below:
     /// \code
     /// SerialPort port;
     /// port.setPortName("/dev/ttyS0"); // a serial port in a unix box
     /// port.open();
     /// port.setBaudRate(B9600);
     /// port.setDataFormat(D8N1);
-    /// port.enableHardwareFlowControl(false);
-    /// port.enableSoftwareFlowControl(false);
+    /// port.enableHardwareFlowControl(true);
     /// \endcode
     bool open();
 

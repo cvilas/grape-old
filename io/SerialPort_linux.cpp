@@ -239,6 +239,7 @@ bool SerialPort::open()
     // - enable non-blocking read
     // - enable raw data input mode (as opposed to canonical)
     // - enable receiver, local mode
+    // - no flow control
 
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
@@ -265,6 +266,9 @@ bool SerialPort::open()
 
     tops.c_cflag |= (CLOCAL | CREAD); // enable receiver and set local mode
     tops.c_iflag |= IGNCR; // ignore any CRs
+
+    tops.c_cflag &= ~CRTSCTS; // no hardware flow control
+    tops.c_cflag &= ~(IXON | IXOFF | IXANY); // no software flow control
 
     // apply..
     if( !_pImpl->setAttributes(tops) )
@@ -293,6 +297,8 @@ bool SerialPort::isOpen()
 {
     return (_pImpl->_portFd != SerialPortP::INVALID_PORT_HANDLE);
 }
+
+
 
 //------------------------------------------------------------------------------
 int SerialPort::read(std::vector<char>& buffer)
