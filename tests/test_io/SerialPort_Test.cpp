@@ -20,19 +20,7 @@ int SerialPort_Test()
         std::cerr << port.getLastError(code) << std::endl;
         return -1;
     }
-/*
-    if( !port.enableHardwareFlowControl(false) )
-    {
-        int code;
-        std::cerr << port.getLastError(code) << std::endl;
-    }
 
-    if( !port.enableSoftwareFlowControl(false) )
-    {
-        int code;
-        std::cerr << port.getLastError(code) << std::endl;
-    }
-*/
     if( !port.setBaudRate(Grape::SerialPort::B115200) )
     {
         int code;
@@ -91,6 +79,7 @@ int SerialPort_Test()
     do
     {
         /*
+         * Warning: cmd3 causes robot to move
         std::cout << "motors full forward..";
         if( port.write(cmd3) )
         {

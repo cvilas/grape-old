@@ -11,7 +11,7 @@ CONFIG += debug_and_release build_all resources thread
 win32: CONFIG += dll embed_manifest_dll embed_manifest_exe
 
 CONFIG += qt
-QT += xml core
+QT += core
 QT -= gui
 
 build_pass:CONFIG(debug, release|debug) {
