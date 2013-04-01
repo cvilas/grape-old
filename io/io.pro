@@ -10,7 +10,7 @@ include(../grapelibs.pri)
 
 # library specific settings
 win32:DEFINES -= _UNICODE UNICODE
-INCLUDEPATH += ../core
+INCLUDEPATH += ./ ../core
 HEADERS = IPort.h SerialPort.h
 SOURCES =
 win32:SOURCES += SerialPort_windows.cpp

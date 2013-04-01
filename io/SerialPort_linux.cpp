@@ -15,8 +15,8 @@
 #include <errno.h>
 #include <string.h>
 
-#ifndef FNDELAY
-#   define FNDELAY  O_NDELAY // required for android
+#ifdef __ANDROID__
+#   define FNDELAY  O_NDELAY
 #endif
 
 namespace Grape
@@ -172,7 +172,7 @@ bool SerialPort::enableHardwareFlowControl(bool enable)
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableHardwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -180,7 +180,7 @@ bool SerialPort::enableHardwareFlowControl(bool enable)
 
     if( !_pImpl->setAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableHardwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -194,7 +194,7 @@ bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableHardwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -211,7 +211,7 @@ bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
 
     if( !_pImpl->setAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableHardwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 

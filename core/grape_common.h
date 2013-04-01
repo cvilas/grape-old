@@ -1,3 +1,10 @@
+//==============================================================================
+// Project  : Grape
+// Module   : Core
+// File     : grape_common.h
+// Brief    : common header
+//==============================================================================
+
 #ifndef GRAPE_COMMON_H
 #define	GRAPE_COMMON_H
 

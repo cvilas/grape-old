@@ -19,7 +19,7 @@ namespace Grape
 /// \class IPort
 /// \ingroup io
 /// \brief Abtract interface definition for communication ports
-class IPort
+class GRAPE_DLL_API IPort
 {
 public:
 

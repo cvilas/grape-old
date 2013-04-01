@@ -21,7 +21,7 @@ build_pass:CONFIG(debug, release|debug) {
 }
 
 # target directories
-DESTDIR = ../lib/
+DESTDIR = ../lib
 DLLDESTDIR = ../bin/
 
 DEFINES +=
