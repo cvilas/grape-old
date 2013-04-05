@@ -95,6 +95,7 @@ public:
     void close();
     bool isOpen();
     int read(std::vector<char>& buffer);
+    int availableToRead();
     int write(const std::vector<char>& buffer);
     bool waitForRead(int timeoutMs);
     bool waitForWrite(int timeoutMs);

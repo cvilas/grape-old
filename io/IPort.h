@@ -45,6 +45,12 @@ public:
     /// \see waitForRead, getLastError
     virtual int read(std::vector<char>& buffer) = 0;
 
+    /// Find the number of bytes available and waiting to be read
+    /// without actually reading them.
+    /// \return The number of bytes available to read. -1 on error.
+    /// \see getLastError
+    virtual int availableToRead() = 0;
+
     /// Write data to the port
     /// \param buffer   Contains data to be written. Note that not all data may get written.
     ///                 Use return value for number of bytes actually written.

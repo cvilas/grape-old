@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += io
+SUBDIRS += core io
 
 OTHER_FILES += \
     doc/doxygen/doxydoc.h \

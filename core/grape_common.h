@@ -23,7 +23,12 @@
 
 namespace Grape
 {
-    // All Grape classes are contained in this namespace
+
+// All Grape classes are contained in this namespace
+
+/// Sleep for specified milliseconds
+/// \ingroup common
+GRAPE_DLL_API void milliSleep(unsigned int ms);
 
 } // Grape
 

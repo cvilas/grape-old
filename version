@@ -1,3 +1,4 @@
 # version numbers for various libraries in Grape
 
+CORE_VERSION = 0.5.0
 IO_VERSION = 0.5.0

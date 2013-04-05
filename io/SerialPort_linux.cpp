@@ -326,6 +326,21 @@ int SerialPort::read(std::vector<char>& buffer)
 }
 
 //------------------------------------------------------------------------------
+int SerialPort::availableToRead()
+//------------------------------------------------------------------------------
+{
+    int bytes = 0;
+
+    if( ioctl(_pImpl->_portFd, FIONREAD, &bytes) < 0 )
+    {
+        setError(errno) << "[SerialPort::availableToRead]: " << strerror(errno) << std::endl;
+        return -1;
+    }
+
+    return bytes;
+}
+
+//------------------------------------------------------------------------------
 int SerialPort::write(const std::vector<char>& buffer)
 //------------------------------------------------------------------------------
 {
