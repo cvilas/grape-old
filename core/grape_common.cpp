@@ -8,6 +8,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#else
+#include <unistd.h>
 #endif
 
 namespace Grape
@@ -17,9 +19,9 @@ void milliSleep(unsigned int ms)
 {
 
 #ifdef _WIN32
-	Sleep(1);
+    Sleep(ms);
 #else
-	usleep(1000);
+    usleep(1000*ms);
 #endif
 
 }
