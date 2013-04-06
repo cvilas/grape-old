@@ -50,6 +50,7 @@ public:
     /// \param port Port identifier. Example: /dev/ttyS0 (linux), COM1 (Windows)
     /// \return     true on success. False if a port is already open (call close() first)
     bool setPortName(const std::string& port);
+    std::string getPortName() const;
 
     /// Set baud rate. This works only if the port is already open.
     /// \param baud One of the supported baud rate constants

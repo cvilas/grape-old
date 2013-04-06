@@ -8,7 +8,7 @@
 #ifndef IPORT_H
 #define IPORT_H
 
-#include "grape_common.h"
+#include "core/grape_common.h"
 #include <vector>
 #include <sstream>
 #include <string>

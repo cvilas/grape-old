@@ -5,7 +5,7 @@
 // Brief    : Serial port test class
 //==============================================================================
 
-#include "SerialPort.h"
+#include "io/SerialPort.h"
 #include <iostream>
 
 int SerialPort_Test()

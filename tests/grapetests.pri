@@ -34,10 +34,10 @@ CONFIG(debug, release|debug) {
 # don't want linking against qtmain.lib
 QMAKE_LIBS_QT_ENTRY=
 
-INCLUDEPATH += ./ ../../core ../../io
+INCLUDEPATH += ./ ../../
 win32:INCLUDEPATH +=
 
-DEPENDPATH += ./ ../../core ../../io
+DEPENDPATH += ./ ../../
 
 LIBS += -L../../lib/
 win32:LIBS +=

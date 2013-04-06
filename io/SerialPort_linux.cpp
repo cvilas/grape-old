@@ -87,6 +87,13 @@ bool SerialPort::setPortName(const std::string& port)
 }
 
 //------------------------------------------------------------------------------
+std::string SerialPort::getPortName() const
+//------------------------------------------------------------------------------
+{
+    return _pImpl->_portName;
+}
+
+//------------------------------------------------------------------------------
 bool SerialPort::setBaudRate(BaudRate baud)
 //------------------------------------------------------------------------------
 {
@@ -358,6 +365,12 @@ int SerialPort::write(const std::vector<char>& buffer)
 bool SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
+    if( !isOpen() )
+    {
+        setError(-1) << "[SerialPort::waitForRead]: Port not open" << std::endl;
+        return false;
+    }
+
     fd_set fds;
     FD_ZERO(&fds);
     FD_SET(_pImpl->_portFd, &fds);
@@ -391,6 +404,12 @@ bool SerialPort::waitForRead(int timeoutMs)
 bool SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
+    if( !isOpen() )
+    {
+        setError(-1) << "[SerialPort::waitForWrite]: Port not open" << std::endl;
+        return false;
+    }
+
     /// \todo: check if we have flow control enabled. if so, wait until remote
     ///        is ready to receive. if no flow control, just return true. We
     ///        can't really do anything meaningful.
