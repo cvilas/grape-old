@@ -201,7 +201,7 @@ bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::enableHardwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableSoftwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -218,7 +218,7 @@ bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
 
     if( !_pImpl->setAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::enableHardwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::enableSoftwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 
@@ -280,7 +280,7 @@ bool SerialPort::open()
     // apply..
     if( !_pImpl->setAttributes(tops) )
     {
-        setError(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
+        setError(-1) << "[SerialPort::open(setAttributes)]: " << strerror(errno) << std::endl;
         return false;
     }
 

@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += core io
+SUBDIRS += core io \
+    tests/TestIo
 
 OTHER_FILES += \
     doc/doxygen/doxydoc.h \
