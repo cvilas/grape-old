@@ -15,7 +15,10 @@ namespace Grape
 
 /// \class SerialPort
 /// \ingroup io
-/// \brief Serial port communication class
+/// \brief A simple serial port communication class
+/// The class provides a basic interface to serial ports.
+/// \todo
+/// - external status object
 class GRAPE_DLL_API SerialPort : public IPort
 {
 public:
@@ -64,24 +67,8 @@ public:
     /// \see open
     bool setDataFormat(DataFormat fmt);
 
-    /// Enable the use of CTS and RTS signal lines for flow control. This
-    /// may not be supported by all platforms. This works only if the port
-    /// is already open.
-    /// \param enable   Set to true to enable hardware flow control.
-    /// \return         true on success.
-    bool enableHardwareFlowControl(bool enable);
-
-    /// Enable software flow control using the specified start and stop characters
-    /// This works only if the port is already open.
-    /// \param enable   Set to true to enable. Remaining parameters are ignored if set to false.
-    /// \param xon      Symbol to resume data transmission (default 0x11).
-    /// \param xoff     Symbol to pause data transmission (default 0x13)
-    /// \return true on success.
-    bool enableSoftwareFlowControl(bool enable, char xon = 0x11, char xoff = 0x13);
-
     /// \copydoc IPort::open()
-    /// After open, the serial port must be configured with baud rate, data format, and
-    /// flow control options. By default, all flow control is disabled.
+    /// After open, the serial port must be configured with baud rate and data format.
     /// A typical configuration is shown below:
     /// \code
     /// SerialPort port;
@@ -89,8 +76,8 @@ public:
     /// port.open();
     /// port.setBaudRate(B9600);
     /// port.setDataFormat(D8N1);
-    /// port.enableHardwareFlowControl(true);
     /// \endcode
+    /// until they are complete
     bool open();
 
     void close();
@@ -98,8 +85,8 @@ public:
     int read(std::vector<char>& buffer);
     int availableToRead();
     int write(const std::vector<char>& buffer);
-    bool waitForRead(int timeoutMs);
-    bool waitForWrite(int timeoutMs);
+    int waitForRead(int timeoutMs);
+    int waitForWrite(int timeoutMs);
 
 private:
     class SerialPortP* _pImpl; //!< platform specific private implementation

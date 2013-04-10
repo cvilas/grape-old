@@ -11,6 +11,9 @@
 namespace Grape
 {
 
+/// \note For a guide to serial port programming on windows, see
+/// http://msdn.microsoft.com/en-us/library/ms810467.aspx
+
 //==============================================================================
 /// \class SerialPortP
 /// \brief Windows specific private implementation
@@ -24,6 +27,7 @@ public:
     ~SerialPortP() {}
     bool getAttributes(DCB&);
     bool setAttributes(DCB&);
+    int waitForReadWrite(bool isRead, int timeoutMs);
 public:
     HANDLE _portFd;
     std::string _portName;
@@ -46,6 +50,56 @@ bool SerialPortP::setAttributes(DCB& dcb)
 {
     dcb.DCBlength = sizeof(DCB);
     return (SetCommState(_portFd, &dcb) != 0);
+}
+
+//------------------------------------------------------------------------------
+int SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
+//------------------------------------------------------------------------------
+{
+    OVERLAPPED osReader = {0};
+    osReader.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if( osReader.hEvent == NULL )
+    {
+        //setError(-1) << "[SerialPort::waitForRead]: CreateEvent failed" << std::endl;
+        return -1;
+    }
+
+    DWORD ev = (isRead)?(EV_RXCHAR):(EV_TXEMPTY);
+    if( 0 == WaitCommEvent(_portFd, &ev, &osReader) )
+    {
+        CloseHandle(osReader.hEvent);
+        //setError(GetLastError()) << "[SerialPort::waitForRead]: WaitCommEvent failed" << std::endl;
+        return -1;
+    }
+
+    int result = -1;
+    DWORD waitResult = WaitForSingleObject(osReader.hEvent, timeoutMs);
+    switch(waitResult)
+    {
+    case WAIT_OBJECT_0:
+        DWORD bytes;
+        if( 0 == GetOverlappedResult(_portFd, &osReader, &bytes, TRUE) )
+        {
+            //setError(GetLastError()) << "[SerialPort::waitForRead]: GetOverlappedResult failed" << std::endl;
+            result = -1;
+        }
+        else
+        {
+            result = 1;
+        }
+        break;
+    case WAIT_TIMEOUT:
+        result = 0;
+        break;
+    default:
+        //setError(GetLastError()) << "[SerialPort::waitForRead]: WaitForSingleObject failed" << std::endl;
+        result = -1;
+        break;
+    }
+
+    CloseHandle(osReader.hEvent);
+
+    return result;
 }
 
 //==============================================================================
@@ -118,7 +172,7 @@ bool SerialPort::setDataFormat(DataFormat fmt)
     DCB dcb;
     if( !_pImpl->getAttributes(dcb) )
     {
-        setError(GetLastError()) << "[SerialPort::setDataFormat]: Unable to get port attributes" << std::endl;
+        setError(GetLastError()) << "[SerialPort::setDataFormat]: getAttributes failed" << std::endl;
         return false;
     }
 
@@ -152,68 +206,11 @@ bool SerialPort::setDataFormat(DataFormat fmt)
 
     if( !_pImpl->setAttributes(dcb) )
     {
-        setError(GetLastError()) << "[SerialPort::setDataFormat]: Unable to set port attributes" << std::endl;
+        setError(GetLastError()) << "[SerialPort::setDataFormat]: setAttributes failed" << std::endl;
         return false;
     }
 
     return true;
-}
-
-//------------------------------------------------------------------------------
-bool SerialPort::enableHardwareFlowControl(bool enable)
-//------------------------------------------------------------------------------
-{
-    DCB dcb;
-    if( !_pImpl->getAttributes(dcb) )
-    {
-        setError(GetLastError()) << "[SerialPort::enableHardwareFlowControl]: Unable to set port attributes" << std::endl;
-        return false;
-    }
-
-    dcb.fOutxCtsFlow = enable;
-    dcb.fOutxDsrFlow = enable;
-
-    if( !_pImpl->setAttributes(dcb) )
-    {
-        setError(GetLastError()) << "[SerialPort::enableHardwareFlowControl]: Unable to set port attributes" << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
-bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
-//------------------------------------------------------------------------------
-{
-    DCB dcb;
-    if( !_pImpl->getAttributes(dcb) )
-    {
-        setError(GetLastError()) << "[SerialPort::enableSoftwareFlowControl]: Unable to set port attributes" << std::endl;
-        return false;
-    }
-
-    if( enable )
-    {
-        dcb.fOutX = TRUE;
-        dcb.fInX = TRUE;
-        dcb.XonChar = xon;
-        dcb.XoffChar = xoff;
-    }
-    else
-    {
-        dcb.fOutX = FALSE;
-        dcb.fInX = FALSE;
-    }
-
-    if( !_pImpl->setAttributes(dcb) )
-    {
-        setError(GetLastError()) << "[SerialPort::enableSoftwareFlowControl]: Unable to set port attributes" << std::endl;
-        return false;
-    }
-
-    return true;
-
 }
 
 //------------------------------------------------------------------------------
@@ -225,7 +222,10 @@ bool SerialPort::open()
     // try opening the serial connection
     _pImpl->_portFd = CreateFile(_pImpl->_portName.c_str(),
                                  GENERIC_READ | GENERIC_WRITE,
-                                 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+                                 0, 0,
+                                 OPEN_EXISTING,
+                                 FILE_FLAG_OVERLAPPED,
+                                 0);
     if( !isOpen() )
     {
         setError(-1) << "[SerialPort::open]: Unable to open " << _pImpl->_portName << std::endl;
@@ -241,7 +241,7 @@ bool SerialPort::open()
     DCB dcb;
     if( !_pImpl->getAttributes(dcb) )
     {
-        setError(GetLastError()) << "[SerialPort::open]: Unable to get port attributes" << std::endl;
+        setError(GetLastError()) << "[SerialPort::open]: getAttributes failed" << std::endl;
         return false;
     }
 
@@ -252,23 +252,20 @@ bool SerialPort::open()
     dcb.fInX = FALSE;
     dcb.fNull = FALSE;
     dcb.fAbortOnError = FALSE;
+    dcb.fDtrControl = DTR_CONTROL_ENABLE;
+    dcb.fRtsControl = RTS_CONTROL_ENABLE;
+    dcb.fDsrSensitivity = FALSE;
+    dcb.fErrorChar = FALSE;
 
     // apply..
     if( !_pImpl->setAttributes(dcb) )
     {
-        setError(GetLastError()) << "[SerialPort::open]: Unable to set port attributes" << std::endl;
+        setError(GetLastError()) << "[SerialPort::open]: setAttributes failed" << std::endl;
         return false;
-    }
-
-    // comm events
-    if( !SetCommMask(_pImpl->_portFd, EV_TXEMPTY|EV_RXCHAR) )
-    {
-        setError(GetLastError()) << "[SerialPort::open]: Unable to set port event parameters" << std::endl;
-        return false;
-
     }
 
     // set time out
+    /// \todo Are these timeouts correct for overlapped IO operations?
     COMMTIMEOUTS timeouts={0};
     timeouts.ReadIntervalTimeout = 0;
     timeouts.ReadTotalTimeoutMultiplier = 0;
@@ -276,9 +273,9 @@ bool SerialPort::open()
     timeouts.WriteTotalTimeoutMultiplier = 0;
     timeouts.WriteTotalTimeoutConstant = 0;
 
-    if( !SetCommTimeouts(_pImpl->_portFd, &timeouts) )
+    if( 0 == SetCommTimeouts(_pImpl->_portFd, &timeouts) )
     {
-        setError(GetLastError()) << "[SerialPort::open]: Unable to set timeout attributes" << std::endl;
+        setError(GetLastError()) << "[SerialPort::open]: SetCommTimeouts failed" << std::endl;
         return false;
     }
 
@@ -307,46 +304,163 @@ bool SerialPort::isOpen()
 int SerialPort::read(std::vector<char>& buffer)
 //------------------------------------------------------------------------------
 {
-    /// \todo
-    //if( !ReadFile(portFd_, &ch, 1, &bytesRead, NULL) )
-    return -1;
+    // how many have we got to read
+    int bytesToRead = availableToRead();
+    if( bytesToRead < 0 )
+    {
+        return -1;
+    }
+
+    // ensure output buffer is long enough
+    if( bytesToRead > buffer.size() )
+    {
+        buffer.resize(bytesToRead);
+    }
+
+    // create event to handle read completion
+    OVERLAPPED osReader = {0};
+    osReader.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if( osReader.hEvent == NULL )
+    {
+        setError(-1) << "[SerialPort::read]: CreateEvent failed" << std::endl;
+        return -1;
+    }
+
+    // read all
+    int bytesRead = 0;
+    if( 0 != ReadFile(_pImpl->_portFd, &buffer[0], bytesToRead, (LPDWORD)(&bytesRead), &osReader) )
+    {
+        // read completed immediately. We are done
+        CloseHandle(osReader.hEvent);
+        return bytesRead;
+    }
+
+    // ReadFile returned false. Could be due to pending IO or an error
+    DWORD lastErr = GetLastError();
+    if( lastErr != ERROR_IO_PENDING ) // not pending IO.
+    {
+        CloseHandle(osReader.hEvent);
+        setError(lastErr) << "[SerialPort::read]: ReadFile failed" << std::endl;
+        return -1;
+    }
+
+    // We have a pending IO. Wait for read to complete
+    bool success = false;
+    DWORD dwRes = WaitForSingleObject(osReader.hEvent, INFINITE);
+    switch(dwRes)
+    {
+    case WAIT_OBJECT_0: // Read Completed
+        if( 0 == GetOverlappedResult(_pImpl->_portFd, &osReader, (LPDWORD)(&bytesRead), TRUE) )
+        {
+            setError(GetLastError()) << "[SerialPort::read]: GetOverlappedResult failed" << std::endl;
+        }
+        else
+        {
+            success = true;
+        }
+        break;
+    case WAIT_TIMEOUT:
+        /* can't happen, considering we are in INFINITE wait */
+        setError(-1) << "[SerialPort::read]: WaitForSingleObject timed out" << std::endl;
+        break;
+    default:
+        setError(-1) << "[SerialPort::read]: WaitForSingleObject failed" << std::endl;
+        break;
+    }
+
+    CloseHandle(osReader.hEvent);
+    return (success)?(bytesRead):(-1);
 }
 
 //------------------------------------------------------------------------------
 int SerialPort::availableToRead()
 //------------------------------------------------------------------------------
 {
-    return -1;
+    COMSTAT stat;
+    DWORD errors;
+    BOOL ret = ClearCommError(_pImpl->_portFd, &errors, &stat);
+    if( ret == 0)
+    {
+        setError(GetLastError()) << "[SerialPort::availableToRead]: ClearCommError failed" << std::endl;
+        return -1;
+    }
+    return stat.cbInQue;
 }
 
 //------------------------------------------------------------------------------
 int SerialPort::write(const std::vector<char>& buffer)
 //------------------------------------------------------------------------------
 {
-    /// \todo
-    return -1;
+    // create event to handle write completion
+    OVERLAPPED osWriter = {0};
+    osWriter.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if( osWriter.hEvent == NULL )
+    {
+        setError(-1) << "[SerialPort::write]: CreateEvent failed" << std::endl;
+        return -1;
+    }
+
+    // write all
+    int bytesWritten = 0;
+    if( 0 != WriteFile(_pImpl->_portFd, &buffer[0], buffer.size(), (LPDWORD)(&bytesWritten), &osWriter) )
+    {
+        // completed immediately. We are done
+        CloseHandle(osWriter.hEvent);
+        return bytesWritten;
+    }
+
+    // WriteFile returned false. Could be due to pending IO or an error
+    DWORD lastErr = GetLastError();
+    if( lastErr != ERROR_IO_PENDING ) // not pending IO.
+    {
+        CloseHandle(osWriter.hEvent);
+        setError(lastErr) << "[SerialPort::write]: WriteFile failed" << std::endl;
+        return -1;
+    }
+
+    // We have a pending IO. Wait for read to complete
+    bool success = false;
+    DWORD dwRes = WaitForSingleObject(osWriter.hEvent, INFINITE);
+    switch(dwRes)
+    {
+    case WAIT_OBJECT_0: // Read Completed
+        if( 0 == GetOverlappedResult(_pImpl->_portFd, &osWriter, (LPDWORD)(&bytesWritten), TRUE) )
+        {
+            setError(GetLastError()) << "[SerialPort::write]: GetOverlappedResult failed" << std::endl;
+        }
+        else
+        {
+            success = true;
+        }
+        break;
+    case WAIT_TIMEOUT:
+        /* can't happen, considering we are in INFINITE wait */
+        setError(-1) << "[SerialPort::write]: WaitForSingleObject timed out" << std::endl;
+        break;
+    default:
+        setError(-1) << "[SerialPort::write]: WaitForSingleObject failed" << std::endl;
+        break;
+    }
+
+    CloseHandle(osWriter.hEvent);
+    return (success)?(bytesWritten):(-1);
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::waitForRead(int timeoutMs)
+int SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
-    /// \todo
-    //WaitCommEvent(_pImpl->_portFd, )
-    return true;
+    return _pImpl->waitForReadWrite(true, timeoutMs);
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::waitForWrite(int timeoutMs)
+int SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
-    /// \todo: check if we have flow control enabled. if so, wait until remote
-    ///        is ready to receive. if no flow control, just return true. We
-    ///        can't really do anything meaningful.
-
-    return true;
-
+    return _pImpl->waitForReadWrite(false, timeoutMs);
 }
+
+
 
 
 } // Grape

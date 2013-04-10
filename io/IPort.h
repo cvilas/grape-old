@@ -61,16 +61,16 @@ public:
     /// Wait until port is ready for a read operation
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Set negative number for infinite wait period.
-    /// \return true        If port is ready for read, false on timeout or error.
+    /// \return >0 if port is ready for read, 0 on timeout, <0 on error.
     /// \see read, getLastError
-    virtual bool waitForRead(int timeoutMs) = 0;
+    virtual int waitForRead(int timeoutMs) = 0;
 
-    /// Wait until port is ready for a write operation
+    /// Wait until all bytes from last write operation have been transmitted
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Specify negative number for infinite wait period.
-    /// \return true        If port is ready for write, false on time out or error
+    /// \return >0 if last write operation finished, 0 on timeout, <0 on error.
     /// \see write, getLastError
-    virtual bool waitForWrite(int timeoutMs) = 0;
+    virtual int waitForWrite(int timeoutMs) = 0;
 
     /// Get the latest error description.
     /// \note Derived classes must call setError to set error description after unsuccessful operations.

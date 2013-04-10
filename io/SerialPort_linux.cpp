@@ -173,59 +173,6 @@ bool SerialPort::setDataFormat(DataFormat fmt)
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::enableHardwareFlowControl(bool enable)
-//------------------------------------------------------------------------------
-{
-    struct termios tops;
-    if( !_pImpl->getAttributes(tops) )
-    {
-        setError(-1) << "[SerialPort::enableHardwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
-        return false;
-    }
-
-    (enable) ? (tops.c_cflag |= CRTSCTS) : (tops.c_cflag &= ~CRTSCTS);
-
-    if( !_pImpl->setAttributes(tops) )
-    {
-        setError(-1) << "[SerialPort::enableHardwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
-bool SerialPort::enableSoftwareFlowControl(bool enable, char xon, char xoff)
-//------------------------------------------------------------------------------
-{
-    struct termios tops;
-    if( !_pImpl->getAttributes(tops) )
-    {
-        setError(-1) << "[SerialPort::enableSoftwareFlowControl(getAttributes)]: " << strerror(errno) << std::endl;
-        return false;
-    }
-
-    if( enable )
-    {
-        tops.c_cflag |= (IXON | IXOFF | IXANY);
-        tops.c_cc[VSTART] = xon;
-        tops.c_cc[VSTOP] = xoff;
-    }
-    else
-    {
-        tops.c_cflag &= ~(IXON | IXOFF | IXANY);
-    }
-
-    if( !_pImpl->setAttributes(tops) )
-    {
-        setError(-1) << "[SerialPort::enableSoftwareFlowControl(setAttributes)]: " << strerror(errno) << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
 bool SerialPort::open()
 //------------------------------------------------------------------------------
 {
@@ -311,12 +258,10 @@ bool SerialPort::isOpen()
 int SerialPort::read(std::vector<char>& buffer)
 //------------------------------------------------------------------------------
 {
-    int bytes = 0;
+    int bytes = availableToRead();
 
-    // find how many bytes are available to read
-    if( ioctl(_pImpl->_portFd, FIONREAD, &bytes) < 0 )
+    if( bytes < 0 )
     {
-        setError(errno) << "[SerialPort::read]: " << strerror(errno) << std::endl;
         return -1;
     }
 
@@ -362,13 +307,13 @@ int SerialPort::write(const std::vector<char>& buffer)
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::waitForRead(int timeoutMs)
+int SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
     {
         setError(-1) << "[SerialPort::waitForRead]: Port not open" << std::endl;
-        return false;
+        return -1;
     }
 
     fd_set fds;
@@ -397,24 +342,22 @@ bool SerialPort::waitForRead(int timeoutMs)
         setError(errno) << "[SerialPort::waitForRead]: " << strerror(errno) << std::endl;
     }
 
-    return (ret > 0);
+    return ret;
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::waitForWrite(int timeoutMs)
+int SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
     {
         setError(-1) << "[SerialPort::waitForWrite]: Port not open" << std::endl;
-        return false;
+        return -1;
     }
 
-    /// \todo: check if we have flow control enabled. if so, wait until remote
-    ///        is ready to receive. if no flow control, just return true. We
-    ///        can't really do anything meaningful.
+    /// \todo: check bytes transmitted
 
-    return true;
+    return 1;
 }
 
 } // Grape

@@ -19,7 +19,6 @@ private Q_SLOTS:
     void openClose();
     void baudRate();
     void dataFormat();
-    void flowControl();
     void readWrite();
 private:
     std::string _portName;
@@ -99,20 +98,6 @@ void TestIo_SerialPort::dataFormat()
     {
         QVERIFY2(sp.setDataFormat((Grape::SerialPort::DataFormat)i), sp.getLastError(ecode).c_str());
     }
-}
-
-//-----------------------------------------------------------------------------
-void TestIo_SerialPort::flowControl()
-//-----------------------------------------------------------------------------
-{
-    int ecode;
-    Grape::SerialPort sp;
-    sp.setPortName(_portName);
-    sp.open();
-    QVERIFY2(sp.enableHardwareFlowControl(true), sp.getLastError(ecode).c_str());
-    QVERIFY2(sp.enableHardwareFlowControl(false), sp.getLastError(ecode).c_str());
-    QVERIFY2(sp.enableSoftwareFlowControl(true), sp.getLastError(ecode).c_str());
-    QVERIFY2(sp.enableSoftwareFlowControl(false), sp.getLastError(ecode).c_str());
 }
 
 //-----------------------------------------------------------------------------
