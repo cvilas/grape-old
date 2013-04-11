@@ -5,13 +5,12 @@
 // Brief    : Abstract interface for ports
 //==============================================================================
 
-#ifndef IPORT_H
-#define IPORT_H
+#ifndef GRAPEIO_IPORT_H
+#define GRAPEIO_IPORT_H
 
+#include "grapeio_common.h"
 #include "core/Status.h"
 #include <vector>
-#include <sstream>
-#include <string>
 
 namespace Grape
 {
@@ -19,7 +18,7 @@ namespace Grape
 /// \class IPort
 /// \ingroup io
 /// \brief Abtract interface definition for communication ports
-class GRAPE_DLL_API IPort
+class GRAPEIO_DLL_API IPort
 {
 public:
     /// Publically accessible status object contains the last
@@ -87,4 +86,4 @@ private:
 
 } // Grape
 
-#endif // IPORT_H
+#endif // GRAPEIO_IPORT_H

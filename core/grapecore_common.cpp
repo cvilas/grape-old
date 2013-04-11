@@ -1,10 +1,10 @@
 //==============================================================================
 // Project  : Grape
 // Module   : Core
-// File     : grape_common.cpp
+// File     : grapecore_common.cpp
 //==============================================================================
 
-#include "grape_common.h"
+#include "grapecore_common.h"
 
 #ifdef _WIN32
 #include <Windows.h>

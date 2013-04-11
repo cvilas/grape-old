@@ -35,7 +35,7 @@ public:
 public:
     HANDLE _portFd;
     std::string _portName;
-    Grape::Status _lastError;
+    Grape::Status& _lastError;
 
 }; // SerialPortP
 
@@ -464,8 +464,6 @@ int SerialPort::waitForWrite(int timeoutMs)
 {
     return _pImpl->waitForReadWrite(false, timeoutMs);
 }
-
-
 
 
 } // Grape

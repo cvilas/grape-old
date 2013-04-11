@@ -5,8 +5,8 @@
 // Brief    : Serial port class
 //==============================================================================
 
-#ifndef SERIALPORT_H
-#define SERIALPORT_H
+#ifndef GRAPEIO_SERIALPORT_H
+#define GRAPEIO_SERIALPORT_H
 
 #include "IPort.h"
 
@@ -17,7 +17,7 @@ namespace Grape
 /// \ingroup io
 /// \brief A simple serial port communication class
 /// The class provides a basic interface to serial ports.
-class GRAPE_DLL_API SerialPort : public IPort
+class GRAPEIO_DLL_API SerialPort : public IPort
 {
 public:
 
@@ -94,4 +94,4 @@ private:
 
 } // Grape
 
-#endif // SERIALPORT_H
+#endif // GRAPEIO_SERIALPORT_H

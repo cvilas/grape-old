@@ -9,13 +9,16 @@ VERSION = $${CORE_VERSION}
 include(../grapelibs.pri)
 
 # library specific settings
+win32:DEFINES += GRAPECORE_DLL GRAPECORE_DLL_EXPORT
 win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
-HEADERS += grape_common.h \ 
+HEADERS += \ 
     stringfuncs.h \
-    Status.h
-SOURCES += grape_common.cpp \
-    Status.cpp
+    Status.h \
+    grapecore_common.h
+SOURCES += \
+    Status.cpp \
+    grapecore_common.cpp
 win32:SOURCES +=
 unix:SOURCES +=
 win32:LIBS +=

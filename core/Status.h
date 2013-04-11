@@ -8,7 +8,7 @@
 #ifndef GRAPE_STATUS_H
 #define GRAPE_STATUS_H
 
-#include "grape_common.h"
+#include "grapecore_common.h"
 #include <sstream>
 #include <string>
 
@@ -18,7 +18,7 @@ namespace Grape
 /// \class Status
 /// \ingroup core
 /// \brief Holder for a single message and code
-class GRAPE_DLL_API Status
+class GRAPECORE_DLL_API Status
 {
 public:
     Status() : _code(0) {}
