@@ -8,7 +8,7 @@
 #ifndef IPORT_H
 #define IPORT_H
 
-#include "core/grape_common.h"
+#include "core/Status.h"
 #include <vector>
 #include <sstream>
 #include <string>
@@ -22,8 +22,14 @@ namespace Grape
 class GRAPE_DLL_API IPort
 {
 public:
+    /// Publically accessible status object contains the last
+    /// error code and message
+    /// \note Derived classes must call Status::set on unsuccessful operations.
+    Status lastError;
 
-    IPort() : _errorCode(0) {}
+public:
+
+    IPort() {}
 
     /// Open the port.
     /// \note Derived class implements port specific configuration.
@@ -72,48 +78,12 @@ public:
     /// \see write, getLastError
     virtual int waitForWrite(int timeoutMs) = 0;
 
-    /// Get the latest error description.
-    /// \note Derived classes must call setError to set error description after unsuccessful operations.
-    /// \param errorCode    Contains code number for the error, if any.
-    /// \return nothing     If no errors occurred since last error
-    inline std::string getLastError(int& errorCode);
-	
 protected:
     virtual ~IPort() {}
-
-    /// Set error code and message. Example usage:
-    /// \code
-    /// IPort::setError(code) << "Message goes here" << std::endl;
-    /// \endcode
-    inline std::ostringstream& setError(int errorCode);
-
 private:
     IPort(const IPort&);            //!< disable copy
     IPort &operator=(const IPort&); //!< disable assignment
-
-private:
-    std::ostringstream  _errorStream;
-    int                 _errorCode;
 };
-
-//-----------------------------------------------------------------------------
-std::string IPort::getLastError(int& errorCode)
-//-----------------------------------------------------------------------------
-{
-    _errorCode = errorCode;
-    return _errorStream.str();
-}
-
-//-----------------------------------------------------------------------------
-std::ostringstream& IPort::setError(int errorCode)
-//-----------------------------------------------------------------------------
-{
-    _errorCode = errorCode;
-    _errorStream.clear();
-    _errorStream.str(std::string());
-    return _errorStream;
-}
-
 
 } // Grape
 

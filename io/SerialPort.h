@@ -17,8 +17,6 @@ namespace Grape
 /// \ingroup io
 /// \brief A simple serial port communication class
 /// The class provides a basic interface to serial ports.
-/// \todo
-/// - external status object
 class GRAPE_DLL_API SerialPort : public IPort
 {
 public:

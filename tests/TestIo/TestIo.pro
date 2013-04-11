@@ -1,11 +1,4 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-04-09T11:58:40
-#
-#-------------------------------------------------
-
 QT       += testlib
-
 QT       -= gui
 
 TARGET = tst_testio_serialport
@@ -21,9 +14,9 @@ DLLDESTDIR = $${PWD}/../../bin/
 SOURCES += tst_testio_serialport.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../lib/ -lGrapeCore0 -lGrapeIo0
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../lib/ -lGrapeCored0 -lGrapeIod0
-else:unix: LIBS += -L$$PWD/../../lib/ -lGrapeCore -lGrapeIo
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../lib/ -lGrapeIo0 -lGrapeCore0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../lib/ -lGrapeIod0 -lGrapeCored0
+else:unix: LIBS += -L$$PWD/../../lib/ -lGrapeIo -lGrapeCore
 
 INCLUDEPATH += $$PWD/../../
 DEPENDPATH += $$PWD/../../
