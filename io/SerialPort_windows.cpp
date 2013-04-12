@@ -306,7 +306,7 @@ bool SerialPort::isOpen()
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::read(std::vector<char>& buffer)
+int SerialPort::read(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     // how many have we got to read
@@ -393,7 +393,7 @@ int SerialPort::availableToRead()
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::write(const std::vector<char>& buffer)
+int SerialPort::write(const std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     // create event to handle write completion

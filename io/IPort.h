@@ -48,7 +48,7 @@ public:
     ///                 bytes read. Use return value for number of bytes actually read.
     /// \return         The number of bytes read. -1 on error.
     /// \see waitForRead, getLastError
-    virtual int read(std::vector<char>& buffer) = 0;
+    virtual int read(std::vector<unsigned char>& buffer) = 0;
 
     /// Find the number of bytes available and waiting to be read
     /// without actually reading them.
@@ -61,7 +61,7 @@ public:
     ///                 Use return value for number of bytes actually written.
     /// \return         Number of bytes written. -1 on error.
     /// \see waitForWrite, getLastError
-    virtual int write(const std::vector<char>& buffer) = 0;
+    virtual int write(const std::vector<unsigned char>& buffer) = 0;
 
     /// Wait until port is ready for a read operation
     /// \param timeoutMs    Milliseconds to wait before returning.
@@ -76,6 +76,12 @@ public:
     /// \return >0 if last write operation finished, 0 on timeout, <0 on error.
     /// \see write, getLastError
     virtual int waitForWrite(int timeoutMs) = 0;
+
+    /// Flush data received but not read
+    virtual void flushRx() = 0;
+
+    /// Flush data written but not transmitted
+    virtual void flushTx() = 0;
 
 protected:
     virtual ~IPort() {}

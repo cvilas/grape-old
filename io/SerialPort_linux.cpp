@@ -6,6 +6,7 @@
 //==============================================================================
 
 #include "SerialPort.h"
+#include <unistd.h>
 #include <termios.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -231,6 +232,9 @@ bool SerialPort::open()
         return false;
     }
 
+    flushRx();
+    flushTx();
+
     return true;
 }
 
@@ -255,7 +259,7 @@ bool SerialPort::isOpen()
 
 
 //------------------------------------------------------------------------------
-int SerialPort::read(std::vector<char>& buffer)
+int SerialPort::read(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     int bytes = availableToRead();
@@ -293,7 +297,7 @@ int SerialPort::availableToRead()
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::write(const std::vector<char>& buffer)
+int SerialPort::write(const std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     int bytes = ::write(_pImpl->_portFd, &buffer[0], buffer.size());
@@ -358,6 +362,20 @@ int SerialPort::waitForWrite(int timeoutMs)
     /// \todo: check bytes transmitted
 
     return 1;
+}
+
+//------------------------------------------------------------------------------
+void SerialPort::flushRx()
+//------------------------------------------------------------------------------
+{
+    tcflush(_pImpl->_portFd, TCIFLUSH);
+}
+
+//------------------------------------------------------------------------------
+void SerialPort::flushTx()
+//------------------------------------------------------------------------------
+{
+    tcflush(_pImpl->_portFd, TCOFLUSH);
 }
 
 } // Grape

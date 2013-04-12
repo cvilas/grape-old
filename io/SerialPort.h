@@ -80,11 +80,13 @@ public:
 
     void close();
     bool isOpen();
-    int read(std::vector<char>& buffer);
+    int read(std::vector<unsigned char>& buffer);
     int availableToRead();
-    int write(const std::vector<char>& buffer);
+    int write(const std::vector<unsigned char>& buffer);
     int waitForRead(int timeoutMs);
     int waitForWrite(int timeoutMs);
+    void flushRx();
+    void flushTx();
 
 private:
     class SerialPortP* _pImpl; //!< platform specific private implementation
