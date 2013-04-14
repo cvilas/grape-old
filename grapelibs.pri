@@ -8,6 +8,7 @@ DEFINES += VER=\"$${VERSTR}\" # create a VER macro containing the version string
 
 # config settings
 CONFIG += debug_and_release build_all resources thread
+android:CONFIG += static
 win32: CONFIG += dll embed_manifest_dll embed_manifest_exe
 
 CONFIG += qt
