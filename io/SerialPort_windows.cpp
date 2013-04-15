@@ -465,6 +465,20 @@ int SerialPort::waitForWrite(int timeoutMs)
     return _pImpl->waitForReadWrite(false, timeoutMs);
 }
 
+//------------------------------------------------------------------------------
+void SerialPort::flushRx()
+//------------------------------------------------------------------------------
+{
+    PurgeComm(_pImpl->_portFd, PURGE_RXABORT|PURGE_RXCLEAR);
+}
+
+//------------------------------------------------------------------------------
+void SerialPort::flushTx()
+//------------------------------------------------------------------------------
+{
+    PurgeComm(_pImpl->_portFd, PURGE_TXABORT|PURGE_TXCLEAR);
+}
+
 
 } // Grape
 
