@@ -16,7 +16,7 @@ HEADERS = IPort.h SerialPort.h \
     grapeio_common.h
 SOURCES =
 win32:SOURCES += SerialPort_windows.cpp
-unix:SOURCES += SerialPort_linux.cpp
+unix:SOURCES += SerialPort_unix.cpp
 
 CONFIG(debug, release|debug) {
     DEFINES += _DEBUG

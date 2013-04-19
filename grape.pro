@@ -1,11 +1,11 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += core io \
-    tests/TestIo
+SUBDIRS += core io timing tests
 
 OTHER_FILES += \
     doc/doxygen/doxydoc.h \
     doc/doxygen/doxygen.cfg \
+    etc/tasklist \
     android/res/values-ja/strings.xml \
     android/res/drawable-mdpi/icon.png \
     android/res/values-es/strings.xml \

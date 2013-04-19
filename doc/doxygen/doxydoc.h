@@ -34,4 +34,6 @@
  * \ingroup
  * Input/Output facilities
  * 
+ * \defgroup timing Timing
+ * Timing facilities
  */
