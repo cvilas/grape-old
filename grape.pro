@@ -1,11 +1,10 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += core io timing tests
+SUBDIRS += utils core io timing tests
 
 OTHER_FILES += \
     doc/doxygen/doxydoc.h \
     doc/doxygen/doxygen.cfg \
-    etc/tasklist \
     android/res/values-ja/strings.xml \
     android/res/drawable-mdpi/icon.png \
     android/res/values-es/strings.xml \
@@ -38,4 +37,5 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/src/org/kde/necessitas/origo/QtActivity.java \
     android/src/org/kde/necessitas/origo/QtApplication.java \
-    android/version.xml
+    android/version.xml \
+    etc/tasklist

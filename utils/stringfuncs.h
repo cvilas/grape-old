@@ -1,6 +1,6 @@
 //==============================================================================
 // Project  : Grape
-// Module   : Core
+// Module   : utilities
 // File     : stringfuncs.h
 // Brief    : a few useful string manipulation functions.
 //==============================================================================
@@ -8,13 +8,17 @@
 #ifndef GRAPE_STRINGFUNCS_H
 #define GRAPE_STRINGFUNCS_H
 
+#include "grapeutils_common.h"
+#include <sstream>
 #include <string>
+#include <algorithm>
 
 namespace Grape
 {
 
 //------------------------------------------------------------------------------
 /// Remove white space characters at the beginning and end of a string
+////// \ingroup utils
 inline std::string removeEndWhiteSpace(const std::string &s)
 //------------------------------------------------------------------------------
 {
@@ -27,6 +31,7 @@ inline std::string removeEndWhiteSpace(const std::string &s)
 
 //------------------------------------------------------------------------------
 /// Convert to string representation
+/// \ingroup utils
 template<class T> std::string TAsString(const T &value)
 //------------------------------------------------------------------------------
 {
@@ -37,6 +42,7 @@ template<class T> std::string TAsString(const T &value)
 
 //------------------------------------------------------------------------------
 /// Interpret specified string as another type
+/// \ingroup utils
 template<class T> T stringAsT(const std::string &s)
 //------------------------------------------------------------------------------
 {

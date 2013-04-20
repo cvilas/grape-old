@@ -9,7 +9,7 @@
 #define	GRAPE_STOPWATCH_H
 
 #include "grapetiming_common.h"
-#include "Exception.h"
+#include "core/Exception.h"
 
 namespace Grape 
 {

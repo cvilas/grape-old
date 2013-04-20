@@ -19,14 +19,13 @@ namespace Grape
     /// \ingroup core
     /// \brief Basic exception object
     ///
-    /// - CException provides a means to throw an exception with an error code
+    /// - Exception provides a means to throw an exception with an error code
     ///   (example: errno) and a short message.
     /// - Methods of the class itself will not throw exceptions.
     /// - Design follows Boost's exception class design guidelines:
     ///   www.boost.org/community/error_handling.html
     /// - For older versions of gcc ( <= 2.96 ) compile with exceptions enabled 
     ///   (-fexceptions switch) to avoid SIGABRT on exception.
-    /// - Define GENERICLIB_DLL in user code if linking against library dll in Windows
     /// 
     /// <b>Example Program:</b>
     /// \include ExceptionExample.cpp

@@ -30,6 +30,9 @@
  * \defgroup core Core
  * Core facilities
  * 
+ * \defgroup utils Utilities
+ * Generic utilities
+ *
  * \defgroup io IO
  * \ingroup
  * Input/Output facilities

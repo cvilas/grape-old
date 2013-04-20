@@ -12,11 +12,11 @@ include(../grapelibs.pri)
 win32:DEFINES += GRAPECORE_DLL GRAPETIMING_DLL GRAPETIMING_DLL_EXPORT
 win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
-HEADERS += grapetiming_common.h StopWatch.h
+HEADERS += grapetiming_common.h StopWatch.h Timer.h
 unix:HEADERS += posix.h
 SOURCES +=
-win32:SOURCES += StopWatch_windows.cpp
-unix:SOURCES += StopWatch_unix.cpp
+win32:SOURCES += StopWatch_windows.cpp Timer_windows2.cpp
+unix:SOURCES += StopWatch_unix.cpp Timer_unix.cpp
 
 CONFIG(debug, release|debug) {
     DEFINES += _DEBUG

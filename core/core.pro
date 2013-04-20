@@ -14,7 +14,6 @@ win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
 HEADERS += \ 
     Exception.h \
-    stringfuncs.h \
     Status.h \
     grapecore_common.h
 SOURCES += \

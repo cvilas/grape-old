@@ -1,7 +1,19 @@
-Tasks for Grape library
-
-1. Move all classes from ours/Generic
-2. Move all examples from ours/Generic
-3. Move remaining classes and examples from mine/Generic
-4. Delete ours/generic, mine/generic
-5. Follow roadmap in GRAPE003 - Specification, GRAPE004 - roadmap, and GRAPE001 - plan
+TODO
+- Move all classes from ours/Generic
+- Move all examples from ours/Generic
+- Move remaining classes and examples from mine/Generic
+- Delete ours/generic, mine/generic
+- Follow roadmap in GRAPE003 - Specification, GRAPE004 - roadmap, and GRAPE001 - plan
+- Real time capable data logger
+- TCP client and multithreaded server classes
+- UDP client and server
+- message queues
+- shared memory
+- RW locks
+- Config: move class and add support to add/modify/save comments
+- Timer: Posix: tests for all error return conditions,
+  timed wait, interaction between multiple timers, response when period is
+  set below timer resolution
+- Timer: Posix: Resolve issue with timer signal terminating other threads
+  in the process.
+- Thread: In Windows wait() blocks in the destructor. Fix this.
