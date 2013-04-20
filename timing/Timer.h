@@ -103,7 +103,6 @@ namespace Grape
         bool wait() const throw();
         
         /// Wait until a single tick of the timer, or until timed out.
-        /// NOTE: This method just calls wait() in cygwin environment.
         /// \param ns (input) Time out period in nanoseconds. If set to 0, the method
         ///           will return immediately (same as polling for a timer tick).
         /// \return true on success, false on error.
