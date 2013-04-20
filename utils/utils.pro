@@ -3,7 +3,7 @@ include(../version)
 
 # library description
 TARGET = GrapeUtils
-VERSION = $${IO_VERSION}
+VERSION = $${UTILS_VERSION}
 
 # common settings
 include(../grapelibs.pri)
