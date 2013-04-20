@@ -3,7 +3,7 @@ include(../version)
 
 # library description
 TARGET = GrapeTiming
-VERSION = $${IO_VERSION}
+VERSION = $${TIMING_VERSION}
 
 # common settings
 include(../grapelibs.pri)
