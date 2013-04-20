@@ -5,18 +5,6 @@
 // Brief    : Hi resolution timer
 //==============================================================================
 
-//==============================================================================
-/// \file        Timer.h
-/// \brief       Hi resolution timer  
-/// \author      vilasc
-/// \date        19 January 2012 (created)
-/// 
-/// <h3>Last Modified details:</h3>
-/// $Author: vilas.chitrakaran $
-/// $Date: 2012-03-01 14:07:33 +0000 (Thu, 01 Mar 2012) $
-/// $Revision: 10201 $
-//==============================================================================
-
 #ifndef GRAPE_TIMER_H
 #define	GRAPE_TIMER_H
 
