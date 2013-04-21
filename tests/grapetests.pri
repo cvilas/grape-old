@@ -1,44 +1,20 @@
-# Common settings for GRAPE tests
+QT       += testlib
+QT       -= gui
+CONFIG   += console
+CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-# config settings
-CONFIG += debug_and_release build_all resources thread
-win32: CONFIG += dll embed_manifest_dll embed_manifest_exe
+DESTDIR = $${PWD}/../bin
+DLLDESTDIR = $${PWD}/../bin
 
-CONFIG += qt
-QT += xml core
-QT -= gui
+win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL GRAPEUTILS_DLL GRAPETIMING_DLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/ -lGrapeIo0 -lGrapeTiming0 -lGrapeUtils0 -lGrapeCore0
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/ -lGrapeIod0 -lGrapeTimingd0 -lGrapeUtilsd0 -lGrapeCored0
+else:unix: LIBS += -L$$PWD/../lib/ -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore -lpthread -lrt
 
-build_pass:CONFIG(debug, release|debug) {
-    TARGET = $$join(TARGET,,,d)
-} else {
-    TARGET = $$join(TARGET,,,)
-}
+DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-# target directories
-DESTDIR = ../../bin/
-DLLDESTDIR = ../../bin/
-
-DEFINES +=
-win32: DEFINES += GRAPE_DLL _UNICODE _CRT_SECURE_NO_WARNINGS
-CONFIG(debug, release|debug) {
-    DEFINES += _DEBUG
-    win32:LIBS += -lGrapeIod -lws2_32 -lUser32
-    else:unix: LIBS += -lGrapeIod
-} else {
-    win32:LIBS += -lGrapeIo -lws2_32 -lUser32
-    else:unix: LIBS += -lGrapeIo
-}
-
-# don't want linking against qtmain.lib
-QMAKE_LIBS_QT_ENTRY=
-
-INCLUDEPATH += ./ ../../
-win32:INCLUDEPATH +=
-
-DEPENDPATH += ./ ../../
-
-LIBS += -L../../lib/
-win32:LIBS +=
+INCLUDEPATH += $$PWD/../
+DEPENDPATH += $$PWD/../
 
