@@ -33,6 +33,9 @@ public:
     std::string getMessage() const { return _stream.str(); }
 
     long long int getCode() const { return _code; }
+
+    void clear();
+
 private:
     std::ostringstream  _stream;
     long long int       _code;

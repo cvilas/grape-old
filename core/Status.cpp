@@ -13,10 +13,18 @@ namespace Grape
 std::ostringstream& Status::set(long long int code)
 //=============================================================================
 {
+    clear();
     _code = code;
+    return _stream;
+}
+
+//-----------------------------------------------------------------------------
+void Status::clear()
+//-----------------------------------------------------------------------------
+{
+    _code = 0;
     _stream.clear();
     _stream.str(std::string());
-    return _stream;
 }
 
 } // Grape
