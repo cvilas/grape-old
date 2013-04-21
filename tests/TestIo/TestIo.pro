@@ -1,7 +1,7 @@
 QT       += testlib
 QT       -= gui
 
-TARGET = tst_testio_serialport
+TARGET = TestIo
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -10,8 +10,11 @@ TEMPLATE = app
 DESTDIR = $${PWD}/../../bin
 DLLDESTDIR = $${PWD}/../../bin/
 
-
-SOURCES += tst_testio_serialport.cpp
+HEADERS += \
+    TestSerialPort.h
+SOURCES += \
+    TestSerialPort.cpp \
+    TestIo.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL

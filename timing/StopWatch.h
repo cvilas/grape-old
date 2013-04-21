@@ -18,20 +18,17 @@ namespace Grape
     /// \ingroup timing
     /// \brief Hi resolution stop watch for real-time applications
     /// 
-    /// Notes
-    /// - Implementation is not thread-safe.
-    /// - In Windows, the class uses QueryPerformanceCounter(QPC) for obtaining clock ticks,
-    ///   and QueryPerformanceFrequency (QPF) for obtaining clock rate. Calling QPC 
-    ///   itself takes about 5 microseconds to execute on a 2 GHz processor.
-    ///   In multiprocessor environments, subsequent calls to QueryPerformanceCounter 
-    ///   may be handled by different processors or cores and time differences reported 
-    ///   may be wrong (even negative) because the processors are not in sync. This is 
-    ///   not supposed to happen according to MS SDK, but may happen due to buggy BIOS or 
-    ///   HAL (harware abstraction layer). For a detailed note on timing issues, see 
-    ///   http://msdn.microsoft.com/en-us/library/bb173458.aspx
-    ///
-    /// <b>Example Program:</b>
-    /// \include StopWatchExample.cpp
+    /// \note resolution is platform dependant.
+    /// \note Implementation is not thread-safe.
+    /// \note In Windows, the class uses QueryPerformanceCounter(QPC) for obtaining clock ticks,
+    /// and QueryPerformanceFrequency (QPF) for obtaining clock rate. Calling QPC
+    /// itself takes about 5 microseconds to execute on a 2 GHz processor.
+    /// In multiprocessor environments, subsequent calls to QueryPerformanceCounter
+    /// may be handled by different processors or cores and time differences reported
+    /// may be wrong (even negative) because the processors are not in sync. This is
+    /// not supposed to happen according to MS SDK, but may happen due to buggy BIOS or
+    /// HAL (harware abstraction layer). For a detailed note on timing issues, see
+    /// http://msdn.microsoft.com/en-us/library/bb173458.aspx
 
     class GRAPETIMING_DLL_API StopWatch
     {

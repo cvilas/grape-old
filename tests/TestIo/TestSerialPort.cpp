@@ -1,37 +1,13 @@
-#include <QString>
-#include <QtTest>
-#include <io/SerialPort.h>
+#include "TestSerialPort.h"
 
 //=============================================================================
-/// \class Test class for SerialPort
-//=============================================================================
-class TestIo_SerialPort : public QObject
-{
-    Q_OBJECT
-    
-public:
-    TestIo_SerialPort();
-    
-private Q_SLOTS:
-    void cleanupTestCase();
-    void initTestCase();
-    void portName();
-    void openClose();
-    void baudRate();
-    void dataFormat();
-    void readWrite();
-private:
-    std::string _portName;
-};
-
-//=============================================================================
-TestIo_SerialPort::TestIo_SerialPort()
+TestSerialPort::TestSerialPort()
 //=============================================================================
 {
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::initTestCase()
+void TestSerialPort::initTestCase()
 //-----------------------------------------------------------------------------
 {
 #ifdef WIN32
@@ -43,13 +19,13 @@ void TestIo_SerialPort::initTestCase()
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::cleanupTestCase()
+void TestSerialPort::cleanupTestCase()
 //-----------------------------------------------------------------------------
 {
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::portName()
+void TestSerialPort::portName()
 //-----------------------------------------------------------------------------
 {
     // verify set/get portname
@@ -60,7 +36,7 @@ void TestIo_SerialPort::portName()
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::openClose()
+void TestSerialPort::openClose()
 //-----------------------------------------------------------------------------
 {
     Grape::SerialPort sp;
@@ -72,7 +48,7 @@ void TestIo_SerialPort::openClose()
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::baudRate()
+void TestSerialPort::baudRate()
 //-----------------------------------------------------------------------------
 {
     Grape::SerialPort sp;
@@ -85,7 +61,7 @@ void TestIo_SerialPort::baudRate()
 }
 
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::dataFormat()
+void TestSerialPort::dataFormat()
 //-----------------------------------------------------------------------------
 {
     Grape::SerialPort sp;
@@ -96,9 +72,9 @@ void TestIo_SerialPort::dataFormat()
         QVERIFY2(sp.setDataFormat((Grape::SerialPort::DataFormat)i), sp.lastError.getMessage().c_str());
     }
 }
-
+/*
 //-----------------------------------------------------------------------------
-void TestIo_SerialPort::readWrite()
+void TestSerialPort::readWrite()
 //-----------------------------------------------------------------------------
 {
     // ** This test requires hardware to be hooked up ***
@@ -119,7 +95,4 @@ void TestIo_SerialPort::readWrite()
         QFAIL(sp.lastError.getMessage().c_str());
     }
 }
-
-QTEST_APPLESS_MAIN(TestIo_SerialPort)
-
-#include "tst_testio_serialport.moc"
+*/
