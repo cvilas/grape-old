@@ -47,7 +47,7 @@ public:
     /// \param buffer   Contains read data. Note that this buffer may be longer than the number of
     ///                 bytes read. Use return value for number of bytes actually read.
     /// \return         The number of bytes read. -1 on error.
-    /// \see waitForRead, getLastError
+    /// \see waitForRead
     virtual int read(std::vector<unsigned char>& buffer) = 0;
 
     /// Find the number of bytes available and waiting to be read
@@ -60,21 +60,21 @@ public:
     /// \param buffer   Contains data to be written. Note that not all data may get written.
     ///                 Use return value for number of bytes actually written.
     /// \return         Number of bytes written. -1 on error.
-    /// \see waitForWrite, getLastError
+    /// \see waitForWrite
     virtual int write(const std::vector<unsigned char>& buffer) = 0;
 
     /// Wait until port is ready for a read operation
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Set negative number for infinite wait period.
     /// \return >0 if port is ready for read, 0 on timeout, <0 on error.
-    /// \see read, getLastError
+    /// \see read
     virtual int waitForRead(int timeoutMs) = 0;
 
     /// Wait until all bytes from last write operation have been transmitted
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Specify negative number for infinite wait period.
     /// \return >0 if last write operation finished, 0 on timeout, <0 on error.
-    /// \see write, getLastError
+    /// \see write
     virtual int waitForWrite(int timeoutMs) = 0;
 
     /// Flush data received but not read

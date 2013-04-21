@@ -18,7 +18,7 @@ namespace Grape
     /// \ingroup timing
     /// \brief Hi resolution stop watch for real-time applications
     /// 
-    /// \note resolution is platform dependant.
+    /// \note Resolution is platform dependant.
     /// \note Implementation is not thread-safe.
     /// \note In Windows, the class uses QueryPerformanceCounter(QPC) for obtaining clock ticks,
     /// and QueryPerformanceFrequency (QPF) for obtaining clock rate. Calling QPC

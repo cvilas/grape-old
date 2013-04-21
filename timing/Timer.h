@@ -40,16 +40,13 @@ namespace Grape
     /// - getNotificationSignal() will tell you what specific signal we are using.
     ///   Don't use this signal elsewhere.
     /// - Implementation is not thread-safe. 
-    ///
-    /// <b>Example Program:</b>
-    /// \include TimerExample.cpp
 
     class GRAPETIMING_DLL_API Timer
     {
     public:
         
         /// Create the timer. The timer is unarmed until a call to start().
-        /// Note: The timer internally uses the POSIX realtime signals SIGRTMIN
+        /// \note The timer internally uses the POSIX realtime signals SIGRTMIN
         /// to SIGRTMAX. The default action for a thread receiving an RT signal
         /// is to terminate itself. Therefore, CTimer class masks the RT signal
         /// it uses for the thread where it is created. In a multi-threaded

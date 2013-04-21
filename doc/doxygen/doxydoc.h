@@ -34,7 +34,6 @@
  * Generic utilities
  *
  * \defgroup io IO
- * \ingroup
  * Input/Output facilities
  * 
  * \defgroup timing Timing

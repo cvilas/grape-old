@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += TestIo TestTiming
+SUBDIRS += TestCore TestUtils TestIo TestTiming
 

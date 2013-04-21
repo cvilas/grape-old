@@ -6,7 +6,7 @@
 #include <timing/Timer.h>
 
 //=============================================================================
-/// \brief Test class for StopWatch
+/// \brief Test class for Timer
 //=============================================================================
 class TestTimer : public QObject
 {

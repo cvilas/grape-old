@@ -16,16 +16,12 @@ namespace Grape
     
     /// \class CmdLineArgs
     /// \ingroup utils
-    /// \brief Retrieves command line options.
+    /// \brief Command line parser.
     ///
     /// To use this class, command line options must be specified as:
-    /// \code
-    /// program -option1Name option1Value -option2Name option2Value ...
-    /// \endcode
-    ///
-    /// <b>Example Program:</b>
-    /// \include CmdLineArgsExample.cpp
-
+    ///     \code
+    ///     program -option1Name option1Value -option2Name option2Value ...
+    ///     \endcode
     class GRAPEUTILS_DLL_API CmdLineArgs
     {
     public:
@@ -76,14 +72,13 @@ namespace Grape
     {
         if( n < getNumOptions() )
         {
-			ConstEntryIter it = _map.begin();
-			std::advance(it, n);
-			option = it->first;
+            ConstEntryIter it = _map.begin();
+            std::advance(it, n);
+            option = it->first;
             value = Grape::removeEndWhiteSpace(it->second);
-			return true;
-		}
-
-		return false;
+            return true;
+        }
+        return false;
     }
 
 } // Grape
