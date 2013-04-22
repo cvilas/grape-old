@@ -154,7 +154,7 @@ namespace Grape
     long long Timer::getResolution() const throw(Exception)
 	//------------------------------------------------------------------------------
 	{
-        return (_pImpl->resolution_ * 1000000LL);
+        return (_pImpl->_resolution * 1000000LL);
 	}
 
 	//------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ namespace Grape
     bool Timer::wait() const throw()
 	//------------------------------------------------------------------------------
 	{
-        return (WaitForSingleObject(_pImpl->hndTimerEvent_, INFINITE) == WAIT_OBJECT_0);
+        return (WaitForSingleObject(_pImpl->_hndTimerEvent, INFINITE) == WAIT_OBJECT_0);
 	}
 
 	//------------------------------------------------------------------------------
@@ -184,14 +184,14 @@ namespace Grape
 	{
 		if( ns < 0 ){ ns = 0; }
 		long long ms = ns/1000000LL;
-        return (WaitForSingleObject(_pImpl->hndTimerEvent_, (DWORD)ms) == WAIT_OBJECT_0 );
+        return (WaitForSingleObject(_pImpl->_hndTimerEvent, (DWORD)ms) == WAIT_OBJECT_0 );
 	}
 
 	//------------------------------------------------------------------------------
     void Timer::forceTimerTick() const throw()
 	//------------------------------------------------------------------------------
 	{
-        SetEvent(_pImpl->hndTimerEvent_);
+        SetEvent(_pImpl->_hndTimerEvent);
 	}
 
 	//------------------------------------------------------------------------------
@@ -201,8 +201,8 @@ namespace Grape
 		LARGE_INTEGER now;
 		QueryPerformanceCounter( &now );
 
-        long long int nTicks = (1000000000LL * (now.QuadPart - _pImpl->startCount_.QuadPart))/_pImpl->countsPerSec_.QuadPart;
-        nTicks /= _pImpl->periodNs_;
+        long long int nTicks = (1000000000LL * (now.QuadPart - _pImpl->_startCount.QuadPart))/_pImpl->_countsPerSec.QuadPart;
+        nTicks /= _pImpl->_periodNs;
 
 		return nTicks;
 	}

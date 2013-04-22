@@ -11,6 +11,7 @@
 #include "grapeutils_common.h"
 #include <sstream>
 #include <string>
+#include <locale>
 #include <algorithm>
 
 namespace Grape
@@ -64,9 +65,7 @@ template<> inline bool stringAsT<bool>(const std::string &s)
     // false: "FALSE", "false", "0", "no"
     // true: anything other than false
     std::string tmp(removeEndWhiteSpace(s));
-    std::transform(tmp.begin(), tmp.end(), tmp.begin(), (int(*)(int))std::toupper);
-    // typecasting toupper() removes ambiguity for same function defined
-    // in <locale> and <cctype>. We want to use <cctype> version
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
 
     if( (tmp == "FALSE") || (tmp == "0") || (tmp == "NO") )
     {

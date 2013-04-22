@@ -112,13 +112,13 @@ namespace Grape
 
         if( !_pImpl->_isRunning )
 		{
-            return static_cast<long long>( (NANO_ * _pImpl->_accumulatedCount)/(double)(_pImpl->_countsPerSec) );
+            return static_cast<long long>( (_NANO * _pImpl->_accumulatedCount)/(double)(_pImpl->_countsPerSec) );
 		}
 		else
 		{
 			__int64 count;
 			QueryPerformanceCounter( (LARGE_INTEGER*)&count);
-            return static_cast<long long>( (NANO_ * (_pImpl->_accumulatedCount + count - _pImpl->_startCount))/(double)(_pImpl->_countsPerSec) );
+            return static_cast<long long>( (_NANO * (_pImpl->_accumulatedCount + count - _pImpl->_startCount))/(double)(_pImpl->_countsPerSec) );
 		}
     }
     
@@ -131,7 +131,7 @@ namespace Grape
 			return 0;
 		}
 		
-        return static_cast<long long>(NANO_/(double)(_pImpl->_countsPerSec));
+        return static_cast<long long>(_NANO/(double)(_pImpl->_countsPerSec));
     }
     
     //--------------------------------------------------------------------------

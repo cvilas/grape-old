@@ -20,10 +20,10 @@ unix:SOURCES += StopWatch_unix.cpp Timer_unix.cpp
 
 CONFIG(debug, release|debug) {
     DEFINES += _DEBUG
-    win32:LIBS += -lGrapeCored0
+    win32:LIBS += -lGrapeCored0 -lwinmm
     else:unix: LIBS += -lGrapeCored
 } else {
-    win32:LIBS += -lGrapeCore0
+    win32:LIBS += -lGrapeCore0 -lwinmm
     else:unix: LIBS += -lGrapeCore
 }
 
