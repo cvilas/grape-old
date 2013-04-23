@@ -53,6 +53,7 @@ void TestException::tryFault()
     try
     {
         enterNumberBelowFive(10);   // this will throw exception
+        QVERIFY2(false, "Exception not thrown");
     }
 
     catch( Grape::Exception& ex ) // prefer to catch by reference where possible
