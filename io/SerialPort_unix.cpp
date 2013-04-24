@@ -220,8 +220,6 @@ bool SerialPort::open()
     //termios_p->c_cflag |= CS8;
 
     tops.c_cflag |= (CLOCAL | CREAD); // enable receiver and set local mode
-    tops.c_iflag |= IGNCR; // ignore any CRs
-
     tops.c_cflag &= ~CRTSCTS; // no hardware flow control
     tops.c_cflag &= ~(IXON | IXOFF | IXANY); // no software flow control
 
