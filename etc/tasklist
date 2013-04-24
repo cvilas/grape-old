@@ -1,4 +1,5 @@
 TODO
+- Replace error return with exceptions where possible. See http://stackoverflow.com/questions/99683/which-and-why-do-you-prefer-exceptions-or-return-codes
 - Move all classes from ours/Generic
 - Move all examples from ours/Generic
 - Move remaining classes and examples from mine/Generic
