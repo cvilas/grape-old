@@ -8,7 +8,6 @@
 #include <Windows.h>
 #include "Timer.h"
 #include <mmsystem.h>
-#include <iostream>
 
 namespace Grape
 {

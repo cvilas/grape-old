@@ -6,7 +6,6 @@
 
 #include "core/posix.h"
 #include "Timer.h"
-#include <iostream>
 #include <errno.h>
 #include <stdio.h> // for fprintf
 namespace Grape

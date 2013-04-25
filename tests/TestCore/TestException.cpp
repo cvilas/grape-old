@@ -42,7 +42,7 @@ void TestException::tryNoFault()
     catch( Grape::Exception& ex ) // prefer to catch by reference where possible
     {
         qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.getCode());
-        QVERIFY2(false, "No Exception case");
+        QFAIL("No Exception case");
     }
 }
 
@@ -53,7 +53,7 @@ void TestException::tryFault()
     try
     {
         enterNumberBelowFive(10);   // this will throw exception
-        QVERIFY2(false, "Exception not thrown");
+        QFAIL("Exception not thrown");
     }
 
     catch( Grape::Exception& ex ) // prefer to catch by reference where possible
@@ -61,6 +61,6 @@ void TestException::tryFault()
         qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.getCode());
         return;
     }
-    QVERIFY2(false, "Exception not caught");
+    QFAIL("Exception not caught");
 }
 

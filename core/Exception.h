@@ -30,7 +30,7 @@ namespace Grape
     class GRAPECORE_DLL_API Exception : public std::exception
     {
     public:
-        static const size_t MAX_MSG_LEN = 80; //!< max length of message
+        static const size_t MAX_MESSAGE_LENGTH = 256; //!< max length of message
         
     public:
 
@@ -58,7 +58,7 @@ namespace Grape
     private:
         void copyFrom(int code, const char* msg) throw(/*nothing*/);
         int _code;
-        char _msgStr[MAX_MSG_LEN];
+        char _msgStr[MAX_MESSAGE_LENGTH];
 
     }; // Exception
     

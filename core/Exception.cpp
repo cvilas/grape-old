@@ -42,9 +42,9 @@ namespace Grape
     {
         _code = code;
         size_t len = strlen(msg);
-        if( len > (MAX_MSG_LEN-1) )
+        if( len > (MAX_MESSAGE_LENGTH-1) )
         {
-            len = MAX_MSG_LEN-1;
+            len = MAX_MESSAGE_LENGTH-1;
         }
         strncpy(_msgStr, msg, len);
         _msgStr[len] = '\0';
