@@ -18,7 +18,7 @@ namespace Grape
     }
     
     //--------------------------------------------------------------------------
-    Exception::Exception(const Exception& e)
+    Exception::Exception(const Exception& e) throw(/*nothing*/)
     //--------------------------------------------------------------------------
     : std::exception(e)
     {

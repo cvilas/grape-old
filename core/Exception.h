@@ -26,9 +26,6 @@ namespace Grape
     ///   www.boost.org/community/error_handling.html
     /// - For older versions of gcc ( <= 2.96 ) compile with exceptions enabled 
     ///   (-fexceptions switch) to avoid SIGABRT on exception.
-    /// 
-    /// <b>Example Program:</b>
-    /// \include ExceptionExample.cpp
 
     class GRAPECORE_DLL_API Exception : public std::exception
     {
@@ -38,13 +35,13 @@ namespace Grape
     public:
 
         /// Standard constructor
-        /// \param code  set integer error code. (0 reserved for no error)
-        /// \param desc  set a short description, possibly just the location of the
+        /// \param code  set integer error code.
+        /// \param desc  set a short description, possibly just the cause and location of the
         ///              error.
         explicit Exception(int code, const char* desc="(no description)") throw(/*nothing*/);
         
         /// copy constructor
-        Exception(const Exception& e);
+        Exception(const Exception& e) throw(/*nothing*/);
         
         /// destructor
         virtual ~Exception() throw(/*nothing*/) { }
@@ -55,7 +52,7 @@ namespace Grape
         /// \return A description of the exception thrown
         virtual const char* what() const throw(/*nothing*/) { return _msgStr; }
         
-        /// \return latest error code. (0 means no error).
+        /// \return latest error code.
         int getCode() const throw(/*nothing*/) { return _code; }
 
     private:
