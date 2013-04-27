@@ -14,7 +14,9 @@ win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
 HEADERS = consoleio.h stringfuncs.h CmdLineArgs.h grapeutils_common.h
 SOURCES = consoleio.cpp CmdLineArgs.cpp
-win32:SOURCES += 
+
+win32:HEADERS += guidfuncs.h
+win32:SOURCES += guidfuncs.cpp
 unix:SOURCES += 
 
 CONFIG(debug, release|debug) {

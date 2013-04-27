@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += core utils io timing tests
+SUBDIRS += core utils io timing tests examples
 
 OTHER_FILES += \
     doc/doxygen/doxydoc.h \
