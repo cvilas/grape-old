@@ -1,13 +1,6 @@
 //==============================================================================
-/// \file        JoystickExamples.cpp
-/// \brief       Example programs for Joystick library
-/// \author      vilasc
-/// \date        3 July 2012 (created)
-///
-/// <h3>Last Modified details:</h3>
-/// $Author: vilas.chitrakaran $
-/// $Date: 2012-07-20 16:23:14 +0100 (Fri, 20 Jul 2012) $
-/// $Revision: 12615 $
+// File     :   JoystickExamples.cpp
+// Brief    :   Example programs for Joystick library
 //==============================================================================
 
 #include "JoystickExamples.h"

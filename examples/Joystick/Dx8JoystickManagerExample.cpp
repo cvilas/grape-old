@@ -1,13 +1,6 @@
 //==============================================================================
-/// \file        Dx8JoystickManagerExample.cpp
-/// \brief       Example program for Dx8JoystickManager class
-/// \author      vilasc
-/// \date        3 July 2012 (created)
-///
-/// <h3>Last Modified details:</h3>
-/// $Author: vilas.chitrakaran $
-/// $Date: 2012-07-11 17:03:19 +0100 (Wed, 11 Jul 2012) $
-/// $Revision: 12405 $
+// File    :   Dx8JoystickManagerExample.cpp
+// Brief   :   Example program for Dx8JoystickManager class
 //==============================================================================
 
 #include "Dx8JoystickManager.h"

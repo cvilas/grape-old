@@ -27,6 +27,9 @@ namespace  Grape
 /// - Event handler interface to notify state changes
 ///   See http://msdn.microsoft.com/en-us/library/windows/desktop/ee418748%28v=vs.85%29.aspx
 /// - Calibration functions and I/O curves for axes
+///
+/// <b>Example Program</b>
+/// \include SimpleJoystickExample.cpp
 
 class GRAPEIO_DLL_API SimpleJoystick : public IJoystick
 {

@@ -29,6 +29,9 @@ namespace Grape
 /// User applications must link against dxguid.lib dxerr.lib dinput8.lib comctl32.lib
 /// (DirectX SDK or runtimes can be installed
 /// from http://msdn.microsoft.com/en-us/directx/aa937788.aspx)
+///
+/// <b>Example Program</b>
+/// \include Dx8JoystickManagerExample.cpp
 
 class GRAPEIO_DLL_API Dx8JoystickManager
 {
