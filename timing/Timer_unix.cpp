@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include <errno.h>
 #include <stdio.h> // for fprintf
+
 namespace Grape
 {
     static const clockid_t CLOCKID = DEFAULT_CLOCK;
