@@ -47,7 +47,7 @@ public:
     int						_nSliders;		//!< number of sliders found
     GUID					_instanceGUID;	//!< GUID of active device
     std::string				_instanceName;	//!< Name of the active device
-    CDx8JoystickManager&    _jsMan;         //!< singleton manager interface
+    Dx8JoystickManager&     _jsMan;         //!< singleton manager interface
 };
 
 //==============================================================================
@@ -59,7 +59,7 @@ SimpleJoystickP::SimpleJoystickP(HWND hWnd)
       _pDevice(NULL),
       _nSliders(0),
       _instanceGUID(GUID_NULL),
-      _jsMan(CDx8JoystickManager::getSingleton())
+      _jsMan(Dx8JoystickManager::getSingleton())
 {
     memset(&_deviceCaps, 0, sizeof(DIDEVCAPS));
     memset(&_axisPresent, 0, 8 * sizeof(bool));
@@ -450,7 +450,7 @@ bool SimpleJoystick::isConnected() const
 }
 
 //------------------------------------------------------------------------------
-std::string SimpleJoystick::getDeviceName() const
+std::string SimpleJoystick::getName() const
 //------------------------------------------------------------------------------
 {
     return _pImpl->getDeviceName();

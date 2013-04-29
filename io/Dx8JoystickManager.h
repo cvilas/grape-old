@@ -11,6 +11,7 @@
 #define DIRECTINPUT_VERSION 0x0800 // Must be declared before dinput.h
 
 #include "grapeio_common.h"
+#include "utils/guidfuncs.h"
 #include <dinput.h>
 #include <vector>
 #include <string>
@@ -92,7 +93,7 @@ public:
     inline static bool isDeviceConnected(const GUID &guid);
 
     /// \return Reference to single me
-    inline static CDx8JoystickManager& getSingleton();
+    inline static Dx8JoystickManager& getSingleton();
 
 private:
     Dx8JoystickManager();
@@ -112,7 +113,7 @@ private:
 Dx8JoystickManager& Dx8JoystickManager::getSingleton()
 //------------------------------------------------------------------------------
 {
-    static CDx8JoystickManager s_singleton;
+    static Dx8JoystickManager s_singleton;
     return s_singleton;
 }
 

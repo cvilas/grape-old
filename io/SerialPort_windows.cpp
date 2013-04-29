@@ -225,7 +225,8 @@ bool SerialPort::open()
     close();
 
     // try opening the serial connection
-    _pImpl->_portFd = CreateFile(_pImpl->_portName.c_str(),
+    std::wstring portName(_pImpl->_portName.begin(), _pImpl->_portName.end());
+    _pImpl->_portFd = CreateFile(portName.c_str(),
                                  GENERIC_READ | GENERIC_WRITE,
                                  0, 0,
                                  OPEN_EXISTING,

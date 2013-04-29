@@ -3,7 +3,7 @@
 // Brief   :   Example program for Dx8JoystickManager class
 //==============================================================================
 
-#include "Dx8JoystickManager.h"
+#include "io/Dx8JoystickManager.h"
 #include <iostream>
 
 //==============================================================================
@@ -32,7 +32,7 @@ bool Dx8JoystickManagerExample()
         GUID gid = manager.getDeviceGuid(i);
         std::cout << "Index: " << i << std::endl
                   << "\tName: " << manager.getDeviceName(i) << std::endl
-                  << "\tGUID: " << Joystick::GuidToString(gid) << std::endl;
+                  << "\tGUID: " << Grape::GuidToString(gid) << std::endl;
     }
 
     return true;

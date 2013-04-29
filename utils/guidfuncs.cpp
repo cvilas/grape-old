@@ -6,6 +6,9 @@
 
 #include "guidfuncs.h"
 
+namespace Grape
+{
+
 //-------------------------------------------------------------------------
 std::string GuidToString(GUID& guid)
 //-------------------------------------------------------------------------
@@ -54,3 +57,4 @@ bool isGuidEqual(const GUID &id1, const GUID &id2 )
     return true;
 }
 
+} // Grape

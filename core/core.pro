@@ -10,7 +10,6 @@ include(../grapelibs.pri)
 
 # library specific settings
 win32:DEFINES += GRAPECORE_DLL GRAPECORE_DLL_EXPORT
-win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
 HEADERS += \ 
     Exception.h \

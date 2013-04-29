@@ -10,7 +10,6 @@ include(../grapelibs.pri)
 
 # library specific settings
 win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL GRAPEIO_DLL_EXPORT
-win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
 
 HEADERS = IPort.h SerialPort.h \
