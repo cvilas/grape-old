@@ -2,7 +2,6 @@ include(../grapetests.pri)
 
 TARGET = TestCore
 
-
 HEADERS += \
     TestException.h
 SOURCES += \
