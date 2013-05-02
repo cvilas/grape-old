@@ -9,8 +9,13 @@
 #define GRAPEUTILS_GUIDFUNCS_H
 
 #include "grapeutils_common.h"
+#include <InitGuid.h>
 #include <string>
 #include <rpc.h>
+
+#ifndef GUID_NULL
+const GUID GUID_NULL = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+#endif
 
 namespace Grape
 {

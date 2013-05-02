@@ -45,4 +45,4 @@ INCLUDEPATH += $${PWD}
 win32:INCLUDEPATH += $${WINSDKDIR}/Include/um
 DEPENDPATH += ./
 LIBS += -L$${PWD}/lib/
-win32:LIBS += -L$${WINSDKDIR}/Lib/win8/um/x64 -ldxguid -ldinput8 -lrpcrt4 -lws2_32 -lUser32
+win32:LIBS += -L$${WINSDKDIR}/Lib/win8/um/x64 -ldinput8 -lrpcrt4 -lws2_32 -lUser32
