@@ -1,6 +1,7 @@
-include(../grapeexamples.pri)
 
 TARGET = JoystickExamples
+
+include(../grapeexamples.pri)
 
 HEADERS += JoystickExamples.h
 SOURCES += JoystickExamples.cpp SimpleJoystickExample.cpp

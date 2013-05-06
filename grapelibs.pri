@@ -1,7 +1,5 @@
 # Common settings for GRAPE project libraries
 
-# For windows - location of windows SDK
-WINSDKDIR=C:\PROGRA~2\WI3CF2~1\8.0
 TEMPLATE = lib
 
 # the following are used by individual libraries
@@ -29,7 +27,6 @@ DLLDESTDIR = $${PWD}/bin/
 
 DEFINES +=
 win32:DEFINES += UNICODE _UNICODE _CRT_SECURE_NO_WARNINGS
-#win32: DEFINES -= UNICODE _UNICODE
 CONFIG(debug, release|debug) {
     DEFINES += _DEBUG
     win32:LIBS +=
@@ -42,7 +39,6 @@ CONFIG(debug, release|debug) {
 # don't want linking against qtmain.lib
 QMAKE_LIBS_QT_ENTRY=
 INCLUDEPATH += $${PWD}
-win32:INCLUDEPATH += $${WINSDKDIR}/Include/um
 DEPENDPATH += ./
 LIBS += -L$${PWD}/lib/
-win32:LIBS += -L$${WINSDKDIR}/Lib/win8/um/x64 -ldinput8 -lrpcrt4 -lws2_32 -lUser32
+win32:LIBS += -ldinput8 -lrpcrt4 -lws2_32 -lUser32

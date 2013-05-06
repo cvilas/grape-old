@@ -1,7 +1,7 @@
-include(../grapetests.pri)
 
 TARGET = TestIo
 
+include(../grapetests.pri)
 
 HEADERS += \
     TestSerialPort.h

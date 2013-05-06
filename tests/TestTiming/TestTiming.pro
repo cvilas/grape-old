@@ -1,5 +1,6 @@
-include(../grapetests.pri)
 TARGET = TestTiming
+
+include(../grapetests.pri)
 
 HEADERS += \
     TestStopWatch.h \

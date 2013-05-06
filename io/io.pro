@@ -24,7 +24,6 @@ win32:SOURCES += Dx8JoystickManager.cpp SimpleJoystick_windows.cpp SerialPort_wi
 unix:SOURCES += SerialPort_unix.cpp SimpleJoystick_unix.cpp
 
 CONFIG(debug, release|debug) {
-    DEFINES += _DEBUG
     win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0
     else:unix: LIBS += -lGrapeCored -lGrapeUtilsd
 } else {

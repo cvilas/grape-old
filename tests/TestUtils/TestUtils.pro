@@ -1,7 +1,7 @@
-include(../grapetests.pri)
 
 TARGET = TestUtils
 
+include(../grapetests.pri)
 
 HEADERS += \
     TestCmdLineArgs.h
