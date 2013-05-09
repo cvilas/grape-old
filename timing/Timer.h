@@ -40,6 +40,9 @@ namespace Grape
     /// - getNotificationSignal() will tell you what specific signal we are using.
     ///   Don't use this signal elsewhere.
     /// - Implementation is not thread-safe. 
+    /// \todo
+    ///  - Rewrite wait() using just sigwait(). Do not use sigwaitinfo()
+    ///  - Rewrite timedwait() without using sigtimedwait
 
     class GRAPETIMING_DLL_API Timer
     {

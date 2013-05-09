@@ -184,7 +184,7 @@ namespace Grape
     //------------------------------------------------------------------------------
     bool Timer::wait() const throw()
     //------------------------------------------------------------------------------
-    {        
+    {
         siginfo_t info;
         if(  (sigwaitinfo(&_pImpl->_sigSet, &info) < 0)
              || (info.si_value.sival_ptr != _pImpl)

@@ -21,7 +21,8 @@ SOURCES = \
 
 win32:HEADERS += Dx8JoystickManager.h
 win32:SOURCES += Dx8JoystickManager.cpp SimpleJoystick_windows.cpp SerialPort_windows.cpp
-unix:SOURCES += SerialPort_unix.cpp SimpleJoystick_unix.cpp
+unix:SOURCES += SerialPort_unix.cpp
+unix:!android:SOURCES+=SimpleJoystick_unix.cpp
 
 CONFIG(debug, release|debug) {
     win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0
