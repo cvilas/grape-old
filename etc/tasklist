@@ -2,6 +2,7 @@ TODO
 - Replace generic Exceptions with specific exception classes in all classes (eg: Ugv1::VehicleException classes)
 - Remove IPort lastError. Use Exceptions instead.
 - Remove error messages redirected to cerr. use exceptions.
+- Timer: Remove error returns. Use exceptions instead.
 - Move all classes from ours/Generic
 - Move all examples from ours/Generic
 - Move remaining classes and examples from mine/Generic
