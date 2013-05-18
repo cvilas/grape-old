@@ -41,8 +41,8 @@ namespace Grape
     ///   Don't use this signal elsewhere.
     /// - Implementation is not thread-safe. 
     /// \todo
-    ///  - Rewrite wait() using just sigwait(). Do not use sigwaitinfo()
-    ///  - Rewrite timedwait() without using sigtimedwait
+    /// Mask the signal used (sigprocmask) so that other threads in the process
+    /// do not terminate when timer signals
 
     class GRAPETIMING_DLL_API Timer
     {
@@ -99,14 +99,17 @@ namespace Grape
         void stop() throw(Exception);
         
         /// Wait until a single tick of the timer.
-        /// \return true on success, false on error. (Most likely interrupted by a signal handler)
-        bool wait() const throw();
+        /// \return true if wait exited due to this timer, false if function returned due
+        ///         to another cause (such as interrupt by another signal).
+        bool wait() const throw(Exception);
         
         /// Wait until a single tick of the timer, or until timed out.
+        /// \note This method is not implemented on Android and will throw an exception.
         /// \param ns (input) Time out period in nanoseconds. If set to 0, the method
         ///           will return immediately (same as polling for a timer tick).
-        /// \return true on success, false on error.
-        bool timedWait(long long ns) const throw();
+        /// \return true if wait exited due to this timer, false if function returned due
+        ///         to another cause (such as timeout or interrupt by another signal).
+        bool timedWait(long long ns) const throw(Exception);
         
         /// Force a timer tick. May use this to unblock wait()
         void forceTimerTick() const throw();

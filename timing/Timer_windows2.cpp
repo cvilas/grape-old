@@ -23,6 +23,7 @@ namespace Grape
         ~TimerP() throw();
         void start(long long ns, bool isOneShot = false) throw(Exception);
         void stop() throw();
+        bool wait(DWORD ms)throw(Exception);
 		static void CALLBACK timerCallback(UINT timerId, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2);
 	public:
         LARGE_INTEGER _countsPerSec;
@@ -127,7 +128,20 @@ namespace Grape
         _isRunning = false;
 	}
 
-	//==============================================================================
+    //------------------------------------------------------------------------------
+    bool TimerP::wait(DWORD ms)throw(Exception)
+    //------------------------------------------------------------------------------
+    {
+        DWORD ret = WaitForSingleObject(_hndTimerEvent, ms);
+        if( ret == WAIT_FAILED )
+        {
+            throw Exception(GetLastError(), "[TimerP::wait(WaitForSingleObject)]");
+        }
+
+        return ( ret == WAIT_OBJECT_0 );
+    }
+
+    //==============================================================================
     Timer::Timer(int prio) throw(Exception, std::bad_alloc)
 	//==============================================================================
     : _pImpl(new TimerP )
@@ -171,20 +185,20 @@ namespace Grape
 	}
 	
 	//------------------------------------------------------------------------------
-    bool Timer::wait() const throw()
+    bool Timer::wait() const throw(Exception)
 	//------------------------------------------------------------------------------
 	{
-        return (WaitForSingleObject(_pImpl->_hndTimerEvent, INFINITE) == WAIT_OBJECT_0);
+        return _pImpl->wait(INFINITE);
 	}
 
 	//------------------------------------------------------------------------------
-    bool Timer::timedWait(long long ns) const throw()
+    bool Timer::timedWait(long long ns) const throw(Exception)
 	//------------------------------------------------------------------------------
 	{
-		if( ns < 0 ){ ns = 0; }
-		long long ms = ns/1000000LL;
-        return (WaitForSingleObject(_pImpl->_hndTimerEvent, (DWORD)ms) == WAIT_OBJECT_0 );
-	}
+        if( ns < 0 ) { ns = 0; }
+        long long ms = ns/1000000LL;
+        return _pImpl->wait((DWORD)ms);
+    }
 
 	//------------------------------------------------------------------------------
     void Timer::forceTimerTick() const throw()

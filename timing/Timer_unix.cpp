@@ -50,11 +50,11 @@ namespace Grape
         // is anyone else using this signal? we want exclusivity
         if( sigaction(_signal, NULL, &sa) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::TimerP (sigaction)]");
+            throw Exception(errno, "[TimerP::TimerP (sigaction)]");
         }
         if( (sa.sa_sigaction != NULL) || (sa.sa_handler != NULL) )
         {
-            throw Grape::Exception(errno, "[TimerP::TimerP] Real-time signal is already in use");
+            throw Exception(errno, "[TimerP::TimerP] Real-time signal is already in use");
         }
 
         // setup notification of timer expiry
@@ -65,17 +65,17 @@ namespace Grape
         
         if( 0 != sigemptyset(&_sigSet) )
         {
-            throw Grape::Exception(errno, "[TimerP::TimerP (sigemptyset)]");
+            throw Exception(errno, "[TimerP::TimerP (sigemptyset)]");
         }
         if( 0 != sigaddset(&_sigSet, _signal) )         // we only want to wait on my signal
         {
-            throw Grape::Exception(errno, "[TimerP::TimerP (sigaddset)]");
+            throw Exception(errno, "[TimerP::TimerP (sigaddset)]");
         }
         
         // create the timer
         if( 0 != timer_create(_clockId, &sigev, &_timerId) )
         {
-            throw Grape::Exception(errno, "[TimerP::TimerP (timer_create)]");
+            throw Exception(errno, "[TimerP::TimerP (timer_create)]");
         }
 
         // Note 1: posix says signal handlers have priority over sigwaitinfo. So
@@ -86,7 +86,7 @@ namespace Grape
 
         if( rc != 0 )
         {
-            throw Grape::Exception(rc, "[TimerP::TimerP (pthread_sigmask)]");
+            throw Exception(rc, "[TimerP::TimerP (pthread_sigmask)]");
         }
     }
     
@@ -122,12 +122,12 @@ namespace Grape
 
         if( timer_settime(_timerId, 0/*flags*/, &_period, NULL /* oldperiod*/) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::start (timer_settime)]");
+            throw Exception(errno, "[TimerP::start (timer_settime)]");
         }
         
         if( clock_gettime(CLOCKID, &_startTime) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::start (clock_gettime)]");
+            throw Exception(errno, "[TimerP::start (clock_gettime)]");
         }
         
     }
@@ -142,7 +142,7 @@ namespace Grape
 
         if( timer_settime(_timerId, 0/*flags*/, &_period, NULL /* oldperiod*/) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::stop (timer_settime)]");
+            throw Exception(errno, "[TimerP::stop (timer_settime)]");
         }
     }
     
@@ -182,67 +182,52 @@ namespace Grape
     }
     
     //------------------------------------------------------------------------------
-    bool Timer::wait() const throw()
+    bool Timer::wait() const throw(Exception)
     //------------------------------------------------------------------------------
     {
-        siginfo_t info;
-        if(  (sigwaitinfo(&_pImpl->_sigSet, &info) < 0)
-             || (info.si_value.sival_ptr != _pImpl)
-             || (info.si_signo != _pImpl->_signal) )
+        int info = 0;
+        int error = sigwait(&_pImpl->_sigSet, &info);
+        if( error != 0 )
         {
-            if(info.si_value.sival_ptr != _pImpl)
-            {
-#ifdef DEBUG
-                fprintf(stderr, "[Timer::wait] Woken up by someone else\n");
-#endif
-            }
-            else if (info.si_signo != _pImpl->_signal)
-            {
-#ifdef DEBUG
-                fprintf(stderr, "[Timer::wait] Signal %d received waiting for signal %d.\n", info.si_signo, pImpl_->_signal);
-#endif
-            }
-            return false;
+            throw Exception(error, "[Timer::wait(sigwait)]");
         }
 
-        // ok, if we unblocked due to my timer and my signal
-        return true;
-        
-        // Notes:
-        // error if sigNo < 0
-        // info.si_code == SI_TIMER; // if signal sent due to timer expiry
-        // info.si_ptr == pImpl_; // our timer
-        // info.si_signo == pImpl_->_signal; // our signal
-        
+        return ( info == _pImpl->_signal );
     }
     
     //------------------------------------------------------------------------------
-    bool Timer::timedWait(long long ns) const throw()
+    bool Timer::timedWait(long long ns) const throw(Exception)
     //------------------------------------------------------------------------------
     {
+#ifdef __ANDROID__
+        throw Exception(-1, "[Timer::timedWait] Not implemented on Android");
+#else
         struct timespec waitTime;
         waitTime.tv_sec = (long)(ns/TimerP::_NANO);
         waitTime.tv_nsec = (long)(ns%TimerP::_NANO);
 
         siginfo_t info;      
         
-        if( (sigtimedwait(&(_pImpl->_sigSet), &info, &waitTime) < 0 )
-             || (info.si_value.sival_ptr != _pImpl)
-             || (info.si_signo != _pImpl->_signal) )
+        if( sigtimedwait(&(_pImpl->_sigSet), &info, &waitTime) < 0 )
         {
-            if(info.si_value.sival_ptr != _pImpl)
-            {
-                fprintf(stderr, "[Timer::timedWait] Woken up by someone else.\n");
-            }
-            else if (info.si_signo != _pImpl->_signal)
-            {
-                fprintf(stderr, "[Timer::timedWait] Signal %d received waiting for signal %d\n", info.si_signo, _pImpl->_signal);
-            }
+            throw Exception(errno, "[Timer::wait(sigwaitinfo)]");
+        }
+
+
+        if(info.si_value.sival_ptr != _pImpl)
+        {
+            fprintf(stderr, "[Timer::timedWait] Woken up by someone else.\n");
             return false;
-        }       
+        }
+        else if (info.si_signo != _pImpl->_signal)
+        {
+            fprintf(stderr, "[Timer::timedWait] Signal %d received waiting for signal %d\n", info.si_signo, _pImpl->_signal);
+            return false;
+        }
 
         // ok, if we unblocked due to my timer and my signal
         return true;
+#endif
     }
 
     //------------------------------------------------------------------------------
@@ -262,7 +247,7 @@ namespace Grape
         struct timespec res;
         if( clock_getres(CLOCKID, &res) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::getResolution (clock_getres)]");
+            throw Exception(errno, "[TimerP::getResolution (clock_getres)]");
             // CLOCKID is not supported
         }
         return (res.tv_sec * TimerP::_NANO) + res.tv_nsec;
@@ -281,12 +266,12 @@ namespace Grape
 
         if( clock_gettime(CLOCKID, &now) < 0 )
         {
-            throw Grape::Exception(errno, "[TimerP::getNumTicks (clock_gettime)]");
+            throw Exception(errno, "[TimerP::getNumTicks (clock_gettime)]");
         }
 
         if( !Grape::timespecDiff(now, startTime, elapsed) )
         {
-            throw Grape::Exception(-1, "[TimerP::getOverruns] Current time < unblock time");
+            throw Exception(-1, "[TimerP::getOverruns] Current time < unblock time");
         }
         long long ns = elapsed.tv_sec * TimerP::_NANO + elapsed.tv_nsec;
         return ns/(period.it_value.tv_sec * TimerP::_NANO + period.it_value.tv_nsec);

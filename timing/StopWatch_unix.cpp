@@ -98,7 +98,7 @@ namespace Grape
         struct timespec elapsed;
         if( !timespecDiff(_pImpl->_stopTime, _pImpl->_startTime, elapsed) )
         {
-            throw Grape::Exception(-1, "[StopWatch::stop] stop time < start time");
+            throw Exception(-1, "[StopWatch::stop] stop time < start time");
         }
         timespecAdd(_pImpl->_accumulatedTime, elapsed, _pImpl->_accumulatedTime);
 #ifdef DEBUG
@@ -127,7 +127,7 @@ namespace Grape
             struct timespec elapsed;
             if( !timespecDiff(now, _pImpl->_startTime, elapsed) )
             {
-                throw Grape::Exception(-1, "[StopWatch::getTime] current time < start time");
+                throw Exception(-1, "[StopWatch::getTime] current time < start time");
             }
             timespecAdd(_pImpl->_accumulatedTime, elapsed, elapsed);
             return elapsed.tv_sec * _NANO + elapsed.tv_nsec;
