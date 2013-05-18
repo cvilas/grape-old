@@ -17,6 +17,4 @@ TODO
 - Timer: Posix: tests for all error return conditions,
   timed wait, interaction between multiple timers, response when period is
   set below timer resolution
-- Timer: Posix: Resolve issue with timer signal terminating other threads
-  in the process.
 - Thread: In Windows wait() blocks in the destructor. Fix this.

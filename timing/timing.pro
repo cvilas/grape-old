@@ -16,7 +16,7 @@ HEADERS += grapetiming_common.h StopWatch.h Timer.h
 unix:HEADERS += posix.h
 SOURCES +=
 win32:SOURCES += StopWatch_windows.cpp Timer_windows2.cpp
-unix:SOURCES += StopWatch_unix.cpp Timer_unix.cpp
+unix:SOURCES += StopWatch_unix.cpp Timer_unix2.cpp
 
 CONFIG(debug, release|debug) {
     DEFINES += _DEBUG
