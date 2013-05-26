@@ -54,7 +54,7 @@ void TestTimer::period()
     {
         // wait for tick
         bool rc = timer.timedWait(timeoutNs);
-        QVERIFY2(rc, "Waiting on timer failed");
+        QVERIFY2(rc, "timedWait returned false");
         nTicks++;
     }
     watch.stop();

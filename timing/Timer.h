@@ -49,13 +49,13 @@ class GRAPETIMING_DLL_API Timer
         void stop() throw(Exception);
         
         /// Wait until a single tick of the timer.
-        /// \return true if wait exited due to timer tick, false on timeout or error.
+        /// \return true if wait exited due to timer tick.
         bool wait() const throw(Exception);
         
         /// Wait until a single tick of the timer, or until timed out.
         /// \param ns (input) Time out period in nanoseconds. If set to 0, the method
         ///           will return immediately (same as polling for a timer tick).
-        /// \return true if wait exited due to timer tick, false on timeout or error.
+        /// \return true if wait exited due to timer tick, false on timeout.
         bool timedWait(long long ns) const throw(Exception);
         
         /// Force a timer tick. May use this to unblock wait()

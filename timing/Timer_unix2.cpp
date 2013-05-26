@@ -24,6 +24,7 @@ namespace Grape
     public:
         static void TimerEventHandler(union sigval sv) throw(Exception);
         static const long long _NANO = 1000000000LL;
+        static const long long _NS_IN_TEN_YEARS = 10*365*24*60*60*_NANO;
     public:
         explicit TimerP() throw(Exception); /* prio between 0 and RTSIG_MAX */
         ~TimerP() throw();
@@ -139,19 +140,11 @@ namespace Grape
         struct timespec absTime;
 
         // compute timeout in absolute time
-        if( ns > 0)
-        {
-            gettimeofday(&now, NULL);
-            long long absTimeNs = (now.tv_sec * _NANO) + (now.tv_usec * 1000) + ns;
+        gettimeofday(&now, NULL);
+        long long absTimeNs = (now.tv_sec * _NANO) + (now.tv_usec * 1000) + ns;
 
-            absTime.tv_sec = (long)(absTimeNs/_NANO);
-            absTime.tv_nsec = (long)(absTimeNs - absTime.tv_sec * _NANO);
-        }
-        else
-        {
-            absTime.tv_sec = INT_MAX;
-            absTime.tv_nsec = LONG_MAX;
-        }
+        absTime.tv_sec = (long)(absTimeNs/_NANO);
+        absTime.tv_nsec = (long)(absTimeNs - absTime.tv_sec * _NANO);
 
         bool ticked = false;
 
@@ -232,7 +225,7 @@ namespace Grape
     bool Timer::wait() const throw(Exception)
     //------------------------------------------------------------------------------
     {
-        return _pImpl->wait(-1);
+        return _pImpl->wait(TimerP::_NS_IN_TEN_YEARS);
     }
 
     //------------------------------------------------------------------------------
