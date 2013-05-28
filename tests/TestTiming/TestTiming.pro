@@ -8,5 +8,4 @@ HEADERS += \
 SOURCES += TestTiming.cpp \
     TestStopWatch.cpp \
     TestTimer.cpp
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
