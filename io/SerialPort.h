@@ -17,6 +17,9 @@ namespace Grape
 /// \ingroup io
 /// \brief A simple serial port communication class
 /// The class provides a basic interface to serial ports.
+/// \todo
+/// - Test all bytes have been transmitted in waitForWrite()
+/// - In windows, review overlapped io timeouts are correct
 class GRAPEIO_DLL_API SerialPort : public IPort
 {
 public:

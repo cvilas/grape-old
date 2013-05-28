@@ -18,6 +18,7 @@ namespace Grape
 /// \class Status
 /// \ingroup core
 /// \brief Holder for a single message and code
+/// \todo Remove this class. Implement a stream-based logger as replacement
 class GRAPECORE_DLL_API Status
 {
 public:
