@@ -38,4 +38,7 @@
  * 
  * \defgroup timing Timing
  * Timing facilities
+ *
+ * \defgroup graphics Graphics
+ * 2D and 3D graphics support
  */

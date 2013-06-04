@@ -14,7 +14,25 @@ win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEGRAPHICS_DLL GRAPEGR
 INCLUDEPATH += ./
 
 HEADERS = \
+    grapegraphics_common.h \
+    ISignalerField.h \
+    Annotation.h \
+    TextAnnotation.h \
+    TimeAnnotation.h \
+    CounterAnnotation.h \
+    ImageAnnotation.h \
+    CrosshairAnnotation.h \
+    ImageAnnotator.h
+
 SOURCES = \
+    Annotation.cpp \
+    TextAnnotation.cpp \
+    TimeAnnotation.cpp \
+    CounterAnnotation.cpp \
+    ImageAnnotation.cpp \
+    CrosshairAnnotation.cpp \
+    ImageAnnotator.cpp
+
 
 CONFIG(debug, release|debug) {
     win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0 -lCoin
