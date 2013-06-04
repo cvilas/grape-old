@@ -11,9 +11,9 @@ namespace Grape
 {
 
 //==============================================================================
-TimeAnnotation::TimeAnnotation()
+TimeAnnotation::TimeAnnotation(QObject *parent)
 //==============================================================================
-: TextAnnotation(), format("dd MMM yyyy - hh:mm:ss.zzz")
+: TextAnnotation(parent), format("dd MMM yyyy - hh:mm:ss.zzz")
 {
 }
 

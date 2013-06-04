@@ -11,13 +11,13 @@ namespace Grape
 {
 
 //==============================================================================
-CrosshairAnnotation::CrosshairAnnotation()
+CrosshairAnnotation::CrosshairAnnotation(QObject *parent)
 //==============================================================================
-: Annotation()
+: Annotation(parent)
 {
     _pLines = new QLine [2];
-    QObject::connect(&boundingBox, SIGNAL(fieldChanged()), this, SLOT(updatePosition()));
-    QObject::connect(&thickness, SIGNAL(fieldChanged()), this, SLOT(updateThickness()));
+    QObject::connect(&boundingBox, SIGNAL(modified()), this, SLOT(updatePosition()));
+    QObject::connect(&thickness, SIGNAL(modified()), this, SLOT(updateThickness()));
     _pen.setColor(Qt::white);
     boundingBox = QRectF(0, 0, 10, 10);
     thickness = 1;

@@ -8,7 +8,7 @@
 #ifndef GRAPE_IMAGEANNOTATOR_H
 #define GRAPE_IMAGEANNOTATOR_H
 
-#include "Annotation.h"
+#include "graphics/Annotation.h"
 #include <QImage>
 #include <QColor>
 

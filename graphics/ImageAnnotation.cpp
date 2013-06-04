@@ -11,9 +11,9 @@ namespace Grape
 {
 
 //==============================================================================
-ImageAnnotation::ImageAnnotation()
+ImageAnnotation::ImageAnnotation(QObject *parent)
 //==============================================================================
-: Annotation()
+: Annotation(parent)
 {
 }
 

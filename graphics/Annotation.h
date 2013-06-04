@@ -48,7 +48,7 @@ protected:
     /// painting of the annotation on to the image
     virtual void process(QPainter& painter) = 0;
 
-    explicit Annotation(QObject *parent = 0) : QObject(parent) {}
+    explicit Annotation(QObject *parent) : QObject(parent) {}
     virtual ~Annotation() {}
 }; // Annotation
 

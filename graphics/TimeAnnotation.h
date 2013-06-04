@@ -35,7 +35,7 @@ class GRAPEGRAPHICS_DLL_API TimeAnnotation : public TextAnnotation
 public:
     QString format; //!< format string. See documentation for QDateTime::toString(QString). The default is "dd MMM yyyy - hh:mm:ss.zzz".
 public:
-    TimeAnnotation();
+    TimeAnnotation(QObject *parent = 0);
     virtual ~TimeAnnotation();
 protected:
     void process(QPainter& painter);

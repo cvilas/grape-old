@@ -31,7 +31,7 @@ public:
     QImage	image;				//!< The annotation image.
 
 public:
-    ImageAnnotation();
+    ImageAnnotation(QObject *parent = 0);
     virtual ~ImageAnnotation();
 protected:
     void process(QPainter& painter);

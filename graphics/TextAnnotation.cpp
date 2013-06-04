@@ -12,9 +12,9 @@ namespace Grape
 {
 
 //==============================================================================
-TextAnnotation::TextAnnotation()
+TextAnnotation::TextAnnotation(QObject *parent)
 //==============================================================================
-: Annotation(), font(QApplication::font())
+: Annotation(parent), font(QApplication::font())
 {
 }
 

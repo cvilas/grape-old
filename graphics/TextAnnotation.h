@@ -52,7 +52,7 @@ public:
                                 //!< Qt::TextWordWrap		\n
                                 //!< Qt::TextIncludeTrailingSpaces
 public:
-    TextAnnotation();
+    TextAnnotation(QObject *parent = 0);
     virtual ~TextAnnotation();
 protected:
     void process(QPainter& painter);

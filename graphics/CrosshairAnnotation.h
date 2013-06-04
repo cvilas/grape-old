@@ -31,7 +31,7 @@ public:
     ISignalerFieldT<int>	thickness;	//!< The thickness of lines in pixels
 
 public:
-    CrosshairAnnotation();
+    CrosshairAnnotation(QObject *parent = 0);
     virtual ~CrosshairAnnotation();
 
 private:

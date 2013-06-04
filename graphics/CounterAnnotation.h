@@ -36,7 +36,7 @@ public:
     int fieldWidth;				//!< Minimum amount of padding space to be filled with fillChar. Default is 0. A positive value produces right-aligned text, negative value produces left aligned text.
     QChar fillChar;				//!< fill character for padding. Default is ' '.
 public:
-    CounterAnnotation();
+    CounterAnnotation(QObject *parent = 0);
     virtual ~CounterAnnotation();
 protected:
     void process(QPainter& painter);

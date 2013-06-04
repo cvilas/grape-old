@@ -74,7 +74,7 @@ void ImageAnnotator::addAnnotation(Annotation* pAnnotation, bool deleteOnRemove)
     prop.deleteOnRemove = deleteOnRemove;
     _annotations.append(prop);
     emit annotationAdded();
-    QObject::connect( &pAnnotation->boundingBox, SIGNAL(fieldChanged()), this, SLOT(onAnnotationMoved()));
+    QObject::connect( &pAnnotation->boundingBox, SIGNAL(modified()), this, SLOT(onAnnotationMoved()));
 }
 
 //------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ bool ImageAnnotator::removeAnnotation( int index )
     }
 
     AnnotationProperties prop = _annotations.takeAt(index);
-    QObject::disconnect( &(prop.pAnnotation->boundingBox), SIGNAL(fieldChanged()), this, SLOT(onAnnotationMoved()));
+    QObject::disconnect( &(prop.pAnnotation->boundingBox), SIGNAL(modified()), this, SLOT(onAnnotationMoved()));
     if( prop.deleteOnRemove )
     {
         delete prop.pAnnotation;

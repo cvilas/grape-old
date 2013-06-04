@@ -10,9 +10,9 @@ namespace Grape
 {
 
 //==============================================================================
-CounterAnnotation::CounterAnnotation()
+CounterAnnotation::CounterAnnotation(QObject *parent)
 //==============================================================================
-: TextAnnotation(), step(1), fieldWidth(0), fillChar(QLatin1Char(' '))
+: TextAnnotation(parent), step(1), fieldWidth(0), fillChar(QLatin1Char(' '))
 {
     count = 0;
 }
