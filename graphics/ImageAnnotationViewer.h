@@ -18,6 +18,7 @@ namespace Grape
 
 
 /// \class ImageAnnotationViewer
+/// \ingroup graphics
 /// \brief Interactive viewer for ImageAnnotator.
 ///
 /// ImageAnnotationViewer provides a surface to display the image stream processed
@@ -30,22 +31,21 @@ class GRAPEGRAPHICS_DLL_API ImageAnnotationViewer : public QWidget
 {
     Q_OBJECT
 public:
+    /// Constructor. Does a few initialisations. setImageAnnotator() must be called
+    /// before using the object.
+    /// \param annotator	The annotator object to associate the viewer with.
+    /// \param pParent		Pointer to the parent window
+    /// \param flgs		Window flags
     explicit ImageAnnotationViewer(QWidget* pParent = 0, Qt::WindowFlags flgs = 0);
-    ///< Constructor. Does a few initialisations. setImageAnnotator() must be called
-    ///< before using the object.
-    ///< \param annotator	The annotator object to associate the viewer with.
-    ///< \param pParent		Pointer to the parent window
-    ///< \param flgs		Window flags
 
     ~ImageAnnotationViewer();
-    ///< Destructor. Cleans up.
 
+    /// Associates the viewer with a specific annotator.
+    /// \param annotator	(input) The annotator object to associate the viewer with. Can be set to NULL.
     void setImageAnnotator(ImageAnnotator* pAnnotator);
-    ///< Associates the viewer with a specific annotator.
-    ///< \param annotator	(input) The annotator object to associate the viewer with. Can be set to NULL.
 
+    /// Allow users to interact with the viewer using the mouse.
     void setUserInteractive(bool option);
-    ///< Allow users to interact with the viewer using the mouse.
 
 public slots:
     inline void scaleToFit(bool );
@@ -80,7 +80,7 @@ private:
     virtual void resizeEvent( QResizeEvent* );
 
 private:
-    ImageAnnotator* m_pAnnotator;
+    ImageAnnotator* _pAnnotator;
 
     ///< \cond (Doxygen - ignore section between cond and endcond)
     typedef struct AnnotationAttributes
@@ -93,22 +93,22 @@ private:
     }AnnotationAttributes;
     ///< \endcond (Doxygen - ignore section between cond and endcond)
 
-    QList<AnnotationAttributes> m_attributes;
+    QList<AnnotationAttributes> _attributes;
 
-    int		m_mouseOverIndex;		// index of annotation under mouse
-    bool	m_isUsrInteractive;
+    int		_mouseOverIndex;		// index of annotation under mouse
+    bool	_isUsrInteractive;
 
-    QPointF	m_prevPos;				// mouse motion tracking variable
-    QPoint	m_windowImageoffset;	// offset between the top-left corners of the image and the containing window
-    bool    m_isScaling;
-    qreal	m_scale;
+    QPointF	_prevPos;				// mouse motion tracking variable
+    QPoint	_windowImageoffset;	// offset between the top-left corners of the image and the containing window
+    bool    _isScaling;
+    qreal	_scale;
 }; // ImageAnnotationViewer
 
 //------------------------------------------------------------------------------
 void ImageAnnotationViewer::scaleToFit(bool option)
 //------------------------------------------------------------------------------
 {
-    m_isScaling = option;
+    _isScaling = option;
     calculateScaleOffset();
     update();
 }
@@ -118,11 +118,11 @@ QPointF ImageAnnotationViewer::mapWindowPosToInputImagePos(const QPointF& window
 //------------------------------------------------------------------------------
 {
     QPointF pos = windowPos;
-    if( m_isScaling )
+    if( _isScaling )
     {
-        pos /= m_scale;
+        pos /= _scale;
     }
-    pos -= m_windowImageoffset;
+    pos -= _windowImageoffset;
     return pos;
 }
 
@@ -130,9 +130,9 @@ QPointF ImageAnnotationViewer::mapWindowPosToInputImagePos(const QPointF& window
 void ImageAnnotationViewer::onRotationEnable(bool option)
 //------------------------------------------------------------------------------
 {
-    if( m_pAnnotator )
+    if( _pAnnotator )
     {
-        m_pAnnotator->enableImageRotation(option);
+        _pAnnotator->enableImageRotation(option);
         update();
     }
 }

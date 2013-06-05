@@ -22,7 +22,7 @@ namespace Grape
 //==============================================================================
 ImageAnnotationViewer::ImageAnnotationViewer(QWidget* pParent, Qt::WindowFlags f)
 //==============================================================================
-: QWidget(pParent, f), m_pAnnotator(0), m_mouseOverIndex(-1), m_isScaling(false)
+: QWidget(pParent, f), _pAnnotator(0), _mouseOverIndex(-1), _isScaling(false)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setMouseTracking(true);
@@ -39,7 +39,7 @@ ImageAnnotationViewer::~ImageAnnotationViewer()
 void ImageAnnotationViewer::setUserInteractive(bool option)
 //-------------------------------------------------------------------------------
 {
-    m_isUsrInteractive = option;
+    _isUsrInteractive = option;
     if( option )
     {
         QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onContextMenuRequest(const QPoint&)));
@@ -55,17 +55,17 @@ void ImageAnnotationViewer::setUserInteractive(bool option)
 void ImageAnnotationViewer::setImageAnnotator(ImageAnnotator* pAnnotator)
 //-------------------------------------------------------------------------------
 {
-    if( m_pAnnotator )
+    if( _pAnnotator )
     {
-        QObject::disconnect(m_pAnnotator, SIGNAL(annotated()), this, SLOT(onAnnotated()));
-        QObject::disconnect(m_pAnnotator, SIGNAL(annotationAdded()), this, SLOT(onAddAnnotation()));
-        QObject::disconnect(m_pAnnotator, SIGNAL(annotationRemoved(int)), this, SLOT(onRemoveAnnotation(int)));
+        QObject::disconnect(_pAnnotator, SIGNAL(annotated()), this, SLOT(onAnnotated()));
+        QObject::disconnect(_pAnnotator, SIGNAL(annotationAdded()), this, SLOT(onAddAnnotation()));
+        QObject::disconnect(_pAnnotator, SIGNAL(annotationRemoved(int)), this, SLOT(onRemoveAnnotation(int)));
     }
-    m_attributes.clear();
+    _attributes.clear();
 
-    m_pAnnotator = pAnnotator;
+    _pAnnotator = pAnnotator;
 
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
@@ -73,14 +73,14 @@ void ImageAnnotationViewer::setImageAnnotator(ImageAnnotator* pAnnotator)
     // Creates a second list to contain attributes of annotations contained in the
     // list managed by CImageAnnotator.
 
-    int numAnnots = m_pAnnotator->getNumAnnotations();
+    int numAnnots = _pAnnotator->getNumAnnotations();
     for(int i = 0; i < numAnnots; ++i )
     {
         onAddAnnotation();
     }
-    QObject::connect(m_pAnnotator, SIGNAL(annotationAdded()), this, SLOT(onAddAnnotation()));
-    QObject::connect(m_pAnnotator, SIGNAL(annotationRemoved(int)), this, SLOT(onRemoveAnnotation(int)));
-    QObject::connect(m_pAnnotator, SIGNAL(annotated()), this, SLOT(onAnnotated()));
+    QObject::connect(_pAnnotator, SIGNAL(annotationAdded()), this, SLOT(onAddAnnotation()));
+    QObject::connect(_pAnnotator, SIGNAL(annotationRemoved(int)), this, SLOT(onRemoveAnnotation(int)));
+    QObject::connect(_pAnnotator, SIGNAL(annotated()), this, SLOT(onAnnotated()));
 }
 
 //-------------------------------------------------------------------------------
@@ -89,16 +89,16 @@ void ImageAnnotationViewer::onAddAnnotation()
 {
     AnnotationAttributes attr;
     attr.isLocked = false;
-    m_attributes.append(attr);
+    _attributes.append(attr);
 }
 
 //-------------------------------------------------------------------------------
 void ImageAnnotationViewer::onRemoveAnnotation( int index )
 //-------------------------------------------------------------------------------
 {
-    if( (index >= 0) && (index < m_attributes.size()))
+    if( (index >= 0) && (index < _attributes.size()))
     {
-        m_attributes.removeAt(index);
+        _attributes.removeAt(index);
     }
 }
 
@@ -127,12 +127,12 @@ QMenu* ImageAnnotationViewer::createWindowContextMenu()
 
     pAction = pContextMenu->addAction("Scale To Fit");
     pAction->setCheckable(true);
-    pAction->setChecked(m_isScaling);
+    pAction->setChecked(_isScaling);
     QObject::connect(pAction, SIGNAL(triggered(bool)), this, SLOT(scaleToFit(bool)));
 
     pAction = pContextMenu->addAction("Enable Rotation");
     pAction->setCheckable(true);
-    pAction->setChecked(m_pAnnotator->isImageRotationEnabled());
+    pAction->setChecked(_pAnnotator->isImageRotationEnabled());
     QObject::connect(pAction, SIGNAL(triggered(bool)), this, SLOT(onRotationEnable(bool)));
 
     return pContextMenu;
@@ -154,9 +154,9 @@ QMenu* ImageAnnotationViewer::createAnnotationContextMenu(int index)
 
     pAction = new QIdAction(index, "Lock Position", 0);
     pAction->setCheckable(true);
-    if( (index >= 0) && (index < m_attributes.size()))
+    if( (index >= 0) && (index < _attributes.size()))
     {
-        pAction->setChecked(m_attributes[index].isLocked);
+        pAction->setChecked(_attributes[index].isLocked);
     }
     pMenu->addAction(pAction);
     QObject::connect(pAction, SIGNAL(triggered(int, bool)), this, SLOT(onMenuLockAnnotation(int, bool)));
@@ -169,7 +169,7 @@ QMenu* ImageAnnotationViewer::createAnnotationContextMenu(int index)
 void ImageAnnotationViewer::onContextMenuRequest(const QPoint& pos)
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
@@ -178,7 +178,7 @@ void ImageAnnotationViewer::onContextMenuRequest(const QPoint& pos)
     // show generic menu
 
     int ind = 0;
-    Annotation* pAnnot = m_pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pos), ind);
+    Annotation* pAnnot = _pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pos), ind);
     QMenu* pMenu = 0;
     if( pAnnot )
     {
@@ -196,21 +196,21 @@ void ImageAnnotationViewer::onContextMenuRequest(const QPoint& pos)
 void ImageAnnotationViewer::onMenuAddText()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     TextAnnotation* pAnnot = new TextAnnotation;
-    QPointF p = mapWindowPosToInputImagePos(m_prevPos);
+    QPointF p = mapWindowPosToInputImagePos(_prevPos);
     pAnnot->text = "Edit this text";
     pAnnot->name = QString("Text (%1, %2)").arg(p.x()).arg(p.y());
     pAnnot->font.setPointSize(15);
     pAnnot->font.setFamily("Arial");
     pAnnot->pen.setColor(Qt::black);
     pAnnot->alignFlags = Qt::AlignCenter | Qt::TextWordWrap;
-    pAnnot->boundingBox = QRectF(p.x(), p.y(), m_pAnnotator->getOutputImage().width() - p.x(), 10);
-    m_pAnnotator->addAnnotation(pAnnot, true);
+    pAnnot->boundingBox = QRectF(p.x(), p.y(), _pAnnotator->getOutputImage().width() - p.x(), 10);
+    _pAnnotator->addAnnotation(pAnnot, true);
     QDialog* pDialog = new TextAnnotationEditUi(pAnnot, this);
     pDialog->setAttribute(Qt::WA_DeleteOnClose, true);
     pDialog->show();
@@ -220,21 +220,21 @@ void ImageAnnotationViewer::onMenuAddText()
 void ImageAnnotationViewer::onMenuAddTimeStamp()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     TimeAnnotation* pAnnot = new TimeAnnotation;
-    QPointF p = mapWindowPosToInputImagePos(m_prevPos);
+    QPointF p = mapWindowPosToInputImagePos(_prevPos);
     pAnnot->name = QString("Time (%1, %2)").arg(p.x()).arg(p.y());
     //pAnnot->format = "dd MMM yyyy hh:mm:ss.zzz";
     pAnnot->font.setPointSize(15);
     pAnnot->font.setFamily("Arial");
     pAnnot->pen.setColor(Qt::black);
     pAnnot->alignFlags = Qt::AlignLeft | Qt::TextWordWrap;
-    pAnnot->boundingBox = QRectF(p.x(), p.y(), m_pAnnotator->getOutputImage().width() - p.x(), 10);
-    m_pAnnotator->addAnnotation(pAnnot, true);
+    pAnnot->boundingBox = QRectF(p.x(), p.y(), _pAnnotator->getOutputImage().width() - p.x(), 10);
+    _pAnnotator->addAnnotation(pAnnot, true);
     QDialog* pDialog = new TextAnnotationEditUi(pAnnot, this);
     pDialog->setAttribute(Qt::WA_DeleteOnClose, true);
     pDialog->show();
@@ -244,13 +244,13 @@ void ImageAnnotationViewer::onMenuAddTimeStamp()
 void ImageAnnotationViewer::onMenuAddCounter()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     CounterAnnotation* pAnnot = new CounterAnnotation;
-    QPointF p = mapWindowPosToInputImagePos(m_prevPos);
+    QPointF p = mapWindowPosToInputImagePos(_prevPos);
     pAnnot->name = QString("Counter (%1, %2)").arg(p.x()).arg(p.y());
     pAnnot->count = 0;
     pAnnot->step = 1;
@@ -260,8 +260,8 @@ void ImageAnnotationViewer::onMenuAddCounter()
     pAnnot->font.setFamily("Arial");
     pAnnot->pen.setColor(Qt::black);
     pAnnot->alignFlags = Qt::AlignRight;
-    pAnnot->boundingBox = QRectF(p.x(), p.y(), m_pAnnotator->getOutputImage().width() - p.x(), 10);
-    m_pAnnotator->addAnnotation(pAnnot, true);
+    pAnnot->boundingBox = QRectF(p.x(), p.y(), _pAnnotator->getOutputImage().width() - p.x(), 10);
+    _pAnnotator->addAnnotation(pAnnot, true);
     QDialog* pDialog = new TextAnnotationEditUi(pAnnot, this);
     pDialog->setAttribute(Qt::WA_DeleteOnClose, true);
     pDialog->show();
@@ -271,18 +271,18 @@ void ImageAnnotationViewer::onMenuAddCounter()
 void ImageAnnotationViewer::onMenuAddCrosshair()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     CrosshairAnnotation* pAnnot = new CrosshairAnnotation;
-    QPointF p = mapWindowPosToInputImagePos(m_prevPos);
+    QPointF p = mapWindowPosToInputImagePos(_prevPos);
     pAnnot->name = QString("Crosshair (%1, %2)").arg(p.x()).arg(p.y());
     pAnnot->thickness = 1;
     pAnnot->boundingBox = QRectF(p.x() - 25, p.y() - 25, 51, 51);
-    m_pAnnotator->addAnnotation(pAnnot, true);
-    QDialog* pDialog = new CrosshairAnnotationEditUi(pAnnot, m_pAnnotator->getOutputImage().size(), this);
+    _pAnnotator->addAnnotation(pAnnot, true);
+    QDialog* pDialog = new CrosshairAnnotationEditUi(pAnnot, _pAnnotator->getOutputImage().size(), this);
     pDialog->setAttribute(Qt::WA_DeleteOnClose, true);
     pDialog->show();
 }
@@ -291,17 +291,17 @@ void ImageAnnotationViewer::onMenuAddCrosshair()
 void ImageAnnotationViewer::onMenuAddImage()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     ImageAnnotation* pAnnot = new ImageAnnotation;
-    QPointF p = mapWindowPosToInputImagePos(m_prevPos);
+    QPointF p = mapWindowPosToInputImagePos(_prevPos);
     pAnnot->name = QString("Image (%1, %2)").arg(p.x()).arg(p.y());
     pAnnot->image = QImage(":images/ocr200_t.png");
     pAnnot->boundingBox = QRectF(p.x(), p.y(), 200, 100);
-    m_pAnnotator->addAnnotation(pAnnot, true);
+    _pAnnotator->addAnnotation(pAnnot, true);
     QDialog* pDialog = new ImageAnnotationSelectUi(pAnnot, this);
     pDialog->setAttribute(Qt::WA_DeleteOnClose, true);
     pDialog->show();
@@ -311,12 +311,12 @@ void ImageAnnotationViewer::onMenuAddImage()
 void ImageAnnotationViewer::onMenuEditAnnotation(int index, bool)
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
-    Annotation* pAnnot = m_pAnnotator->getAnnotation(index);
+    Annotation* pAnnot = _pAnnotator->getAnnotation(index);
     if( !pAnnot )
     {
         return;
@@ -327,7 +327,7 @@ void ImageAnnotationViewer::onMenuEditAnnotation(int index, bool)
     if( annotationType == "Grape::CrosshairAnnotation" )
     {
         pDialog = new CrosshairAnnotationEditUi(dynamic_cast<CrosshairAnnotation*>(pAnnot),
-            m_pAnnotator->getOutputImage().size(),
+            _pAnnotator->getOutputImage().size(),
             this);
     }
     else if( annotationType == "Grape::ImageAnnotation" )
@@ -358,14 +358,14 @@ void ImageAnnotationViewer::onMenuEditAnnotation(int index, bool)
 void ImageAnnotationViewer::onMenuRemoveAnnotation(int index, bool)
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
-    m_pAnnotator->removeAnnotation(index);
-    if( index == m_mouseOverIndex )
+    _pAnnotator->removeAnnotation(index);
+    if( index == _mouseOverIndex )
     {
-        m_mouseOverIndex = -1;
+        _mouseOverIndex = -1;
     }
 }
 
@@ -373,9 +373,9 @@ void ImageAnnotationViewer::onMenuRemoveAnnotation(int index, bool)
 void ImageAnnotationViewer::onMenuLockAnnotation(int index, bool checked)
 //-------------------------------------------------------------------------------
 {
-    if( (index >= 0) && (index < m_attributes.size()))
+    if( (index >= 0) && (index < _attributes.size()))
     {
-        m_attributes[index].isLocked = checked;
+        _attributes[index].isLocked = checked;
     }
 }
 
@@ -383,18 +383,18 @@ void ImageAnnotationViewer::onMenuLockAnnotation(int index, bool checked)
 void ImageAnnotationViewer::mousePressEvent( QMouseEvent* pEvent )
 //-------------------------------------------------------------------------------
 {
-    if( !m_isUsrInteractive )
+    if( !_isUsrInteractive )
     {
         return pEvent->ignore();
     }
-    m_prevPos = pEvent->pos();
+    _prevPos = pEvent->pos();
 }
 
 //-------------------------------------------------------------------------------
 void ImageAnnotationViewer::mouseReleaseEvent( QMouseEvent* pEvent )
 //-------------------------------------------------------------------------------
 {
-    if( !m_isUsrInteractive )
+    if( !_isUsrInteractive )
     {
         return pEvent->ignore();
     }
@@ -404,11 +404,11 @@ void ImageAnnotationViewer::mouseReleaseEvent( QMouseEvent* pEvent )
 void ImageAnnotationViewer::mouseMoveEvent( QMouseEvent* pEvent)
 //-------------------------------------------------------------------------------
 {
-    if( !m_isUsrInteractive )
+    if( !_isUsrInteractive )
     {
         return pEvent->ignore();
     }
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
@@ -419,17 +419,17 @@ void ImageAnnotationViewer::mouseMoveEvent( QMouseEvent* pEvent)
     if( pEvent->buttons() & Qt::LeftButton )
     {
         // if annotation is active, move it
-        if( (m_mouseOverIndex >= 0) && (m_mouseOverIndex < m_attributes.size()) )
+        if( (_mouseOverIndex >= 0) && (_mouseOverIndex < _attributes.size()) )
         {
-            AnnotationAttributes &attr = m_attributes[m_mouseOverIndex];
+            AnnotationAttributes &attr = _attributes[_mouseOverIndex];
             if( !attr.isLocked )
             {
-                Annotation* pAnnot = m_pAnnotator->getAnnotation(m_mouseOverIndex); // find corresponding annotation
+                Annotation* pAnnot = _pAnnotator->getAnnotation(_mouseOverIndex); // find corresponding annotation
                 QRectF bb = pAnnot->boundingBox.value();
-                QPointF d = pos - m_prevPos;
-                if ( m_isScaling )
+                QPointF d = pos - _prevPos;
+                if ( _isScaling )
                 {
-                    d /= m_scale;
+                    d /= _scale;
                 }
                 bb.translate(d); // apply mouse movement
                 pAnnot->boundingBox = bb;
@@ -439,18 +439,18 @@ void ImageAnnotationViewer::mouseMoveEvent( QMouseEvent* pEvent)
         // otherwise rotate the image
         else
         {
-            if( m_pAnnotator->isImageRotationEnabled() )
+            if( _pAnnotator->isImageRotationEnabled() )
             {
                 QPointF d;
                 int w2 = width()/2;
                 int h2 = height()/2;
                 d.setX(pos.x() - w2);
                 d.setY(pos.y() - h2);
-                float deg = m_pAnnotator->getImageRotationAngle() + (180.0/M_PI) * atan2(d.y(),d.x());
-                d.setX(m_prevPos.x() - w2);
-                d.setY(m_prevPos.y() - h2);
+                float deg = _pAnnotator->getImageRotationAngle() + (180.0/M_PI) * atan2(d.y(),d.x());
+                d.setX(_prevPos.x() - w2);
+                d.setY(_prevPos.y() - h2);
                 deg -= (180.0/M_PI) * atan2(d.y(), d.x());
-                m_pAnnotator->setImageRotationAngle(deg);
+                _pAnnotator->setImageRotationAngle(deg);
             }
         }
     }
@@ -458,10 +458,10 @@ void ImageAnnotationViewer::mouseMoveEvent( QMouseEvent* pEvent)
     // select the annotation under the mouse
     else
     {
-        m_pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pos), m_mouseOverIndex);
+        _pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pos), _mouseOverIndex);
     }
 
-    m_prevPos = pos;
+    _prevPos = pos;
     update();
 
 }
@@ -470,18 +470,18 @@ void ImageAnnotationViewer::mouseMoveEvent( QMouseEvent* pEvent)
 void ImageAnnotationViewer::mouseDoubleClickEvent( QMouseEvent* pEvent )
 //-------------------------------------------------------------------------------
 {
-    if( !m_isUsrInteractive )
+    if( !_isUsrInteractive )
     {
         return pEvent->ignore();
     }
 
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
     int index = -1;
-    m_pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pEvent->pos()), index);
+    _pAnnotator->getAnnotation(mapWindowPosToInputImagePos(pEvent->pos()), index);
     onMenuEditAnnotation(index, false);
 }
 
@@ -489,12 +489,12 @@ void ImageAnnotationViewer::mouseDoubleClickEvent( QMouseEvent* pEvent )
 void ImageAnnotationViewer::keyPressEvent( QKeyEvent* pEvent )
 //-------------------------------------------------------------------------------
 {
-    if( !m_isUsrInteractive )
+    if( !_isUsrInteractive )
     {
         return pEvent->ignore();
     }
 
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
@@ -503,10 +503,10 @@ void ImageAnnotationViewer::keyPressEvent( QKeyEvent* pEvent )
     {
     case Qt::Key_Enter :
     case Qt::Key_Return:
-        onMenuEditAnnotation(m_mouseOverIndex, false);
+        onMenuEditAnnotation(_mouseOverIndex, false);
         break;
     case Qt::Key_Delete :
-        onMenuRemoveAnnotation(m_mouseOverIndex, false);
+        onMenuRemoveAnnotation(_mouseOverIndex, false);
         break;
     default:
         break;
@@ -517,26 +517,26 @@ void ImageAnnotationViewer::keyPressEvent( QKeyEvent* pEvent )
 void ImageAnnotationViewer::paintEvent( QPaintEvent* )
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
-    const QImage& image = m_pAnnotator->getOutputImage();
+    const QImage& image = _pAnnotator->getOutputImage();
 
     QPainter painter(this);
-    if( m_isScaling )
+    if( _isScaling )
     {
         painter.setRenderHints(QPainter::SmoothPixmapTransform|QPainter::Antialiasing, true);
-        painter.scale(m_scale, m_scale);
+        painter.scale(_scale, _scale);
     }
     else
     {
         painter.setRenderHints(QPainter::SmoothPixmapTransform|QPainter::Antialiasing, false);
     }
-    painter.drawImage(m_windowImageoffset, image);
+    painter.drawImage(_windowImageoffset, image);
 
-    Annotation* pAnnot = m_pAnnotator->getAnnotation(m_mouseOverIndex);
+    Annotation* pAnnot = _pAnnotator->getAnnotation(_mouseOverIndex);
     if( !pAnnot )
     {
         return;
@@ -547,7 +547,7 @@ void ImageAnnotationViewer::paintEvent( QPaintEvent* )
     painter.setPen(pen);
     painter.setBrush(QColor(127, 127, 127, 50));
     QRectF bb = pAnnot->boundingBox.value();
-    bb.translate( m_windowImageoffset ); // apply mouse movement
+    bb.translate( _windowImageoffset ); // apply mouse movement
     painter.drawRoundedRect( bb, 5, 5);
 }
 
@@ -562,27 +562,27 @@ void ImageAnnotationViewer::resizeEvent( QResizeEvent* )
 void ImageAnnotationViewer::calculateScaleOffset()
 //-------------------------------------------------------------------------------
 {
-    if( !m_pAnnotator )
+    if( !_pAnnotator )
     {
         return;
     }
 
-    const QImage& image = m_pAnnotator->getOutputImage();
+    const QImage& image = _pAnnotator->getOutputImage();
 
     qreal imgW = image.width();
     qreal imgH = image.height();
     qreal winW = width();
     qreal winH = height();
 
-    ( (imgW/imgH) > (winW/winH) ) ? (m_scale = winW/imgW) : (m_scale = winH/imgH);
+    ( (imgW/imgH) > (winW/winH) ) ? (_scale = winW/imgW) : (_scale = winH/imgH);
 
-    if( m_isScaling )
+    if( _isScaling )
     {
-        m_windowImageoffset = QPoint((width() - (m_scale * image.width()))/(2*m_scale), (height()- (m_scale * image.height()))/(2*m_scale));
+        _windowImageoffset = QPoint((width() - (_scale * image.width()))/(2*_scale), (height()- (_scale * image.height()))/(2*_scale));
     }
     else
     {
-        m_windowImageoffset = QPoint((width() - image.width())/2, (height()- image.height())/2);
+        _windowImageoffset = QPoint((width() - image.width())/2, (height()- image.height())/2);
     }
 }
 
