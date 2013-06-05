@@ -28,6 +28,9 @@ namespace Grape
 /// output stream of fixed size is required, such as for example input buffers
 /// to video encoders.
 ///
+/// \todo
+/// - Mechanism to save/load overlay information to/from XML file.
+///
 /// Example program:
 /// \include 2DGraphics/ImageAnnotationExample.cpp
 class GRAPEGRAPHICS_DLL_API ImageAnnotator : public QObject
