@@ -22,9 +22,6 @@ namespace Grape
 /// This is a specialised class used for placing text annotations on a QImage. An
 /// object of this class is used with ImageAnnotator.
 ///
-/// \todo
-/// - Check example program. Text annotation does not work.
-///
 /// Example program:
 /// See example for ImageAnnotator class
 class GRAPEGRAPHICS_DLL_API TextAnnotation : public Annotation

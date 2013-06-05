@@ -641,7 +641,7 @@ void TextAnnotationEditUi::recalculateBoundingBox()
     QFontMetrics metrics(_pAnnotation->font);
     QRectF bound;
     QString annotType = _pAnnotation->metaObject()->className();
-    if( annotType == "QtGraphics::CImageTextAnnotation" )
+    if( annotType == "Grape::TextAnnotation" )
     {
         bound = metrics.boundingRect(QRect(0, 0, 10000, 0), _pAnnotation->alignFlags, _pAnnotation->text);
     }

@@ -12,7 +12,7 @@ android:CONFIG += static
 win32: CONFIG += dll embed_manifest_dll embed_manifest_exe
 
 CONFIG += qt
-QT += core gui widgets
+QT += core gui
 
 build_pass:CONFIG(debug, release|debug) {
     TARGET = $$join(TARGET,,,d)

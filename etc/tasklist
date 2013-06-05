@@ -20,4 +20,3 @@ TODO
   timed wait, interaction between multiple timers, response when period is
   set below timer resolution
 - Thread: In Windows wait() blocks in the destructor. Fix this.
-- TextAnnotation does not work
