@@ -48,14 +48,14 @@ FORMS = \
 
 RESOURCES = graphics.qrc
 
-unix:INCLUDEPATH += $$system(coin-config --includedir)
-unix:LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
+INCLUDEPATH += $$system(coin-config --includedir)
+LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
 
 CONFIG(debug, release|debug) {
-    win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0 -lCoin
+    win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0
     else:unix: LIBS += -lGrapeCored -lGrapeUtilsd
 } else {
-    win32:LIBS += -lGrapeCore0 -lGrapeUtils0 -lCoin
+    win32:LIBS += -lGrapeCore0 -lGrapeUtils0
     else:unix: LIBS += -lGrapeCore -lGrapeUtilsd
 }
 

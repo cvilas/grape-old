@@ -6,7 +6,7 @@ android:CONFIG += static
 win32: CONFIG += embed_manifest_exe
 
 CONFIG += console qt
-QT += core gui
+QT += core gui widgets
 
 build_pass:CONFIG(debug, release|debug) {
     TARGET = $$join(TARGET,,,d)
@@ -28,5 +28,5 @@ else:unix: LIBS += -lGrapeGraphics -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeC
 INCLUDEPATH += $$PWD/../
 DEPENDPATH += $$PWD/../
 
-unix:INCLUDEPATH += $$system(coin-config --includedir)
-unix:LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
+INCLUDEPATH += $$system(coin-config --includedir)
+LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
