@@ -26,9 +26,6 @@ namespace Grape
 /// object of this class is used with ImageAnnotator. Derived classes implement
 /// the process() method containing the specific painting instructions.
 ///
-/// \todo
-/// - Mechanism to save/load overlay information to/from XML file.
-///
 /// Example program:
 /// See example for ImageAnnotator class
 class GRAPEGRAPHICS_DLL_API Annotation : public QObject
