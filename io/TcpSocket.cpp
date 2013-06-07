@@ -28,43 +28,11 @@
 namespace Grape
 {
 
-//--------------------------------------------------------------------------
-static void throwSocketException(const std::string& location)
-//--------------------------------------------------------------------------
-{
-    int e;
-    std::ostringstream str;
-#ifdef _MSC_VER
-    e = WSAGetLastError();
-    str << location << ": Got WSA error " << e;
-#else
-    e = errno;
-    str << location << ": " << strerror(e);
-#endif
-    throw SocketException(e, str.str());
-}
-
-
 //==========================================================================
 TcpSocket::TcpSocket()
 //==========================================================================
+    : IpSocket()
 {
-#ifdef _MSC_VER
-    WSADATA wsa_data;
-    int err = WSAStartup (MAKEWORD(2,0), &wsa_data);
-    if (err)
-    {
-        WSACleanup();
-        throw WsaInitException(-1, "[TcpSocket::TcpSocket (WSAStartup)]");
-    }
-    if (LOBYTE(wsa_data.wVersion) != 2 || HIBYTE(wsa_data.wVersion) != 0)
-    {
-        WSACleanup();
-        throw WsaInitException(-1, "[TcpSocket::TcpSocket]: Failed to load Windows Sockets 2.0");
-    }
-#endif
-
-    // initialise socket
     if( (int)(_sockFd = socket(AF_INET /*ipv4*/, SOCK_STREAM /*TCP*/, IPPROTO_TCP)) == SOCKET_ERROR)
     {
         throwSocketException("[TcpSocket::TcpSocket](socket)");
@@ -73,50 +41,9 @@ TcpSocket::TcpSocket()
 }
 
 //--------------------------------------------------------------------------
-TcpSocket::~TcpSocket()
+TcpSocket::~TcpSocket() throw()
 //--------------------------------------------------------------------------
 {
-    close();
-
-#ifdef _MSC_VER
-    WSACleanup();
-#endif
-}
-
-//--------------------------------------------------------------------------
-void TcpSocket::close()
-//--------------------------------------------------------------------------
-{
-    if( _sockFd != INVALID_SOCKET )
-    {
-        CLOSESOCKET(_sockFd);
-        _sockFd = INVALID_SOCKET;
-    }
-}
-
-//--------------------------------------------------------------------------
-void TcpSocket::allowPortReuse(bool yes)
-//--------------------------------------------------------------------------
-{
-    if( setsockopt(_sockFd, SOL_SOCKET, SO_REUSEADDR, (const char *)&yes, sizeof(int)) == SOCKET_ERROR)
-    {
-        throwSocketException("[TcpSocket::allowPortReuse](setsockopt)");
-    }
-}
-
-//--------------------------------------------------------------------------
-void TcpSocket::setBufSize(unsigned int sz)
-//--------------------------------------------------------------------------
-{
-    if( setsockopt(_sockFd, SOL_SOCKET, SO_SNDBUF, (char *)&sz, sizeof(unsigned int)) == SOCKET_ERROR)
-    {
-        throwSocketException("[TcpSocket::setBufSize(SO_SNDBUF)]");
-    }
-
-    if( setsockopt(_sockFd, SOL_SOCKET, SO_RCVBUF, (char *)&sz, sizeof(unsigned int)) == SOCKET_ERROR)
-    {
-        throwSocketException("[TcpSocket::setBufSize(SO_RCVBUF)]");
-    }
 }
 
 //--------------------------------------------------------------------------
@@ -131,21 +58,6 @@ void TcpSocket::setNoDelay(bool yes)
 }
 
 //--------------------------------------------------------------------------
-void TcpSocket::bind(int port)
-//--------------------------------------------------------------------------
-{
-    struct sockaddr_in name;
-    name.sin_family = AF_INET;
-    name.sin_port = htons(port);
-    name.sin_addr.s_addr = htonl(INADDR_ANY);
-    memset(&(name.sin_zero), '\0', 8);
-    if( ::bind(_sockFd, (struct sockaddr *)&name, sizeof(struct sockaddr)) == SOCKET_ERROR)
-    {
-        throwSocketException("[TcpSocket::bind]");
-    }
-}
-
-//--------------------------------------------------------------------------
 bool TcpSocket::connect(struct sockaddr_in &peer)
 //--------------------------------------------------------------------------
 {
@@ -153,7 +65,7 @@ bool TcpSocket::connect(struct sockaddr_in &peer)
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
+unsigned int TcpSocket::send(const unsigned char *outMsgBuf, unsigned int outMsgLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -171,7 +83,7 @@ unsigned int TcpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
+unsigned int TcpSocket::receive(unsigned char *inMsgBuf, unsigned int inBufLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -187,26 +99,6 @@ unsigned int TcpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
     }
 
     return len;
-}
-
-//--------------------------------------------------------------------------
-void TcpSocket::setRecvTimeout(unsigned long int ms)
-//--------------------------------------------------------------------------
-{
-    // set receive timeout
-    int ret = 0;
-#ifdef _MSC_VER
-    ret = setsockopt(_sockFd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&ms, sizeof(unsigned long int));
-#else
-    struct timeval tmo;
-    tmo.tv_sec = ms/1000UL;
-    tmo.tv_usec = (ms%1000UL) * 1000000UL;
-    ret = setsockopt(_sockFd, SOL_SOCKET, SO_RCVTIMEO, &tmo, sizeof(struct timeval));
-#endif
-    if( ret == SOCKET_ERROR )
-    {
-        throwSocketException("[TcpSocket::setRecvTimeout]");
-    }
 }
 
 } // Grape

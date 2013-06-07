@@ -2,23 +2,13 @@
 // Project  : Grape
 // Module   : IO
 // File     : IpClient.h
-// Brief    : Base interface for IP clients
+// Brief    : IP client interface
 //==============================================================================
 
 #ifndef GRAPEIO_IPCLIENT_H
 #define GRAPEIO_IPCLIENT_H
 
-#ifdef _MSC_VER // using microsoft visual studio
-#include <Winsock2.h>
-#include <Windows.h>
-#include <ws2tcpip.h>
-typedef u_int in_addr_t;
-#else // UNIX platforms?
-#include <sys/socket.h>
-#include <netinet/in.h>
-#endif
-
-#include "SocketException.h"
+#include "IpSocket.h"
 #include <string>
 
 namespace Grape
@@ -26,42 +16,43 @@ namespace Grape
 
 /// \class IpClient
 /// \ingroup io
-/// \brief Base class interface for IP clients
+/// \brief IP client interface. Use this to connect to a remote TCP or UDP server
 class GRAPEIO_DLL_API IpClient
 {
 public:
 
-    /// Constructor. Keeps remote host connection parameters, but doesn't actually
-    /// connect (this is left to derived classes)
+    /// Initialise and connect to a remote host
     /// \param serverIp Remote host IP
     /// \param port Port to connect to on remote host
     /// \param msTimeout Receive timeout in ms
     /// \param bufSizeBytes send and receive buffer sizes in bytes
     /// \throw WsaInitException, HostInfoException
-    IpClient(const std::string& serverIp, int port);
+    IpClient(IpSocket::SocketType type, const std::string& serverIp, int port);
 
-    virtual ~IpClient();
+    ~IpClient();
 
-    /// Send message to server
+    /// Send message to remote host
     /// \param outMsgBuf  Pointer to buffer containing your message to server.
     /// \param outMsgLen  The length of your message above.
     /// \throw SocketException
-    /// \return false on error
-    virtual bool send(const unsigned char *outMsgBuf, unsigned int outMsgLen) = 0;
+    /// \return number of bytes sent
+    unsigned int send(const unsigned char *outMsgBuf, unsigned int outMsgLen);
 
-    /// block to receive message from server or timeout
+    /// Block to receive message from remote host or timeout
     /// \param inMsgBuf Buffer to receive message into
     /// \param inBufLen The size (bytes) of the above buffer.
-    /// \param inMsgLen  The actual length (bytes) of message received
     /// \param ms        timeout (ms)
     /// \throw SocketException
-    /// \return false on error
-    virtual bool receive(unsigned char *inMsgBuf, unsigned int inBufLen, unsigned int &inMsgLen) = 0;
+    /// \return number of bytes received
+    unsigned int receive(unsigned char *inMsgBuf, unsigned int inBufLen);
 
 protected:
     struct sockaddr_in _serverEndpoint;
+    IpSocket* _pSocket;
 
 }; // IpClient
+
+
 
 } // Grape
 

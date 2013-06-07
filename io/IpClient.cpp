@@ -5,34 +5,28 @@
 //==============================================================================
 
 #include "IpClient.h"
-#ifdef _MSC_VER // using microsoft visual studio
-#else
-#include <sys/types.h>
+#include "TcpSocket.h"
+#include "UdpSocket.h"
 #include <netdb.h>
-#endif
 #include <sstream>
 
 namespace Grape
 {
 
 //==========================================================================
-IpClient::IpClient(const std::string& serverIp, int port)
+IpClient::IpClient(IpSocket::SocketType type, const std::string& serverIp, int port)
 //==========================================================================
+    : _pSocket(NULL)
 {
-#ifdef _MSC_VER
-    WSADATA wsa_data;
-    int err = WSAStartup (MAKEWORD(2,0), &wsa_data);
-    if (err)
+    switch(type)
     {
-        WSACleanup();
-        throw WsaInitException(-1, "[IpClient::IpClient (WSAStartup)]");
-    }
-    if (LOBYTE(wsa_data.wVersion) != 2 || HIBYTE(wsa_data.wVersion) != 0)
-    {
-        WSACleanup();
-        throw WsaInitException(-1, "[IpClient::IpClient]: Failed to load Windows Sockets 2.0");
-    }
-#endif
+    case IpSocket::TCP:
+        _pSocket = new TcpSocket;
+        break;
+    case IpSocket::UDP:
+        _pSocket = new UdpSocket;
+        break;
+    };
 
     // get network server entry
     struct hostent* pHost = NULL;
@@ -40,7 +34,7 @@ IpClient::IpClient(const std::string& serverIp, int port)
     if( pHost == NULL )
     {
 #ifdef _MSC_VER
-        throw SocketException(WSAGetLastError(), "[IpClient::init(gethostbyname)]");
+        throw HostInfoException(WSAGetLastError(), "[IpClient::init(gethostbyname)]");
 #else
         std::ostringstream str;
         str << "[IpClient::IpClient(gethostbyname)]: " << hstrerror(h_errno);
@@ -53,16 +47,30 @@ IpClient::IpClient(const std::string& serverIp, int port)
     _serverEndpoint.sin_port = htons(port);
     _serverEndpoint.sin_addr.s_addr = *((in_addr_t *)pHost->h_addr);
     memset(&(_serverEndpoint.sin_zero), '\0', 8);
+
+    _pSocket->connect(_serverEndpoint);
+    //_socket->bind(INADDR_ANY);
 }
 
 //--------------------------------------------------------------------------
 IpClient::~IpClient()
 //--------------------------------------------------------------------------
 {
-#ifdef _MSC_VER
-    WSACleanup();
-#endif
+    delete _pSocket;
 }
 
+//--------------------------------------------------------------------------
+unsigned int IpClient::send(const unsigned char *outMsgBuf, unsigned int outMsgLen)
+//--------------------------------------------------------------------------
+{
+    return _pSocket->send(outMsgBuf, outMsgLen);
+}
+
+//--------------------------------------------------------------------------
+unsigned int IpClient::receive(unsigned char *inMsgBuf, unsigned int inBufLen)
+//--------------------------------------------------------------------------
+{
+    return _pSocket->receive(inMsgBuf, inBufLen);
+}
 
 } // Grape

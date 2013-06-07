@@ -18,12 +18,18 @@ HEADERS = IPort.h SerialPort.h \
     SimpleJoystick.h \
     IpClient.h \
     SocketException.h \
-    TcpSocket.h
+    TcpSocket.h \
+    UdpSocket.h \
+    IpSocket.h \
+    UdpServer.h
 SOURCES = \
     IJoystick.cpp \
     IpClient.cpp \
     SocketException.cpp \
-    TcpSocket.cpp
+    TcpSocket.cpp \
+    UdpSocket.cpp \
+    IpSocket.cpp \
+    UdpServer.cpp
 
 win32:HEADERS += Dx8JoystickManager.h
 win32:SOURCES += Dx8JoystickManager.cpp SimpleJoystick_windows.cpp SerialPort_windows.cpp
