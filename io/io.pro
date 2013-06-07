@@ -15,9 +15,15 @@ INCLUDEPATH += ./
 HEADERS = IPort.h SerialPort.h \
     grapeio_common.h \
     IJoystick.h \
-    SimpleJoystick.h
+    SimpleJoystick.h \
+    IpClient.h \
+    SocketException.h \
+    TcpSocket.h
 SOURCES = \
-    IJoystick.cpp
+    IJoystick.cpp \
+    IpClient.cpp \
+    SocketException.cpp \
+    TcpSocket.cpp
 
 win32:HEADERS += Dx8JoystickManager.h
 win32:SOURCES += Dx8JoystickManager.cpp SimpleJoystick_windows.cpp SerialPort_windows.cpp
