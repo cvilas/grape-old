@@ -32,9 +32,9 @@ public:
     /// \return true (always)
     bool connect(struct sockaddr_in &peer);
 
-    unsigned int send(const unsigned char *outMsgBuf, unsigned int outMsgLen);
+    unsigned int send(const char *outMsgBuf, unsigned int outMsgLen);
 
-    unsigned int receive(unsigned char *inMsgBuf, unsigned int inBufLen);
+    unsigned int receive(char *inMsgBuf, unsigned int inBufLen);
 
     /// Send message to a specific host
     /// \param destAddr   Destination address information
@@ -42,7 +42,7 @@ public:
     /// \param outMsgLen  The length of your message above.
     /// \throw SocketException
     /// \return number of bytes sent
-    unsigned int sendTo(struct sockaddr_in &destAddr, const unsigned char *outMsgBuf, unsigned int outMsgLen);
+    unsigned int sendTo(struct sockaddr_in &destAddr, const char *outMsgBuf, unsigned int outMsgLen);
 
     /// Block to receive message from any host or timeout
     /// \param inMsgBuf Buffer to receive message into
@@ -50,7 +50,7 @@ public:
     /// \param srcAddr The address of the host from which data was received.
     /// \throw SocketException
     /// \return number of bytes received
-    unsigned int receiveFrom(unsigned char *inMsgBuf, unsigned int inBufLen, struct sockaddr_in &srcAddr);
+    unsigned int receiveFrom(char *inMsgBuf, unsigned int inBufLen, struct sockaddr_in &srcAddr);
 
 private:
     sockaddr_in _peer;

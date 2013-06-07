@@ -53,7 +53,7 @@ bool UdpSocket::connect(struct sockaddr_in &peer)
 }
 
 //--------------------------------------------------------------------------
-unsigned int UdpSocket::sendTo(struct sockaddr_in &destAddr, const unsigned char *outMsgBuf, unsigned int outMsgLen)
+unsigned int UdpSocket::sendTo(struct sockaddr_in &destAddr, const char *outMsgBuf, unsigned int outMsgLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -71,7 +71,7 @@ unsigned int UdpSocket::sendTo(struct sockaddr_in &destAddr, const unsigned char
 }
 
 //--------------------------------------------------------------------------
-unsigned int UdpSocket::receiveFrom(unsigned char *inMsgBuf, unsigned int inBufLen, struct sockaddr_in &srcAddr)
+unsigned int UdpSocket::receiveFrom(char *inMsgBuf, unsigned int inBufLen, struct sockaddr_in &srcAddr)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -92,7 +92,7 @@ unsigned int UdpSocket::receiveFrom(unsigned char *inMsgBuf, unsigned int inBufL
 }
 
 //--------------------------------------------------------------------------
-unsigned int UdpSocket::send(const unsigned char *outMsgBuf, unsigned int outMsgLen)
+unsigned int UdpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -110,7 +110,7 @@ unsigned int UdpSocket::send(const unsigned char *outMsgBuf, unsigned int outMsg
 }
 
 //--------------------------------------------------------------------------
-unsigned int UdpSocket::receive(unsigned char *inMsgBuf, unsigned int inBufLen)
+unsigned int UdpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )

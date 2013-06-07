@@ -90,14 +90,14 @@ public:
     /// \throw SocketException
     /// \return number of bytes sent
     /// \see connect
-    virtual unsigned int send(const unsigned char *outMsgBuf, unsigned int outMsgLen) = 0;
+    virtual unsigned int send(const char *outMsgBuf, unsigned int outMsgLen) = 0;
 
     /// block to receive message from remote peer or timeout
     /// \param inMsgBuf Buffer to receive message into
     /// \param inBufLen The size (bytes) of the above buffer.
     /// \throw SocketException
     /// \return number of bytes received
-    virtual unsigned int receive(unsigned char *inMsgBuf, unsigned int inBufLen) = 0;
+    virtual unsigned int receive(char *inMsgBuf, unsigned int inBufLen) = 0;
 
 protected:
 

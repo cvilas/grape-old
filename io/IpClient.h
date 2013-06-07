@@ -36,7 +36,7 @@ public:
     /// \param outMsgLen  The length of your message above.
     /// \throw SocketException
     /// \return number of bytes sent
-    unsigned int send(const unsigned char *outMsgBuf, unsigned int outMsgLen);
+    unsigned int send(const char *outMsgBuf, unsigned int outMsgLen);
 
     /// Block to receive message from remote host or timeout
     /// \param inMsgBuf Buffer to receive message into
@@ -44,10 +44,9 @@ public:
     /// \param ms        timeout (ms)
     /// \throw SocketException
     /// \return number of bytes received
-    unsigned int receive(unsigned char *inMsgBuf, unsigned int inBufLen);
+    unsigned int receive(char *inMsgBuf, unsigned int inBufLen);
 
-protected:
-    struct sockaddr_in _serverEndpoint;
+private:
     IpSocket* _pSocket;
 
 }; // IpClient

@@ -34,8 +34,8 @@ public:
     /// \throw SocketException
     void setNoDelay(bool option);
 
-    unsigned int send(const unsigned char *outMsgBuf, unsigned int outMsgLen);
-    unsigned int receive(unsigned char *inMsgBuf, unsigned int inBufLen);
+    unsigned int send(const char *outMsgBuf, unsigned int outMsgLen);
+    unsigned int receive(char *inMsgBuf, unsigned int inBufLen);
 
 }; // TcpSocket
 

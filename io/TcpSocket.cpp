@@ -65,7 +65,7 @@ bool TcpSocket::connect(struct sockaddr_in &peer)
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::send(const unsigned char *outMsgBuf, unsigned int outMsgLen)
+unsigned int TcpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
@@ -83,7 +83,7 @@ unsigned int TcpSocket::send(const unsigned char *outMsgBuf, unsigned int outMsg
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::receive(unsigned char *inMsgBuf, unsigned int inBufLen)
+unsigned int TcpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
 //--------------------------------------------------------------------------
 {
     if( INVALID_SOCKET == _sockFd )
