@@ -10,8 +10,7 @@ TODO
 - Delete ours/generic, mine/generic
 - Follow roadmap in GRAPE003 - Specification, GRAPE004 - roadmap, and GRAPE001 - plan
 - Real time capable data logger
-- TCP client and multithreaded server classes
-- UDP client and server
+- TCP multithreaded server
 - message queues
 - shared memory
 - RW locks
@@ -19,4 +18,6 @@ TODO
 - Timer: Posix: tests for all error return conditions,
   timed wait, interaction between multiple timers, response when period is
   set below timer resolution
-- Thread: In Windows wait() blocks in the destructor. Fix this.
+- OpenScenegraph interactive viewer
+- Coin interactive viewer
+- OpenScenegraph/Coin importers for 3d cad model formats (DWG, etc)
