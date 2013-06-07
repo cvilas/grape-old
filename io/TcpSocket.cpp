@@ -196,7 +196,7 @@ void TcpSocket::setRecvTimeout(unsigned long int ms)
     // set receive timeout
     int ret = 0;
 #ifdef _MSC_VER
-    ret = setsockopt(sockFd_, SOL_SOCKET, SO_RCVTIMEO, (const char *)&ms, sizeof(unsigned long int));
+    ret = setsockopt(_sockFd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&ms, sizeof(unsigned long int));
 #else
     struct timeval tmo;
     tmo.tv_sec = ms/1000UL;
