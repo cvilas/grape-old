@@ -21,3 +21,4 @@ TODO
 - OpenScenegraph interactive viewer
 - Coin interactive viewer
 - OpenScenegraph/Coin importers for 3d cad model formats (DWG, etc)
+- Remove dependencies of libs other than 'graphics' from coin. (edit .pro files as necessary) 
