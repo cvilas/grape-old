@@ -1,9 +1,8 @@
 TODO
 - Replace generic Exceptions with specific exception classes in all classes (eg: Ugv1::VehicleException classes)
-- Remove IPort lastError. Use Exceptions instead.
 - Remove error messages redirected to cerr. use exceptions.
 - Remove all explicit exception specifiers (throw() statement in function prototype). Document what is thrown instead
-- For every function, document what may be thrown briefly (eg: Throws PortException)
+- For every function, document what may be thrown briefly (eg: \throw PortException)
 - Move all classes from ours/Generic
 - Move all examples from ours/Generic
 - Move remaining classes and examples from mine/Generic
