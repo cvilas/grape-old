@@ -97,13 +97,13 @@ unsigned int UdpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
 {
     if( INVALID_SOCKET == _sockFd )
     {
-        throw SocketException(-1, "[UdpSocket::sendTo] Socket not initialised");
+        throw SocketException(-1, "[UdpSocket::send] Socket not initialised");
     }
 
     int len = sendto(_sockFd, outMsgBuf, outMsgLen, 0, (struct sockaddr *)&_peer, sizeof(struct sockaddr_in));
     if( len == SOCKET_ERROR )
     {
-        throwSocketException("[UdpSocket::sendTo(sendto)]");
+        throwSocketException("[UdpSocket::send(sendto)]");
     }
 
     return len;
@@ -115,7 +115,7 @@ unsigned int UdpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
 {
     if( INVALID_SOCKET == _sockFd )
     {
-        throw SocketException(-1, "[UdpSocket::receiveFrom] Socket not initialised");
+        throw SocketException(-1, "[UdpSocket::receive] Socket not initialised");
     }
 
     struct sockaddr_in srcAddr;
@@ -129,7 +129,7 @@ unsigned int UdpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
 
     if( len == SOCKET_ERROR )
     {
-        throwSocketException("[UdpSocket::receive(recv)]");
+        throwSocketException("[UdpSocket::receive(recvfrom)]");
     }
 
     return len;
