@@ -7,6 +7,7 @@
 
 #include "SerialPort.h"
 #include <Windows.h>
+#include <sstream>
 
 namespace Grape
 {
@@ -23,19 +24,17 @@ class SerialPortP
 public:
     static const int baud[SerialPort::BAUD_MAX]; // windows baud rate constants
 public:
-    SerialPortP(Grape::Status& lastError)
+    SerialPortP()
         : _portFd(INVALID_HANDLE_VALUE),
-          _portName(""),
-          _lastError(lastError)
+          _portName("")
     {}
-    ~SerialPortP() {}
+    ~SerialPortP() throw() {}
     bool getAttributes(DCB&);
     bool setAttributes(DCB&);
-    int waitForReadWrite(bool isRead, int timeoutMs);
+    IPort::Status waitForReadWrite(bool isRead, int timeoutMs);
 public:
     HANDLE _portFd;
     std::string _portName;
-    Grape::Status& _lastError;
 
 }; // SerialPortP
 
@@ -58,26 +57,24 @@ bool SerialPortP::setAttributes(DCB& dcb)
 }
 
 //------------------------------------------------------------------------------
-int SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
+IPort::Status SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
 //------------------------------------------------------------------------------
 {
     OVERLAPPED osReader = {0};
     osReader.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if( osReader.hEvent == NULL )
     {
-        _lastError.set(-1) << "[SerialPort::waitForRead]: CreateEvent failed" << std::endl;
-        return -1;
+        throw IoEventHandlingException(-1, "[SerialPort::waitForRead(CreateEvent)] failed");
     }
 
     DWORD ev = (isRead)?(EV_RXCHAR):(EV_TXEMPTY);
     if( 0 == WaitCommEvent(_portFd, &ev, &osReader) )
     {
         CloseHandle(osReader.hEvent);
-        _lastError.set(GetLastError()) << "[SerialPort::waitForRead]: WaitCommEvent failed" << std::endl;
-        return -1;
+        throw IoEventHandlingException(-1, "[SerialPort::waitForRead(WaitCommEvent)] failed");
     }
 
-    int result = -1;
+    IPort::Status result = IPort::PORT_ERROR;
     DWORD waitResult = WaitForSingleObject(osReader.hEvent, timeoutMs);
     switch(waitResult)
     {
@@ -85,20 +82,18 @@ int SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
         DWORD bytes;
         if( 0 == GetOverlappedResult(_portFd, &osReader, &bytes, TRUE) )
         {
-            _lastError.set(GetLastError()) << "[SerialPort::waitForRead]: GetOverlappedResult failed" << std::endl;
-            result = -1;
+            throw IoEventHandlingException(-1, "[SerialPort::waitForRead(GetOverlappedResult)] failed");
         }
         else
         {
-            result = 1;
+            result = IPort::PORT_OK;
         }
         break;
     case WAIT_TIMEOUT:
-        result = 0;
+        result = IPort::PORT_TIMEOUT;
         break;
     default:
-        _lastError.set(GetLastError()) << "[SerialPort::waitForRead]: WaitForSingleObject failed" << std::endl;
-        result = -1;
+        throw IoEventHandlingException(-1, "[SerialPort::waitForRead(WaitForSingleObject)] failed");
         break;
     }
 
@@ -110,12 +105,12 @@ int SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
 //==============================================================================
 SerialPort::SerialPort()
 //==============================================================================
-    : _pImpl(new SerialPortP(lastError))
+    : _pImpl(new SerialPortP)
 {
 }
 
 //------------------------------------------------------------------------------
-SerialPort::~SerialPort()
+SerialPort::~SerialPort() throw()
 //------------------------------------------------------------------------------
 {
     close();
@@ -123,15 +118,14 @@ SerialPort::~SerialPort()
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setPortName(const std::string& port)
+void SerialPort::setPortName(const std::string& port)
 //------------------------------------------------------------------------------
 {
     if( isOpen() )
     {
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setPortName] Port is already open");
     }
     _pImpl->_portName = port;
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -142,43 +136,36 @@ std::string SerialPort::getPortName() const
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setBaudRate(BaudRate baud)
+void SerialPort::setBaudRate(BaudRate baud)
 //------------------------------------------------------------------------------
 {
     if( baud == SerialPort::BAUD_MAX )
     {
-        lastError.set(-1) << "[SerialPort::setBaudRate]: Invalid baud setting" << std::endl;
-        return false;
+        throw InvalidBaudException(-1, "[SerialPort::setBaudRate]: Invalid baud setting");
     }
 
     DCB dcb = {0};
     if( !_pImpl->getAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::setBaudRate]: Unable to get port attributes" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::setBaudRate(getAttributes)] failed");
     }
 
     dcb.BaudRate = SerialPortP::baud[baud];
 
     if( !_pImpl->setAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::setBaudRate: Unabl to set port attributes" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::setBaudRate(setAttributes)] failed");
     }
-
-    return true;
-
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setDataFormat(DataFormat fmt)
+void SerialPort::setDataFormat(DataFormat fmt)
 //------------------------------------------------------------------------------
 {
     DCB dcb;
     if( !_pImpl->getAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::setDataFormat]: getAttributes failed" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::setDataFormat(getAttributes)] failed");
     }
 
     switch(fmt)
@@ -205,21 +192,17 @@ bool SerialPort::setDataFormat(DataFormat fmt)
         dcb.fErrorChar = FALSE;
         break;
     default:
-        lastError.set(-1) << "[SerialPort::setDataFormat]: Unsupported data format" << std::endl;
-        return false;
+        throw InvalidSerialDataFormatException(-1, "[SerialPort::setDataFormat]: Unsupported data format");
     };
 
     if( !_pImpl->setAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::setDataFormat]: setAttributes failed" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::setDataFormat(setAttributes)] failed");
     }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::open()
+void SerialPort::open()
 //------------------------------------------------------------------------------
 {
     close();
@@ -234,8 +217,9 @@ bool SerialPort::open()
                                  0);
     if( !isOpen() )
     {
-        lastError.set(-1) << "[SerialPort::open]: Unable to open " << _pImpl->_portName << std::endl;
-        return false;
+        std::ostringstream str;
+        str << "[SerialPort::open]: Unable to open " << _pImpl->_portName;
+        throw IoOpenException(-1, str.str());
     }
 
     // basic configuration
@@ -247,8 +231,7 @@ bool SerialPort::open()
     DCB dcb;
     if( !_pImpl->getAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::open]: getAttributes failed" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::Open(getAttributes)] failed");
     }
 
     dcb.fBinary = TRUE;
@@ -266,8 +249,7 @@ bool SerialPort::open()
     // apply..
     if( !_pImpl->setAttributes(dcb) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::open]: setAttributes failed" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::Open(setAttributes)] failed");
     }
 
     // set time out
@@ -281,15 +263,12 @@ bool SerialPort::open()
 
     if( 0 == SetCommTimeouts(_pImpl->_portFd, &timeouts) )
     {
-        lastError.set(GetLastError()) << "[SerialPort::open]: SetCommTimeouts failed" << std::endl;
-        return false;
+        throw SerialPortException(GetLastError(), "[SerialPort::Open(SetCommTimeouts)] failed");
     }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
-void SerialPort::close()
+void SerialPort::close() throw()
 //------------------------------------------------------------------------------
 {
     if( isOpen() )
@@ -307,11 +286,11 @@ bool SerialPort::isOpen()
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::read(std::vector<unsigned char>& buffer)
+unsigned int SerialPort::read(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     // how many have we got to read
-    int bytesToRead = availableToRead();
+    unsigned int bytesToRead = availableToRead();
     if( bytesToRead < 0 )
     {
         return -1;
@@ -328,12 +307,11 @@ int SerialPort::read(std::vector<unsigned char>& buffer)
     osReader.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if( osReader.hEvent == NULL )
     {
-        lastError.set(-1) << "[SerialPort::read]: CreateEvent failed" << std::endl;
-        return -1;
+        throw IoEventHandlingException(-1, "[SerialPort::read(CreateEvent)] failed");
     }
 
     // read all
-    int bytesRead = 0;
+    unsigned int bytesRead = 0;
     if( 0 != ReadFile(_pImpl->_portFd, &buffer[0], bytesToRead, (LPDWORD)(&bytesRead), &osReader) )
     {
         // read completed immediately. We are done
@@ -346,8 +324,7 @@ int SerialPort::read(std::vector<unsigned char>& buffer)
     if( lastErr != ERROR_IO_PENDING ) // not pending IO.
     {
         CloseHandle(osReader.hEvent);
-        lastError.set(lastErr) << "[SerialPort::read]: ReadFile failed" << std::endl;
-        return -1;
+        throw IoReadException(lastErr, "[SerialPort::read(ReadFile)] failed");
     }
 
     // We have a pending IO. Wait for read to complete
@@ -358,7 +335,7 @@ int SerialPort::read(std::vector<unsigned char>& buffer)
     case WAIT_OBJECT_0: // Read Completed
         if( 0 == GetOverlappedResult(_pImpl->_portFd, &osReader, (LPDWORD)(&bytesRead), TRUE) )
         {
-            lastError.set(GetLastError()) << "[SerialPort::read]: GetOverlappedResult failed" << std::endl;
+            throw IoEventHandlingException(GetLastError(), "[SerialPort::read(GetOverlappedResult)] failed");
         }
         else
         {
@@ -367,19 +344,19 @@ int SerialPort::read(std::vector<unsigned char>& buffer)
         break;
     case WAIT_TIMEOUT:
         /* can't happen, considering we are in INFINITE wait */
-        lastError.set(-1) << "[SerialPort::read]: WaitForSingleObject timed out" << std::endl;
+        throw IoEventHandlingException(-1, "[SerialPort::read(WaitForSingleObject)] timed out");
         break;
     default:
-        lastError.set(-1) << "[SerialPort::read]: WaitForSingleObject failed" << std::endl;
+        throw IoEventHandlingException(-1, "[SerialPort::read(WaitForSingleObject)] failed");
         break;
     }
 
     CloseHandle(osReader.hEvent);
-    return (success)?(bytesRead):(-1);
+    return bytesRead;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::availableToRead()
+unsigned int SerialPort::availableToRead()
 //------------------------------------------------------------------------------
 {
     COMSTAT stat;
@@ -387,14 +364,13 @@ int SerialPort::availableToRead()
     BOOL ret = ClearCommError(_pImpl->_portFd, &errors, &stat);
     if( ret == 0)
     {
-        lastError.set(GetLastError()) << "[SerialPort::availableToRead]: ClearCommError failed" << std::endl;
-        return -1;
+        throw SerialPortException(GetLastError(), "[SerialPort::availableToRead(ClearCommError)] failed");
     }
     return stat.cbInQue;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::write(const std::vector<unsigned char>& buffer)
+unsigned int SerialPort::write(const std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     // create event to handle write completion
@@ -402,12 +378,11 @@ int SerialPort::write(const std::vector<unsigned char>& buffer)
     osWriter.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if( osWriter.hEvent == NULL )
     {
-        lastError.set(-1) << "[SerialPort::write]: CreateEvent failed" << std::endl;
-        return -1;
+        throw IoEventHandlingException(-1, "[SerialPort::write(CreateEvent)] failed");
     }
 
     // write all
-    int bytesWritten = 0;
+    unsigned int bytesWritten = 0;
     if( 0 != WriteFile(_pImpl->_portFd, &buffer[0], buffer.size(), (LPDWORD)(&bytesWritten), &osWriter) )
     {
         // completed immediately. We are done
@@ -420,8 +395,7 @@ int SerialPort::write(const std::vector<unsigned char>& buffer)
     if( lastErr != ERROR_IO_PENDING ) // not pending IO.
     {
         CloseHandle(osWriter.hEvent);
-        lastError.set(lastErr) << "[SerialPort::write]: WriteFile failed" << std::endl;
-        return -1;
+        throw IoWriteException(lastErr, "[SerialPort::write(WriteFile)] failed");
     }
 
     // We have a pending IO. Wait for read to complete
@@ -432,7 +406,7 @@ int SerialPort::write(const std::vector<unsigned char>& buffer)
     case WAIT_OBJECT_0: // Read Completed
         if( 0 == GetOverlappedResult(_pImpl->_portFd, &osWriter, (LPDWORD)(&bytesWritten), TRUE) )
         {
-            lastError.set(GetLastError()) << "[SerialPort::write]: GetOverlappedResult failed" << std::endl;
+            throw IoEventHandlingException(GetLastError(), "[SerialPort::write(GetOverlappedResult)] failed");
         }
         else
         {
@@ -441,26 +415,26 @@ int SerialPort::write(const std::vector<unsigned char>& buffer)
         break;
     case WAIT_TIMEOUT:
         /* can't happen, considering we are in INFINITE wait */
-        lastError.set(-1) << "[SerialPort::write]: WaitForSingleObject timed out" << std::endl;
+        throw IoEventHandlingException(-1, "[SerialPort::write(WaitForSingleObject)] timed out");
         break;
     default:
-        lastError.set(-1) << "[SerialPort::write]: WaitForSingleObject failed" << std::endl;
+        throw IoEventHandlingException(-1, "[SerialPort::write(WaitForSingleObject)] failed");
         break;
     }
 
     CloseHandle(osWriter.hEvent);
-    return (success)?(bytesWritten):(-1);
+    return bytesWritten;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::waitForRead(int timeoutMs)
+IPort::Status SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     return _pImpl->waitForReadWrite(true, timeoutMs);
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::waitForWrite(int timeoutMs)
+IPort::Status SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     return _pImpl->waitForReadWrite(false, timeoutMs);

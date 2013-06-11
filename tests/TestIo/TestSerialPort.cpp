@@ -31,7 +31,15 @@ void TestSerialPort::portName()
     // verify set/get portname
 
     Grape::SerialPort sp;
-    QVERIFY2(sp.setPortName(_portName), "Error setting port name");
+    try
+    {
+        sp.setPortName(_portName);
+    }
+    catch( Grape::Exception &ex )
+    {
+        QFAIL(ex.what());
+    }
+
     QVERIFY2(_portName == sp.getPortName(), "get not same as set");
 }
 
@@ -41,7 +49,14 @@ void TestSerialPort::openClose()
 {
     Grape::SerialPort sp;
     sp.setPortName(_portName);
-    QVERIFY2(sp.open(), sp.lastError.getMessage().c_str());
+    try
+    {
+        sp.open();
+    }
+    catch(Grape::Exception &ex)
+    {
+        QFAIL(ex.what());
+    }
     QVERIFY2(sp.isOpen(), "isOpen after open");
     sp.close();
     QVERIFY2(!sp.isOpen(), "isOpen after close");
@@ -56,7 +71,14 @@ void TestSerialPort::baudRate()
     sp.open();
     for(int i = 0; i < Grape::SerialPort::BAUD_MAX; ++i)
     {
-        QVERIFY2(sp.setBaudRate((Grape::SerialPort::BaudRate)i), sp.lastError.getMessage().c_str());
+        try
+        {
+            sp.setBaudRate((Grape::SerialPort::BaudRate)i);
+        }
+        catch(Grape::Exception &ex)
+        {
+            QFAIL(ex.what());
+        }
     }
 }
 
@@ -69,7 +91,14 @@ void TestSerialPort::dataFormat()
     sp.open();
     for(int i = 0; i < Grape::SerialPort::DATA_FORMAT_MAX; ++i)
     {
-        QVERIFY2(sp.setDataFormat((Grape::SerialPort::DataFormat)i), sp.lastError.getMessage().c_str());
+        try
+        {
+            sp.setDataFormat((Grape::SerialPort::DataFormat)i);
+        }
+        catch(Grape::Exception &ex)
+        {
+            QFAIL(ex.what());
+        }
     }
 }
 /*

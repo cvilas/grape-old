@@ -9,6 +9,7 @@
 #define GRAPEIO_SERIALPORT_H
 
 #include "IPort.h"
+#include "SerialPortException.h"
 
 namespace Grape
 {
@@ -48,25 +49,24 @@ public:
 
 public:
     SerialPort();
-    virtual ~SerialPort();
+    virtual ~SerialPort() throw (/*nothing*/);
 
     /// Set the port name. This should be called before calling open()
     /// \param port Port identifier. Example: /dev/ttyS0 (linux), COM1 (Windows)
-    /// \return     true on success. False if a port is already open (call close() first)
-    bool setPortName(const std::string& port);
+    void setPortName(const std::string& port);
     std::string getPortName() const;
 
     /// Set baud rate. This works only if the port is already open.
     /// \param baud One of the supported baud rate constants
-    /// \return     true on success.
     /// \see open
-    bool setBaudRate(BaudRate baud);
+    /// \throw InvalidBaudException
+    void setBaudRate(BaudRate baud);
 
     /// Set data format. This works only if the port is already open.
     /// \param fmt One of the supported data format constants
-    /// \return     true on success
     /// \see open
-    bool setDataFormat(DataFormat fmt);
+    /// \throw InvalidSerialDataFormatException
+    void setDataFormat(DataFormat fmt);
 
     /// \copydoc IPort::open()
     /// After open, the serial port must be configured with baud rate and data format.
@@ -79,15 +79,15 @@ public:
     /// port.setDataFormat(D8N1);
     /// \endcode
     /// until they are complete
-    bool open();
+    void open();
 
     void close();
     bool isOpen();
-    int read(std::vector<unsigned char>& buffer);
-    int availableToRead();
-    int write(const std::vector<unsigned char>& buffer);
-    int waitForRead(int timeoutMs);
-    int waitForWrite(int timeoutMs);
+    unsigned int read(std::vector<unsigned char>& buffer);
+    unsigned int availableToRead();
+    unsigned int write(const std::vector<unsigned char>& buffer);
+    IPort::Status waitForRead(int timeoutMs);
+    IPort::Status waitForWrite(int timeoutMs);
     void flushRx();
     void flushTx();
 

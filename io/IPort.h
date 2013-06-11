@@ -9,7 +9,7 @@
 #define GRAPEIO_IPORT_H
 
 #include "grapeio_common.h"
-#include "core/Status.h"
+#include "IoException.h"
 #include <vector>
 
 namespace Grape
@@ -18,73 +18,80 @@ namespace Grape
 /// \class IPort
 /// \ingroup io
 /// \brief Abtract interface definition for communication ports
+///
+/// IPort methods can throw IoException if IO specific exceptions occur
 class GRAPEIO_DLL_API IPort
 {
 public:
-    /// Publically accessible status object contains the last
-    /// error code and message
-    /// \note Derived classes must call Status::set on unsuccessful operations.
-    Status lastError;
-
+    enum Status
+    {
+        PORT_OK,
+        PORT_TIMEOUT,
+        PORT_ERROR
+    };
 public:
 
     IPort() {}
 
     /// Open the port.
     /// \note Derived class implements port specific configuration.
-    /// \return true on success
-    /// \see getLastError
-    virtual bool open() = 0;
+    /// \throw IoOpenException
+    virtual void open() = 0;
 
     /// Close the port.
-    virtual void close() = 0;
+    /// \throw none
+    virtual void close() throw(/*nothing*/) = 0;
 
     /// Check if the port is open
     /// \return true if open
     virtual bool isOpen() = 0;
 
     /// Read data from the port.
-    /// \param buffer   Contains read data. Note that this buffer may be longer than the number of
-    ///                 bytes read. Use return value for number of bytes actually read.
-    /// \return         The number of bytes read. -1 on error.
-    /// \see waitForRead
-    virtual int read(std::vector<unsigned char>& buffer) = 0;
+    /// \param buffer   Buffer for read data. If the buffer isn't large enough, it is resized.
+    ///                 If the buffer is larger than required, the extra bytes in the buffer are
+    ///                 left untouched. Use return value for number of bytes actually read.
+    /// \return         The number of bytes read.
+    /// \see waitForRead, availableToRead
+    /// \throw IoReadException, IoEventHandlingException
+    virtual unsigned int read(std::vector<unsigned char>& buffer) = 0;
 
     /// Find the number of bytes available and waiting to be read
     /// without actually reading them.
-    /// \return The number of bytes available to read. -1 on error.
-    /// \see getLastError
-    virtual int availableToRead() = 0;
-
-    /// Write data to the port
-    /// \param buffer   Contains data to be written. Note that not all data may get written.
-    ///                 Use return value for number of bytes actually written.
-    /// \return         Number of bytes written. -1 on error.
-    /// \see waitForWrite
-    virtual int write(const std::vector<unsigned char>& buffer) = 0;
+    /// \return The number of bytes available to read.
+    /// \see waitForRead, read
+    virtual unsigned int availableToRead() = 0;
 
     /// Wait until port is ready for a read operation
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Set negative number for infinite wait period.
-    /// \return >0 if port is ready for read, 0 on timeout, <0 on error.
-    /// \see read
-    virtual int waitForRead(int timeoutMs) = 0;
+    /// \return status code
+    /// \see read, availableToRead
+    /// \throw IoEventHandlingException
+    virtual Status waitForRead(int timeoutMs) = 0;
+
+    /// Flush data received but not read
+    virtual void flushRx() = 0;
+
+    /// Write data to the port
+    /// \param buffer   Buffer containing data to be written. Note that not all data
+    ///                 may get written. Return value for number of bytes actually written.
+    /// \return         Number of bytes written.
+    /// \see waitForWrite
+    /// \throw IoWriteException, IoEventHandlingException
+    virtual unsigned int write(const std::vector<unsigned char>& buffer) = 0;
 
     /// Wait until all bytes from last write operation have been transmitted
     /// \param timeoutMs    Milliseconds to wait before returning.
     ///                     Specify negative number for infinite wait period.
-    /// \return >0 if last write operation finished, 0 on timeout, <0 on error.
+    /// \return status code
     /// \see write
-    virtual int waitForWrite(int timeoutMs) = 0;
-
-    /// Flush data received but not read
-    virtual void flushRx() = 0;
+    virtual Status waitForWrite(int timeoutMs) = 0;
 
     /// Flush data written but not transmitted
     virtual void flushTx() = 0;
 
 protected:
-    virtual ~IPort() {}
+    virtual ~IPort() throw(/*nothing*/) {}
 private:
     IPort(const IPort&);            //!< disable copy
     IPort &operator=(const IPort&); //!< disable assignment
