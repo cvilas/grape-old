@@ -81,7 +81,7 @@ public:
     /// until they are complete
     void open();
 
-    void close();
+    void close() throw();
     bool isOpen();
     unsigned int read(std::vector<unsigned char>& buffer);
     unsigned int availableToRead();

@@ -15,6 +15,7 @@
 #include <sys/select.h>
 #include <errno.h>
 #include <string.h>
+#include <sstream>
 
 #ifdef __ANDROID__
 #   define FNDELAY  O_NDELAY
@@ -34,7 +35,7 @@ public:
     static const int baud[SerialPort::BAUD_MAX]; // linux baud rate constants
 public:
     SerialPortP() : _portFd(-1), _portName("") {}
-    ~SerialPortP() {}
+    ~SerialPortP() throw() {}
     bool getAttributes(struct termios&);
     bool setAttributes(struct termios&);
 public:
@@ -68,7 +69,7 @@ SerialPort::SerialPort()
 }
 
 //------------------------------------------------------------------------------
-SerialPort::~SerialPort()
+SerialPort::~SerialPort() throw()
 //------------------------------------------------------------------------------
 {
     close();
@@ -76,15 +77,14 @@ SerialPort::~SerialPort()
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setPortName(const std::string& port)
+void SerialPort::setPortName(const std::string& port)
 //------------------------------------------------------------------------------
 {
     if( isOpen() )
     {
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setPortName] Port is already open");
     }
     _pImpl->_portName = port;
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -95,20 +95,18 @@ std::string SerialPort::getPortName() const
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setBaudRate(BaudRate baud)
+void SerialPort::setBaudRate(BaudRate baud)
 //------------------------------------------------------------------------------
 {
     if( baud == SerialPort::BAUD_MAX )
     {
-        lastError.set(-1) << "[SerialPort::setBaudRate]: Invalid baud setting" << std::endl;
-        return false;
+        throw InvalidBaudException(-1, "[SerialPort::setBaudRate]: Invalid baud setting");
     }
 
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::setBaudRate(getAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setBaudRate(getAttributes)] failed");
     }
 
     cfsetispeed (&tops, SerialPortP::baud[baud]); // set input baud rate
@@ -116,22 +114,18 @@ bool SerialPort::setBaudRate(BaudRate baud)
 
     if( !_pImpl->setAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::setBaudRate(setAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setBaudRate(setAttributes)] failed");
     }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::setDataFormat(DataFormat fmt)
+void SerialPort::setDataFormat(DataFormat fmt)
 //------------------------------------------------------------------------------
 {
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::setDataFormat(getAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setDataFormat(getAttributes)] failed");
     }
 
     switch(fmt)
@@ -160,21 +154,17 @@ bool SerialPort::setDataFormat(DataFormat fmt)
         tops.c_iflag |= (INPCK | ISTRIP);
         break;
     default:
-        lastError.set(-1) << "[SerialPort::setDataFormat]: Unsupported data format" << std::endl;
-        return false;
+        throw InvalidSerialDataFormatException(-1, "[SerialPort::setDataFormat]: Unsupported data format");
     };
 
     if( !_pImpl->setAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::setDataFormat(setAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::setDataFormat(setAttributes)] failed");
     }
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
-bool SerialPort::open()
+void SerialPort::open()
 //------------------------------------------------------------------------------
 {
     close();
@@ -186,8 +176,9 @@ bool SerialPort::open()
 
     if( !isOpen() )
     {
-        lastError.set(-1) << "[SerialPort::open]: Unable to open " << _pImpl->_portName << std::endl;
-        return false;
+        std::ostringstream str;
+        str << "[SerialPort::open]: Unable to open " << _pImpl->_portName;
+        throw IoOpenException(-1, str.str());
     }
 
     // basic configuration
@@ -199,8 +190,7 @@ bool SerialPort::open()
     struct termios tops;
     if( !_pImpl->getAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::open(getAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::Open(getAttributes)] failed");
     }
 
     fcntl(_pImpl->_portFd, F_SETFL, FNDELAY); // enable non-blocking read
@@ -226,18 +216,15 @@ bool SerialPort::open()
     // apply..
     if( !_pImpl->setAttributes(tops) )
     {
-        lastError.set(-1) << "[SerialPort::open(setAttributes)]: " << strerror(errno) << std::endl;
-        return false;
+        throw SerialPortException(-1, "[SerialPort::Open(setAttributes)] failed");
     }
 
     flushRx();
     flushTx();
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
-void SerialPort::close()
+void SerialPort::close() throw()
 //------------------------------------------------------------------------------
 {
     if( isOpen() )
@@ -257,15 +244,10 @@ bool SerialPort::isOpen()
 
 
 //------------------------------------------------------------------------------
-int SerialPort::read(std::vector<unsigned char>& buffer)
+unsigned int SerialPort::read(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
-    int bytes = availableToRead();
-
-    if( bytes < 0 )
-    {
-        return -1;
-    }
+    unsigned int bytes = availableToRead();
 
     // ensure output buffer is long enough
     if( bytes > buffer.size() )
@@ -274,48 +256,56 @@ int SerialPort::read(std::vector<unsigned char>& buffer)
     }
 
     // read all
-    bytes = ::read(_pImpl->_portFd, &buffer[0], bytes);
+    ssize_t bytesRead = ::read(_pImpl->_portFd, &buffer[0], bytes);
+    if( bytesRead < 0)
+    {
+        std::ostringstream str;
+        str << "[SerialPort::read]: " << strerror(errno);
+        throw IoReadException(errno, str.str());
+    }
 
-    return bytes;
+    return bytesRead;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::availableToRead()
+unsigned int SerialPort::availableToRead()
 //------------------------------------------------------------------------------
 {
-    int bytes = 0;
+    unsigned int bytes = 0;
 
     if( ioctl(_pImpl->_portFd, FIONREAD, &bytes) < 0 )
     {
-        lastError.set(errno) << "[SerialPort::availableToRead]: " << strerror(errno) << std::endl;
-        return -1;
+        std::ostringstream str;
+        str << "[SerialPort::availableToRead]: " << strerror(errno);
+        throw SerialPortException(errno, str.str());
     }
 
     return bytes;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::write(const std::vector<unsigned char>& buffer)
+unsigned int SerialPort::write(const std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
     int bytes = ::write(_pImpl->_portFd, &buffer[0], buffer.size());
 
     if( bytes < 0 )
     {
-        lastError.set(errno) << "[SerialPort::write]: " << strerror(errno) << std::endl;
+        std::ostringstream str;
+        str << "[SerialPort::write]: " << strerror(errno);
+        throw IoWriteException(errno, str.str());
     }
 
     return bytes;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::waitForRead(int timeoutMs)
+IPort::Status SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
     {
-        lastError.set(-1) << "[SerialPort::waitForRead]: Port not open" << std::endl;
-        return -1;
+        throw SerialPortException(-1, "[SerialPort::waitForRead]: Port not open");
     }
 
     fd_set fds;
@@ -338,28 +328,37 @@ int SerialPort::waitForRead(int timeoutMs)
         ret = select(_pImpl->_portFd+1, &fds, NULL, NULL, &timeout);
     }
 
+    IPort::Status st = IPort::PORT_ERROR;
     // ret == 0: timeout, ret == 1: ready, ret == -1: error
-    if( ret < 0)
+    if (ret > 0)
     {
-        lastError.set(errno) << "[SerialPort::waitForRead]: " << strerror(errno) << std::endl;
+        st = IPort::PORT_OK;
+    }
+    else if (ret == 0)
+    {
+        st = IPort::PORT_TIMEOUT;
+    }
+    else
+    {
+        throw IoEventHandlingException(errno, "[SerialPort::waitForRead(select)] failed");
     }
 
-    return ret;
+    return st;
 }
 
 //------------------------------------------------------------------------------
-int SerialPort::waitForWrite(int timeoutMs)
+IPort::Status SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
     {
-        lastError.set(-1) << "[SerialPort::waitForWrite]: Port not open" << std::endl;
-        return -1;
+        throw SerialPortException(-1, "[SerialPort::waitForWrite]: Port not open");
+
     }
 
     /// \todo: check bytes transmitted
 
-    return 1;
+    return IPort::PORT_OK;
 }
 
 //------------------------------------------------------------------------------

@@ -9,20 +9,20 @@
 #define GRAPE_SOCKETEXCEPTION_H
 
 #include "grapeio_common.h"
-#include "core/Exception.h"
+#include "IoException.h"
 
 namespace Grape
 {
 
 /// \brief common base class for exceptions thrown by socket classes
 /// \ingroup io
-class GRAPEIO_DLL_API SocketException : public Grape::Exception
+class GRAPEIO_DLL_API SocketException : public Grape::IoException
 {
 public:
-    SocketException() throw() : Exception(0, "Unspecified Socket Exception") {}
-    SocketException(int code, const std::string& msg) throw() : Exception(code, msg.c_str()) {}
-    SocketException(const SocketException& ve) throw() : Exception(ve) {}
-    SocketException& operator=(const SocketException& other) throw() { Exception::operator=(other); return *this; }
+    SocketException() throw() : IoException(0, "Unspecified Socket Exception") {}
+    SocketException(int code, const std::string& msg) throw() : IoException(code, msg.c_str()) {}
+    SocketException(const SocketException& ve) throw() : IoException(ve) {}
+    SocketException& operator=(const SocketException& other) throw() { IoException::operator=(other); return *this; }
 }; // ControllerException
 
 

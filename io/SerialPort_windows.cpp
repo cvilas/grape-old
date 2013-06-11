@@ -291,10 +291,6 @@ unsigned int SerialPort::read(std::vector<unsigned char>& buffer)
 {
     // how many have we got to read
     unsigned int bytesToRead = availableToRead();
-    if( bytesToRead < 0 )
-    {
-        return -1;
-    }
 
     // ensure output buffer is long enough
     if( bytesToRead > buffer.size() )
