@@ -244,19 +244,22 @@ bool SerialPort::isOpen()
 
 
 //------------------------------------------------------------------------------
-unsigned int SerialPort::read(std::vector<unsigned char>& buffer)
+unsigned int SerialPort::readAll(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
-    unsigned int bytes = availableToRead();
+    return readn(buffer, availableToRead());
+}
 
-    // ensure output buffer is long enough
-    if( bytes > buffer.size() )
+//------------------------------------------------------------------------------
+unsigned int SerialPort::readn(std::vector<unsigned char>& buffer, unsigned int bytesToRead)
+//------------------------------------------------------------------------------
+{
+    if( bytesToRead > buffer.size() )
     {
-        buffer.resize(bytes);
+        buffer.resize(bytesToRead);
     }
 
-    // read all
-    ssize_t bytesRead = ::read(_pImpl->_portFd, &buffer[0], bytes);
+    ssize_t bytesRead = ::read(_pImpl->_portFd, &buffer[0], bytesToRead);
     if( bytesRead < 0)
     {
         std::ostringstream str;
@@ -300,7 +303,7 @@ unsigned int SerialPort::write(const std::vector<unsigned char>& buffer)
 }
 
 //------------------------------------------------------------------------------
-IPort::Status SerialPort::waitForRead(int timeoutMs)
+IDataPort::Status SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
@@ -328,15 +331,15 @@ IPort::Status SerialPort::waitForRead(int timeoutMs)
         ret = select(_pImpl->_portFd+1, &fds, NULL, NULL, &timeout);
     }
 
-    IPort::Status st = IPort::PORT_ERROR;
+    IDataPort::Status st = IDataPort::PORT_ERROR;
     // ret == 0: timeout, ret == 1: ready, ret == -1: error
     if (ret > 0)
     {
-        st = IPort::PORT_OK;
+        st = IDataPort::PORT_OK;
     }
     else if (ret == 0)
     {
-        st = IPort::PORT_TIMEOUT;
+        st = IDataPort::PORT_TIMEOUT;
     }
     else
     {
@@ -347,7 +350,7 @@ IPort::Status SerialPort::waitForRead(int timeoutMs)
 }
 
 //------------------------------------------------------------------------------
-IPort::Status SerialPort::waitForWrite(int timeoutMs)
+IDataPort::Status SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     if( !isOpen() )
@@ -358,7 +361,7 @@ IPort::Status SerialPort::waitForWrite(int timeoutMs)
 
     /// \todo: check bytes transmitted
 
-    return IPort::PORT_OK;
+    return IDataPort::PORT_OK;
 }
 
 //------------------------------------------------------------------------------

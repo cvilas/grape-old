@@ -31,7 +31,7 @@ public:
     ~SerialPortP() throw() {}
     bool getAttributes(DCB&);
     bool setAttributes(DCB&);
-    IPort::Status waitForReadWrite(bool isRead, int timeoutMs);
+    IDataPort::Status waitForReadWrite(bool isRead, int timeoutMs);
 public:
     HANDLE _portFd;
     std::string _portName;
@@ -57,7 +57,7 @@ bool SerialPortP::setAttributes(DCB& dcb)
 }
 
 //------------------------------------------------------------------------------
-IPort::Status SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
+IDataPort::Status SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
 //------------------------------------------------------------------------------
 {
     OVERLAPPED osReader = {0};
@@ -74,7 +74,7 @@ IPort::Status SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
         throw IoEventHandlingException(-1, "[SerialPort::waitForRead(WaitCommEvent)] failed");
     }
 
-    IPort::Status result = IPort::PORT_ERROR;
+    IDataPort::Status result = IDataPort::PORT_ERROR;
     DWORD waitResult = WaitForSingleObject(osReader.hEvent, timeoutMs);
     switch(waitResult)
     {
@@ -86,11 +86,11 @@ IPort::Status SerialPortP::waitForReadWrite(bool isRead, int timeoutMs)
         }
         else
         {
-            result = IPort::PORT_OK;
+            result = IDataPort::PORT_OK;
         }
         break;
     case WAIT_TIMEOUT:
-        result = IPort::PORT_TIMEOUT;
+        result = IDataPort::PORT_TIMEOUT;
         break;
     default:
         throw IoEventHandlingException(-1, "[SerialPort::waitForRead(WaitForSingleObject)] failed");
@@ -286,12 +286,16 @@ bool SerialPort::isOpen()
 }
 
 //------------------------------------------------------------------------------
-unsigned int SerialPort::read(std::vector<unsigned char>& buffer)
+unsigned int SerialPort::readAll(std::vector<unsigned char>& buffer)
 //------------------------------------------------------------------------------
 {
-    // how many have we got to read
-    unsigned int bytesToRead = availableToRead();
+    return SerialPort::readn(buffer, availableToRead());
+}
 
+//------------------------------------------------------------------------------
+unsigned int SerialPort::readn(std::vector<unsigned char>& buffer, unsigned int bytesToRead)
+//------------------------------------------------------------------------------
+{
     // ensure output buffer is long enough
     if( bytesToRead > buffer.size() )
     {
@@ -423,14 +427,14 @@ unsigned int SerialPort::write(const std::vector<unsigned char>& buffer)
 }
 
 //------------------------------------------------------------------------------
-IPort::Status SerialPort::waitForRead(int timeoutMs)
+IDataPort::Status SerialPort::waitForRead(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     return _pImpl->waitForReadWrite(true, timeoutMs);
 }
 
 //------------------------------------------------------------------------------
-IPort::Status SerialPort::waitForWrite(int timeoutMs)
+IDataPort::Status SerialPort::waitForWrite(int timeoutMs)
 //------------------------------------------------------------------------------
 {
     return _pImpl->waitForReadWrite(false, timeoutMs);

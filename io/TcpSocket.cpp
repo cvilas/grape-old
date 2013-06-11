@@ -58,22 +58,19 @@ void TcpSocket::setNoDelay(bool yes)
 }
 
 //--------------------------------------------------------------------------
-bool TcpSocket::connect(struct sockaddr_in &peer)
+bool TcpSocket::connect(const std::string& remoteIp, int remotePort)
 //--------------------------------------------------------------------------
 {
+    struct sockaddr_in peer = getSocketAddress(remoteIp, remotePort);
     return (::connect(_sockFd, (struct sockaddr*)(&peer), sizeof(struct sockaddr)) != SOCKET_ERROR );
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
+unsigned int TcpSocket::write(const std::vector<unsigned char>& buffer)
 //--------------------------------------------------------------------------
 {
-    if( INVALID_SOCKET == _sockFd )
-    {
-        throw SocketException(-1, "[TcpSocket::send] Socket not initialised");
-    }
+    ssize_t len = ::send(_sockFd, &buffer[0], buffer.size(), 0);
 
-    int len = ::send(_sockFd, outMsgBuf, outMsgLen, 0);
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[TcpSocket::send(send)]");
@@ -83,16 +80,15 @@ unsigned int TcpSocket::send(const char *outMsgBuf, unsigned int outMsgLen)
 }
 
 //--------------------------------------------------------------------------
-unsigned int TcpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
+unsigned int TcpSocket::readn(std::vector<unsigned char>& buffer, unsigned int bytesToRead)
 //--------------------------------------------------------------------------
 {
-    if( INVALID_SOCKET == _sockFd )
+    if( bytesToRead > buffer.size() )
     {
-        throw SocketException(-1, "[TcpSocket::receive] Socket not initialised");
+        buffer.resize(bytesToRead);
     }
 
-    // wait for messages
-    int len = ::recv(_sockFd, inMsgBuf, inBufLen, 0/*MSG_WAITALL*/);
+    ssize_t len = ::recv(_sockFd, &buffer[0], bytesToRead, 0/*MSG_WAITALL*/);
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[TcpSocket::receive(recv)]");
@@ -100,5 +96,6 @@ unsigned int TcpSocket::receive(char *inMsgBuf, unsigned int inBufLen)
 
     return len;
 }
+
 
 } // Grape

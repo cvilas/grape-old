@@ -14,6 +14,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #endif
 
 #ifdef _MSC_VER
@@ -31,7 +32,7 @@ namespace Grape
 //==========================================================================
 IpSocket::IpSocket()
 //==========================================================================
-    : _sockFd(INVALID_SOCKET)
+    : IDataPort(), _sockFd(INVALID_SOCKET)
 {
 #ifdef _MSC_VER
     WSADATA wsa_data;
@@ -50,6 +51,34 @@ IpSocket::IpSocket()
 }
 
 //--------------------------------------------------------------------------
+struct sockaddr_in IpSocket::getSocketAddress(const std::string& serverIp, int port)
+//--------------------------------------------------------------------------
+{
+    // get network server entry
+    struct hostent* pHost = NULL;
+    pHost = gethostbyname(serverIp.c_str());
+    if( pHost == NULL )
+    {
+#ifdef _MSC_VER
+        throw HostInfoException(WSAGetLastError(), "[IpClient::init(gethostbyname)]");
+#else
+        std::ostringstream str;
+        str << "[IpSocket::IpClient(gethostbyname)]: " << hstrerror(h_errno);
+        throw HostInfoException(h_errno, str.str());
+#endif
+    }
+
+    // server socket info
+    struct sockaddr_in remoteEndpoint;
+    remoteEndpoint.sin_family = AF_INET;
+    remoteEndpoint.sin_port = htons(port);
+    remoteEndpoint.sin_addr.s_addr = *((in_addr_t *)pHost->h_addr);
+    memset(&(remoteEndpoint.sin_zero), '\0', 8);
+
+    return remoteEndpoint;
+}
+
+//--------------------------------------------------------------------------
 IpSocket::~IpSocket() throw()
 //--------------------------------------------------------------------------
 {
@@ -61,7 +90,7 @@ IpSocket::~IpSocket() throw()
 }
 
 //--------------------------------------------------------------------------
-void IpSocket::close()
+void IpSocket::close() throw()
 //--------------------------------------------------------------------------
 {
     if( _sockFd != INVALID_SOCKET )
@@ -107,7 +136,7 @@ void IpSocket::bind(int port)
     memset(&(name.sin_zero), '\0', 8);
     if( ::bind(_sockFd, (struct sockaddr *)&name, sizeof(struct sockaddr)) == SOCKET_ERROR)
     {
-        throwSocketException("[TcpSocket::bind]");
+        throwSocketException("[IpSocket::bind]");
     }
 }
 
@@ -127,7 +156,7 @@ void IpSocket::setRecvTimeout(unsigned long int ms)
 #endif
     if( ret == SOCKET_ERROR )
     {
-        throwSocketException("[TcpSocket::setRecvTimeout]");
+        throwSocketException("[IpSocket::setRecvTimeout]");
     }
 }
 
@@ -146,5 +175,64 @@ void IpSocket::throwSocketException(const std::string& location)
 #endif
     throw SocketException(e, str.str());
 }
+
+//------------------------------------------------------------------------------
+unsigned int IpSocket::availableToRead()
+//------------------------------------------------------------------------------
+{
+    unsigned int bytes = 0;
+
+    if( ioctl(_sockFd, FIONREAD, &bytes) < 0 )
+    {
+        std::ostringstream str;
+        str << "[IpSocket::availableToRead]: " << strerror(errno);
+        throw SocketException(errno, str.str());
+    }
+
+    return bytes;
+}
+
+//--------------------------------------------------------------------------
+IDataPort::Status IpSocket::waitForRead(int timeoutMs)
+//--------------------------------------------------------------------------
+{
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(_sockFd, &fds);
+
+    // indefinite wait
+    int ret = 0;
+    if( timeoutMs < 0 )
+    {
+        ret = select(_sockFd+1, &fds, NULL, NULL, NULL);
+    }
+
+    // wait with timeout
+    else
+    {
+        long long int secs = timeoutMs/1000;
+        long long int usecs = (timeoutMs * 1000) - (secs * 1000000);
+        struct timeval timeout = {secs, usecs};
+        ret = select(_sockFd+1, &fds, NULL, NULL, &timeout);
+    }
+
+    IDataPort::Status st = IDataPort::PORT_ERROR;
+    // ret == 0: timeout, ret == 1: ready, ret == -1: error
+    if (ret > 0)
+    {
+        st = IDataPort::PORT_OK;
+    }
+    else if (ret == 0)
+    {
+        st = IDataPort::PORT_TIMEOUT;
+    }
+    else
+    {
+        throw IoEventHandlingException(errno, "[IpSocket::waitForRead(select)] failed");
+    }
+
+    return st;
+}
+
 
 } // Grape

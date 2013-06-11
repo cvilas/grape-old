@@ -19,6 +19,7 @@ typedef u_int in_addr_t;
 typedef unsigned int SOCKET;
 #endif
 
+#include "IDataPort.h"
 #include "SocketException.h"
 
 namespace Grape
@@ -27,39 +28,33 @@ namespace Grape
 /// \brief Base class for BSD sockets
 /// \ingroup io
 ///
-/// See derived classes for specific implementations.
+/// See derived classes for specific implementations. Socket classes implement the
+/// IDataPort interface
 /// \todo
 /// - setSocketFd() should check that socket of the correct type is set (TCP, UDP, etc)
-class GRAPEIO_DLL_API IpSocket
+class GRAPEIO_DLL_API IpSocket : public IDataPort
 {
 public:
 
-    /// \brief supported socket types
-    enum SocketType
-    {
-        TCP,    //!< TcpSocket
-        UDP     //!< UdpSocket
-    };
+    /// Base class contructor initialises socket library. Derived classes
+    /// initialise socket.
+    /// \throw WsaInitException, SocketException
+    IpSocket();
 
-public:
+    // ------------- Reimplemented from IDataPort -------------------
 
     virtual ~IpSocket() throw(/*nothing*/);
+    virtual void close() throw(/*nothing*/);
+    unsigned int availableToRead();
+    unsigned int readAll(std::vector<unsigned char>& buffer) { return readn(buffer, availableToRead()); }
+    IDataPort::Status waitForRead(int timeoutMs);
+    IDataPort::Status waitForWrite(int timeoutMs) { return IDataPort::PORT_OK; } //!< does nothing
+    void flushRx() {} //!< does nothing
+    void flushTx() {} //!< does nothing
 
-    /// Reset raw socket descriptor. Note that any previously
-    /// set socket properties are lost
-    /// (recieve timeout, no delay option, etc)
-    void setSocketFd(SOCKET s) { close(); _sockFd = s; }
+    // ------------- Socket specific methods -------------------
 
-    /// return socket descriptor
-    SOCKET getSocketFd() const { return _sockFd; }
-
-    /// establish connection with a remote peer
-    virtual bool connect(struct sockaddr_in &peer) = 0;
-
-    /// close socket
-    void close();
-
-    /// bind socket to a port
+    /// bind socket to a port number
     /// \throw SocketException
     void bind(int port);
 
@@ -84,27 +79,12 @@ public:
     /// \throw SocketException
     void allowPortReuse(bool yes);
 
-    /// Send message to connected remote peer
-    /// \param outMsgBuf  Pointer to buffer containing your message to remote host.
-    /// \param outMsgLen  The length of your message above.
-    /// \throw SocketException
-    /// \return number of bytes sent
-    /// \see connect
-    virtual unsigned int send(const char *outMsgBuf, unsigned int outMsgLen) = 0;
-
-    /// block to receive message from remote peer or timeout
-    /// \param inMsgBuf Buffer to receive message into
-    /// \param inBufLen The size (bytes) of the above buffer.
-    /// \throw SocketException
-    /// \return number of bytes received
-    virtual unsigned int receive(char *inMsgBuf, unsigned int inBufLen) = 0;
+    /// Construct a socket address for a remote endpoint
+    /// \param remoteIp Remote host IP
+    /// \param remotePort Port to connect to on remote host
+    struct sockaddr_in getSocketAddress(const std::string& remoteIp, int remotePort);
 
 protected:
-
-    /// Base class contructor initialises socket library. Derived classes
-    /// initialise socket.
-    /// \throw WsaInitException, SocketException
-    IpSocket();
 
     /// Throw a SocketException. Specify location from where it was thrown in
     /// order to help the user

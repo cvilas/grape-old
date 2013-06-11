@@ -8,7 +8,7 @@
 #ifndef GRAPEIO_SERIALPORT_H
 #define GRAPEIO_SERIALPORT_H
 
-#include "IPort.h"
+#include "IDataPort.h"
 #include "SerialPortException.h"
 
 namespace Grape
@@ -21,7 +21,7 @@ namespace Grape
 /// \todo
 /// - Test all bytes have been transmitted in waitForWrite()
 /// - In windows, review overlapped io timeouts are correct
-class GRAPEIO_DLL_API SerialPort : public IPort
+class GRAPEIO_DLL_API SerialPort : public IDataPort
 {
 public:
 
@@ -68,7 +68,7 @@ public:
     /// \throw InvalidSerialDataFormatException
     void setDataFormat(DataFormat fmt);
 
-    /// \copydoc IPort::open()
+    /// Open the port.
     /// After open, the serial port must be configured with baud rate and data format.
     /// A typical configuration is shown below:
     /// \code
@@ -79,15 +79,20 @@ public:
     /// port.setDataFormat(D8N1);
     /// \endcode
     /// until they are complete
+    /// \throw IoOpenException
     void open();
 
-    void close() throw();
+    /// Check if the port is open
+    /// \return true if open
     bool isOpen();
-    unsigned int read(std::vector<unsigned char>& buffer);
+
+    void close() throw();
+    unsigned int readAll(std::vector<unsigned char>& buffer);
+    unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);
     unsigned int availableToRead();
     unsigned int write(const std::vector<unsigned char>& buffer);
-    IPort::Status waitForRead(int timeoutMs);
-    IPort::Status waitForWrite(int timeoutMs);
+    IDataPort::Status waitForRead(int timeoutMs);
+    IDataPort::Status waitForWrite(int timeoutMs);
     void flushRx();
     void flushTx();
 

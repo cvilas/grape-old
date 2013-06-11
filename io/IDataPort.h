@@ -1,12 +1,12 @@
 //==============================================================================
 // Project  : Grape
 // Module   : IO
-// File     : IPort.h
-// Brief    : Abstract interface for ports
+// File     : IDataPort.h
+// Brief    : Abstract interface for data streams
 //==============================================================================
 
-#ifndef GRAPEIO_IPORT_H
-#define GRAPEIO_IPORT_H
+#ifndef GRAPEIO_IDATAPORT_H
+#define GRAPEIO_IDATAPORT_H
 
 #include "grapeio_common.h"
 #include "IoException.h"
@@ -15,12 +15,12 @@
 namespace Grape
 {
 
-/// \class IPort
+/// \class IDataPort
 /// \ingroup io
 /// \brief Abtract interface definition for communication ports
 ///
-/// IPort methods can throw IoException if IO specific exceptions occur
-class GRAPEIO_DLL_API IPort
+/// IDataPort methods can throw IoException if IO specific exceptions occur
+class GRAPEIO_DLL_API IDataPort
 {
 public:
     enum Status
@@ -31,29 +31,30 @@ public:
     };
 public:
 
-    IPort() {}
-
-    /// Open the port.
-    /// \note Derived class implements port specific configuration.
-    /// \throw IoOpenException
-    virtual void open() = 0;
+    IDataPort() {}
 
     /// Close the port.
     /// \throw none
     virtual void close() throw(/*nothing*/) = 0;
 
-    /// Check if the port is open
-    /// \return true if open
-    virtual bool isOpen() = 0;
-
-    /// Read data from the port.
+    /// Read all available data from the port.
     /// \param buffer   Buffer for read data. If the buffer isn't large enough, it is resized.
     ///                 If the buffer is larger than required, the extra bytes in the buffer are
     ///                 left untouched. Use return value for number of bytes actually read.
     /// \return         The number of bytes read.
     /// \see waitForRead, availableToRead
     /// \throw IoReadException, IoEventHandlingException
-    virtual unsigned int read(std::vector<unsigned char>& buffer) = 0;
+    virtual unsigned int readAll(std::vector<unsigned char>& buffer) = 0;
+
+    /// Read specified number of data bytes from the port.
+    /// \param buffer   Buffer for read data. If the buffer isn't large enough, it is resized.
+    ///                 If the buffer is larger than required, the extra bytes in the buffer are
+    ///                 left untouched. Use return value for number of bytes actually read.
+    /// \param bytes    Number of bytes to read
+    /// \return         The number of bytes read.
+    /// \see waitForRead, availableToRead
+    /// \throw IoReadException, IoEventHandlingException
+    virtual unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes) = 0;
 
     /// Find the number of bytes available and waiting to be read
     /// without actually reading them.
@@ -87,16 +88,17 @@ public:
     /// \see write
     virtual Status waitForWrite(int timeoutMs) = 0;
 
+
     /// Flush data written but not transmitted
     virtual void flushTx() = 0;
 
 protected:
-    virtual ~IPort() throw(/*nothing*/) {}
+    virtual ~IDataPort() throw(/*nothing*/) {}
 private:
-    IPort(const IPort&);            //!< disable copy
-    IPort &operator=(const IPort&); //!< disable assignment
-};
+    IDataPort(const IDataPort&);            //!< disable copy
+    IDataPort &operator=(const IDataPort&); //!< disable assignment
+}; // IDataPort
 
 } // Grape
 
-#endif // GRAPEIO_IPORT_H
+#endif // GRAPEIO_IDATAPORT_H

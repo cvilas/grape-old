@@ -17,8 +17,6 @@ namespace Grape
 /// \ingroup io
 ///
 /// Note that any method can throw SocketException on error
-/// \todo
-/// - Implement receive() properly.
 class GRAPEIO_DLL_API UdpSocket : public IpSocket
 {
 public:
@@ -30,27 +28,30 @@ public:
     /// established, as UDP communication is connectionless. The method copies
     /// peer information, and uses them in send() and receive()
     /// \return true (always)
-    bool connect(struct sockaddr_in &peer);
+    bool setRemotePeer(struct sockaddr_in &peer);
 
-    unsigned int send(const char *outMsgBuf, unsigned int outMsgLen);
+    /// \copydoc IDataPort::read()
+    /// Since UDP sockets are connectionless, this method will read data from any remote host.
+    /// To get data source information, use readFrom()
+    unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);
 
-    unsigned int receive(char *inMsgBuf, unsigned int inBufLen);
+    /// \copydoc IDataPort::write()
+    /// This method writes to remote peer specified in setRemotePeer()
+    unsigned int write(const std::vector<unsigned char>& buffer);
 
     /// Send message to a specific host
     /// \param destAddr   Destination address information
-    /// \param outMsgBuf  Pointer to buffer containing your message to server.
-    /// \param outMsgLen  The length of your message above.
+    /// \param buffer  Pointer to buffer containing your message.
     /// \throw SocketException
     /// \return number of bytes sent
-    unsigned int sendTo(struct sockaddr_in &destAddr, const char *outMsgBuf, unsigned int outMsgLen);
+    unsigned int writeTo(struct sockaddr_in &destAddr, const std::vector<unsigned char>& buffer);
 
-    /// Block to receive message from any host or timeout
-    /// \param inMsgBuf Buffer to receive message into
-    /// \param inBufLen The size (bytes) of the above buffer.
+    /// Block to receive message from any host
+    /// \param buffer Buffer to receive message into
     /// \param srcAddr The address of the host from which data was received.
     /// \throw SocketException
     /// \return number of bytes received
-    unsigned int receiveFrom(char *inMsgBuf, unsigned int inBufLen, struct sockaddr_in &srcAddr);
+    unsigned int readFrom(std::vector<unsigned char>& buffer, struct sockaddr_in &srcAddr);
 
 private:
     sockaddr_in _peer;

@@ -23,19 +23,19 @@ public:
 
     TcpSocket();
     virtual ~TcpSocket() throw(/*nothing*/);
-    void close();
 
     /// Establish connection with remote peer
-    /// \param peer Remote host
+    /// \param remoteIp Remote host IP
+    /// \param remotePort Port to connect to on remote host
     /// \return true if connection was established successfully
-    bool connect(struct sockaddr_in &peer);
+    bool connect(const std::string& remoteIp,int remotePort);
 
     /// Enable TCP_NODELAY socket option (disable Nagle algorithm)
     /// \throw SocketException
     void setNoDelay(bool option);
 
-    unsigned int send(const char *outMsgBuf, unsigned int outMsgLen);
-    unsigned int receive(char *inMsgBuf, unsigned int inBufLen);
+    unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);
+    unsigned int write(const std::vector<unsigned char>& buffer);
 
 }; // TcpSocket
 

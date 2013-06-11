@@ -12,28 +12,24 @@ include(../grapelibs.pri)
 win32:DEFINES += GRAPECORE_DLL GRAPEUTILS_DLL GRAPEIO_DLL GRAPEIO_DLL_EXPORT
 INCLUDEPATH += ./
 
-HEADERS = IPort.h SerialPort.h \
+HEADERS = SerialPort.h \
     grapeio_common.h \
     IJoystick.h \
     SimpleJoystick.h \
-    IpClient.h \
     SocketException.h \
     TcpSocket.h \
     UdpSocket.h \
     IpSocket.h \
     UdpServer.h \
     SerialPortException.h \
-    IoException.h
+    IoException.h \
+    IDataPort.h
 SOURCES = \
     IJoystick.cpp \
-    IpClient.cpp \
-    SocketException.cpp \
     TcpSocket.cpp \
     UdpSocket.cpp \
     IpSocket.cpp \
-    UdpServer.cpp \
-    SerialPortException.cpp \
-    IoException.cpp
+    UdpServer.cpp
 
 win32:HEADERS += Dx8JoystickManager.h
 win32:SOURCES += Dx8JoystickManager.cpp SimpleJoystick_windows.cpp SerialPort_windows.cpp
