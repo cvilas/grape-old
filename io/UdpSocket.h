@@ -30,7 +30,7 @@ public:
     /// \return true (always)
     bool setRemotePeer(struct sockaddr_in &peer);
 
-    /// \copydoc IDataPort::read()
+    /// \copydoc IDataPort::readn()
     /// Since UDP sockets are connectionless, this method will read data from any remote host.
     /// To get data source information, use readFrom()
     unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);

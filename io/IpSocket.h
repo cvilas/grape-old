@@ -30,8 +30,6 @@ namespace Grape
 ///
 /// See derived classes for specific implementations. Socket classes implement the
 /// IDataPort interface
-/// \todo
-/// - setSocketFd() should check that socket of the correct type is set (TCP, UDP, etc)
 class GRAPEIO_DLL_API IpSocket : public IDataPort
 {
 public:

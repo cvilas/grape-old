@@ -26,6 +26,10 @@ public:
         bind(port);
     }
     ~UdpServer() throw() {}
+private:
+    bool setRemotePeer(struct sockaddr_in &peer);
+    unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);
+    unsigned int write(const std::vector<unsigned char>& buffer);
 
 };// UdpServer
 
