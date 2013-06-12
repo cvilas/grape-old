@@ -69,7 +69,7 @@ bool TcpSocket::connect(const std::string& remoteIp, int remotePort)
 unsigned int TcpSocket::write(const std::vector<unsigned char>& buffer)
 //--------------------------------------------------------------------------
 {
-    ssize_t len = ::send(_sockFd, &buffer[0], buffer.size(), 0);
+    int len = ::send(_sockFd, (const char*)&buffer[0], buffer.size(), 0);
 
     if( len == SOCKET_ERROR )
     {
@@ -88,7 +88,7 @@ unsigned int TcpSocket::readn(std::vector<unsigned char>& buffer, unsigned int b
         buffer.resize(bytesToRead);
     }
 
-    ssize_t len = ::recv(_sockFd, &buffer[0], bytesToRead, 0/*MSG_WAITALL*/);
+    int len = ::recv(_sockFd, (char*)(&buffer[0]), bytesToRead, 0/*MSG_WAITALL*/);
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[TcpSocket::receive(recv)]");

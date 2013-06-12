@@ -56,7 +56,7 @@ bool UdpSocket::setRemotePeer(struct sockaddr_in &peer)
 unsigned int UdpSocket::writeTo(struct sockaddr_in &destAddr, const std::vector<unsigned char>& buffer)
 //--------------------------------------------------------------------------
 {
-    ssize_t len = sendto(_sockFd, &buffer[0], buffer.size(), 0, (struct sockaddr *)&destAddr, sizeof(struct sockaddr_in));
+    int len = sendto(_sockFd, (const char*)&buffer[0], buffer.size(), 0, (struct sockaddr *)&destAddr, sizeof(struct sockaddr_in));
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[UdpSocket::writeTo(sendto)]");
@@ -71,7 +71,7 @@ unsigned int UdpSocket::readFrom(std::vector<unsigned char>& buffer, struct sock
 {
     int srcAddrLen = sizeof(struct sockaddr);
 
-    ssize_t len = ::recvfrom(_sockFd, &buffer[0], buffer.size(), 0/*MSG_WAITALL*/, (struct sockaddr *) &(srcAddr), (socklen_t *)&srcAddrLen);
+    int len = ::recvfrom(_sockFd, (char*)(&buffer[0]), buffer.size(), 0/*MSG_WAITALL*/, (struct sockaddr *) &(srcAddr), (socklen_t *)&srcAddrLen);
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[UdpSocket::readFrom(receivefrom)]");
@@ -84,7 +84,7 @@ unsigned int UdpSocket::readFrom(std::vector<unsigned char>& buffer, struct sock
 unsigned int UdpSocket::write(const std::vector<unsigned char>& buffer)
 //--------------------------------------------------------------------------
 {
-    int len = sendto(_sockFd, &buffer[0], buffer.size(), 0, (struct sockaddr *)&_peer, sizeof(struct sockaddr_in));
+    int len = sendto(_sockFd, (const char*)&buffer[0], buffer.size(), 0, (struct sockaddr *)&_peer, sizeof(struct sockaddr_in));
     if( len == SOCKET_ERROR )
     {
         throwSocketException("[UdpSocket::write(sendto)]");
@@ -106,7 +106,7 @@ unsigned int UdpSocket::readn(std::vector<unsigned char>& buffer, unsigned int b
     int srcAddrLen = sizeof(struct sockaddr);
 
     // wait for messages
-    ssize_t len = ::recvfrom(_sockFd, &buffer[0], bytesToRead, 0/*MSG_WAITALL*/, (struct sockaddr *) &(srcAddr), (socklen_t *)&srcAddrLen);
+    int len = ::recvfrom(_sockFd, (char*)&buffer[0], bytesToRead, 0/*MSG_WAITALL*/, (struct sockaddr *) &(srcAddr), (socklen_t *)&srcAddrLen);
 
     if( len == SOCKET_ERROR )
     {
