@@ -5,10 +5,8 @@
 
 #include "io/SerialPort.h"
 #include "utils/consoleio.h"
-
 #include <iostream>
-#include <iomanip>
-#include <stdio.h>
+
 
 //==============================================================================
 int main(int argc, char** argv)

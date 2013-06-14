@@ -30,6 +30,10 @@ namespace Grape
 ///
 /// See derived classes for specific implementations. Socket classes implement the
 /// IDataPort interface
+///
+/// Example Programs:
+/// \include TcpEchoServer.cpp
+/// \include TcpClientExample.cpp
 class GRAPEIO_DLL_API IpSocket : public IDataPort
 {
 public:
@@ -53,7 +57,7 @@ public:
     // ------------- Socket specific methods -------------------
 
     /// bind socket to a port number
-    /// \throw SocketException
+    /// \see listen, accept
     void bind(int port);
 
     /// Resize the send and receive buffer spaces allocated by the OS. Set this
@@ -83,6 +87,9 @@ public:
     struct sockaddr_in getSocketAddress(const std::string& remoteIp, int remotePort);
 
 protected:
+
+    void setSockFd(SOCKET fd) { _sockFd = fd; }
+    SOCKET getSockFd() const { return _sockFd; }
 
     /// Throw a SocketException. Specify location from where it was thrown in
     /// order to help the user

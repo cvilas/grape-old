@@ -21,6 +21,9 @@ namespace Grape
 /// \todo
 /// - Test all bytes have been transmitted in waitForWrite()
 /// - In windows, review overlapped io timeouts are correct
+///
+/// Example program:
+/// \include SerialPortMonitor.cpp
 class GRAPEIO_DLL_API SerialPort : public IDataPort
 {
 public:
@@ -98,7 +101,9 @@ public:
 
 private:
     class SerialPortP* _pImpl; //!< platform specific private implementation
-
+private:
+    SerialPort(const SerialPort&);            //!< disable copy
+    SerialPort &operator=(const SerialPort&); //!< disable assignment
 }; // SerialPort
 
 

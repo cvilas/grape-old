@@ -182,14 +182,12 @@ unsigned int IpSocket::availableToRead()
 {
     unsigned int bytes = 0;
 #ifdef _MSC_VER
-    if( ioctlsocket(_sockFd, FIONREAD, (unsigned long*)&bytes) < 0 )
+    if( ioctlsocket(_sockFd, FIONREAD, (unsigned long*)&bytes) == SOCKET_ERROR )
 #else
     if( ioctl(_sockFd, FIONREAD, &bytes) < 0 )
 #endif
     {
-        std::ostringstream str;
-        str << "[IpSocket::availableToRead]: " << strerror(errno);
-        throw SocketException(errno, str.str());
+        throwSocketException("[IpSocket::availableToRead]");
     }
 
     return bytes;

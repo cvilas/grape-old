@@ -41,7 +41,7 @@ void TestException::tryNoFault()
 
     catch( Grape::Exception& ex ) // prefer to catch by reference where possible
     {
-        qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.getCode());
+        qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.code());
         QFAIL("No Exception case");
     }
 }
@@ -58,7 +58,7 @@ void TestException::tryFault()
 
     catch( Grape::Exception& ex ) // prefer to catch by reference where possible
     {
-        qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.getCode());
+        qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.code());
         return;
     }
     QFAIL("Exception not caught");

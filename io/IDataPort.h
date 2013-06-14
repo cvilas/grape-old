@@ -94,9 +94,6 @@ public:
 
 protected:
     virtual ~IDataPort() throw(/*nothing*/) {}
-private:
-    IDataPort(const IDataPort&);            //!< disable copy
-    IDataPort &operator=(const IDataPort&); //!< disable assignment
 }; // IDataPort
 
 } // Grape

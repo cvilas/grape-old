@@ -22,7 +22,7 @@ namespace Grape
     //--------------------------------------------------------------------------
     : std::exception(e)
     {
-        copyFrom(e.getCode(), e.what() );
+        copyFrom(e.code(), e.what() );
     }
     
     //--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ namespace Grape
     {
         if( this != &e )
         {
-            copyFrom( e.getCode(), e.what() );
+            copyFrom( e.code(), e.what() );
         }
         return *this;
     }

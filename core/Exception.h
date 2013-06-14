@@ -53,7 +53,7 @@ namespace Grape
         virtual const char* what() const throw(/*nothing*/) { return _msgStr; }
         
         /// \return latest error code.
-        int getCode() const throw(/*nothing*/) { return _code; }
+        int code() const throw(/*nothing*/) { return _code; }
 
     private:
         void copyFrom(int code, const char* msg) throw(/*nothing*/);

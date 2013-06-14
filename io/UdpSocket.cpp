@@ -32,7 +32,7 @@ namespace Grape
 UdpSocket::UdpSocket()
 //==========================================================================
 {
-    if( (int)(_sockFd = socket(AF_INET /*ipv4*/, SOCK_DGRAM /*UDP*/, IPPROTO_UDP)) == SOCKET_ERROR)
+    if( (int)(_sockFd = socket(AF_INET /*ipv4*/, SOCK_DGRAM /*UDP*/, IPPROTO_UDP)) == INVALID_SOCKET)
     {
         throwSocketException("[UdpSocket::UdpSocket](socket)");
     }

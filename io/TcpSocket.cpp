@@ -33,7 +33,7 @@ TcpSocket::TcpSocket()
 //==========================================================================
     : IpSocket()
 {
-    if( (int)(_sockFd = socket(AF_INET /*ipv4*/, SOCK_STREAM /*TCP*/, IPPROTO_TCP)) == SOCKET_ERROR)
+    if( (int)(_sockFd = socket(AF_INET /*ipv4*/, SOCK_STREAM /*TCP*/, IPPROTO_TCP)) == INVALID_SOCKET)
     {
         throwSocketException("[TcpSocket::TcpSocket](socket)");
     }
@@ -47,6 +47,38 @@ TcpSocket::~TcpSocket() throw()
 }
 
 //--------------------------------------------------------------------------
+bool TcpSocket::connect(const std::string& remoteIp, int remotePort)
+//--------------------------------------------------------------------------
+{
+    struct sockaddr_in peer = getSocketAddress(remoteIp, remotePort);
+    return (::connect(_sockFd, (struct sockaddr*)(&peer), sizeof(struct sockaddr)) != SOCKET_ERROR );
+}
+
+//--------------------------------------------------------------------------
+void TcpSocket::listen(int backlog)
+//--------------------------------------------------------------------------
+{
+    if( ::listen(_sockFd, backlog) == SOCKET_ERROR )
+    {
+        throwSocketException("[TcpSocket::listen]");
+    }
+}
+
+//--------------------------------------------------------------------------
+TcpSocket TcpSocket::accept()
+//--------------------------------------------------------------------------
+{
+    TcpSocket client;
+    SOCKET fd = ::accept(_sockFd, NULL, NULL);
+    if( fd == INVALID_SOCKET )
+    {
+        throwSocketException("[TcpSocket::accept]");
+    }
+    client.setSockFd(fd);
+    return client;
+}
+
+//--------------------------------------------------------------------------
 void TcpSocket::setNoDelay(bool yes)
 //--------------------------------------------------------------------------
 {
@@ -55,14 +87,6 @@ void TcpSocket::setNoDelay(bool yes)
     {
         throwSocketException("[TcpSocket::setNoDelay(TCP_NODELAY)]");
     }
-}
-
-//--------------------------------------------------------------------------
-bool TcpSocket::connect(const std::string& remoteIp, int remotePort)
-//--------------------------------------------------------------------------
-{
-    struct sockaddr_in peer = getSocketAddress(remoteIp, remotePort);
-    return (::connect(_sockFd, (struct sockaddr*)(&peer), sizeof(struct sockaddr)) != SOCKET_ERROR );
 }
 
 //--------------------------------------------------------------------------
