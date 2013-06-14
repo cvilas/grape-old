@@ -81,14 +81,26 @@ public:
     /// \throw SocketException
     void allowPortReuse(bool yes);
 
+    /// \return the current address to which the socket is bound, in
+    /// the format ip:port
+    std::string getHostName();
+
+    /// \return The remote endpoint for the connected socket, in
+    /// the format ip:port
+    std::string getPeerName();
+
+protected:
+
     /// Construct a socket address for a remote endpoint
     /// \param remoteIp Remote host IP
     /// \param remotePort Port to connect to on remote host
     struct sockaddr_in getSocketAddress(const std::string& remoteIp, int remotePort);
 
-protected:
-
+    /// Set the underlying socket file descriptor. Use with caution, as there
+    /// are not error checks
     void setSockFd(SOCKET fd) { _sockFd = fd; }
+
+    /// \return BSD socket file descriptor
     SOCKET getSockFd() const { return _sockFd; }
 
     /// Throw a SocketException. Specify location from where it was thrown in

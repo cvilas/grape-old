@@ -65,16 +65,16 @@ void TcpSocket::listen(int backlog)
 }
 
 //--------------------------------------------------------------------------
-TcpSocket TcpSocket::accept()
+TcpSocket* TcpSocket::accept()
 //--------------------------------------------------------------------------
 {
-    TcpSocket client;
+    TcpSocket* client = new TcpSocket;
     SOCKET fd = ::accept(_sockFd, NULL, NULL);
     if( fd == INVALID_SOCKET )
     {
         throwSocketException("[TcpSocket::accept]");
     }
-    client.setSockFd(fd);
+    client->setSockFd(fd);
     return client;
 }
 

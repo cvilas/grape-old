@@ -79,6 +79,36 @@ struct sockaddr_in IpSocket::getSocketAddress(const std::string& serverIp, int p
 }
 
 //--------------------------------------------------------------------------
+std::string IpSocket::getHostName()
+//--------------------------------------------------------------------------
+{
+    sockaddr_in addr;
+    socklen_t len = sizeof(sockaddr_in);
+    if( getsockname(_sockFd, (sockaddr*)&addr, &len) == SOCKET_ERROR )
+    {
+        throwSocketException("[IpSocket::getSocketName]");
+    }
+    std::ostringstream str;
+    str << inet_ntoa(addr.sin_addr) << ":" << addr.sin_port;
+    return str.str();
+}
+
+//--------------------------------------------------------------------------
+std::string IpSocket::getPeerName()
+//--------------------------------------------------------------------------
+{
+    sockaddr_in addr;
+    socklen_t len = sizeof(sockaddr_in);
+    if( getpeername(_sockFd, (sockaddr*)&addr, &len) == SOCKET_ERROR )
+    {
+        throwSocketException("[IpSocket::getPeerName]");
+    }
+    std::ostringstream str;
+    str << inet_ntoa(addr.sin_addr) << ":" << addr.sin_port;
+    return str.str();
+}
+
+//--------------------------------------------------------------------------
 IpSocket::~IpSocket() throw()
 //--------------------------------------------------------------------------
 {
@@ -221,7 +251,12 @@ IDataPort::Status IpSocket::waitForRead(int timeoutMs)
     // ret == 0: timeout, ret == 1: ready, ret == -1: error
     if (ret > 0)
     {
-        st = IDataPort::PORT_OK;
+        // linux workaround. select returns 1 for closed socket, but there
+        // is nothing to read
+        if( availableToRead() )
+        {
+            st = IDataPort::PORT_OK;
+        }
     }
     else if (ret == 0)
     {

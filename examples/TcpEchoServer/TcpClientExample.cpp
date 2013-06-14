@@ -4,6 +4,7 @@
 //==============================================================================
 
 #include "io/TcpSocket.h"
+#include <stdlib.h>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -32,6 +33,8 @@ int main(int argc, char** argv)
         Grape::TcpSocket client;
         std::string remoteIp(argv[1]);
         int port = atoi(argv[2]);
+
+        // connect to server
         if( !client.connect(remoteIp, port) )
         {
             std::cerr << "Unable to connect to " << remoteIp << ":" << port << std::endl;
@@ -43,9 +46,13 @@ int main(int argc, char** argv)
         {
             std::string is;
             std::getline(std::cin, is);
+
             if( is.length() )
             {
+                // write data to server
                 unsigned int bytesWritten = client.write(string2vector(is));
+
+                // wait for server to reply
                 std::vector<unsigned char> buffer;
                 Grape::IDataPort::Status st = client.waitForRead(1000);
                 if( st != Grape::IDataPort::PORT_OK )
@@ -53,19 +60,27 @@ int main(int argc, char** argv)
                     std::cout << "Error or timeout waiting for reply" << std::endl;
                     break;
                 }
+
+                // read the reply
                 unsigned int bytesReceived = client.readAll(buffer);
+
+                // server should echo everything back
                 if( bytesWritten != bytesReceived )
                 {
                     std::cout << "Number of bytes sent and received are not the same!" << std::endl;
                 }
+
+                // print reply
                 for(unsigned int i = 0; i < bytesReceived; ++i)
                 {
                     std::cout << buffer[i];
                 }
                 std::cout << std::endl;
+
             } // valid input
         } // while
     }
+
     catch(Grape::Exception& ex)
     {
         std::cout << ex.what() << std::endl;

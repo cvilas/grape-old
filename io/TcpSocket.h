@@ -48,9 +48,16 @@ public:
     /// Use this with connection-based protocols (eg: TCP) to accept an incoming
     /// connection. For this to work, this socket should be bound to a port (see bind())
     /// and listening for connections (see listen())
-    /// \return Socket intialised for the accepted connection from remote peer
+    /// \return Socket intialised for the accepted connection from remote peer. After use,
+    /// the user must delete the socket as follows
+    /// \code
+    /// TcpSocket* pSocket = accept();
+    /// // use socket
+    /// pSocket->close();
+    /// delete pSocket;
+    /// \endcode
     /// \see bind, listen
-    TcpSocket accept();
+    TcpSocket* accept();
 
     unsigned int readn(std::vector<unsigned char>& buffer, unsigned int bytes);
     unsigned int write(const std::vector<unsigned char>& buffer);
