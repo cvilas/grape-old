@@ -32,8 +32,7 @@ namespace Grape
 /// IDataPort interface
 ///
 /// Example Programs:
-/// \include TcpEchoServer.cpp
-/// \include TcpClientExample.cpp
+/// See TcpSocket
 class GRAPEIO_DLL_API IpSocket : public IDataPort
 {
 public:

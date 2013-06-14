@@ -9,7 +9,6 @@ TODO
 - Delete ours/generic, mine/generic
 - Follow roadmap in GRAPE003 - Specification, GRAPE004 - roadmap, and GRAPE001 - plan
 - Real time capable data logger
-- TCP multithreaded server
 - message queues
 - shared memory
 - RW locks

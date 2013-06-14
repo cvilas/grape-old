@@ -18,8 +18,10 @@ namespace Grape
 ///
 /// Note that any method can throw SocketException on error
 ///
-/// Example Programs:
-/// \include TcpEchoServer.cpp
+/// Threaded TCP server example:
+/// \include TcpEchoServerExample.cpp
+///
+/// TCP client example:
 /// \include TcpClientExample.cpp
 class GRAPEIO_DLL_API TcpSocket : public IpSocket
 {
@@ -41,6 +43,7 @@ public:
 
     /// Place socket in a passive state listening for incoming connections.
     /// Note that this will work only with connection-based protocols such as TCP.
+    /// Call bind first.
     /// \param backlog The maximum length of queue of pending connections.
     /// \see bind, accept
     void listen(int backlog);
