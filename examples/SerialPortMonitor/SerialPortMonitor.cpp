@@ -30,13 +30,20 @@ int main(int argc, char** argv)
         while( !Grape::kbhit() )
         {
             std::vector<unsigned char> buffer;
-            int nBytes = port.readAll(buffer);
-            for(int i = 0; i < nBytes; ++i)
+            if( port.availableToRead() > 0 )
             {
-                std::cout << buffer[i];
+                int nBytes = port.readAll(buffer);
+                for(int i = 0; i < nBytes; ++i)
+                {
+                    std::cout << buffer[i];
+                }
+            } // bytes available to read
+            else
+            {
+                Grape::milliSleep(500);
             }
-        }
-    }
+        } // until key hit
+    } // try
     catch(Grape::Exception &ex)
     {
         std::cerr << ex.what() << std::endl;
