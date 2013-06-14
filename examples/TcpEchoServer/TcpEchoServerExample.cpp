@@ -27,18 +27,22 @@ public:
                 if( st == Grape::IDataPort::PORT_OK )
                 {
                     buffer.clear();
+
                     _socket.readAll(buffer);
+
                     std::vector<unsigned char>::const_iterator it = buffer.begin();
                     while(it != buffer.end() )
                     {
                         std::cout << *it;
                         ++it;
                     }
+                    std::cout << std::endl;
+
                     _socket.write(buffer);
                 }
                 else if( st == Grape::IDataPort::PORT_ERROR )
                 {
-                    std::cout << "Error waiting for data." << std::endl;
+                    std::cout << "Comm error." << std::endl;
                     break;
                 }
             }while(1);

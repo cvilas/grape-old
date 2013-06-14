@@ -42,24 +42,28 @@ int main(int argc, char** argv)
         while(1)
         {
             std::string is;
-            std::cin >> is;
-            unsigned int bytesWritten = client.write(string2vector(is));
-            std::vector<unsigned char> buffer;
-            Grape::IDataPort::Status st = client.waitForRead(1000);
-            if( st != Grape::IDataPort::PORT_OK )
+            std::getline(std::cin, is);
+            if( is.length() )
             {
-                std::cout << "Error or timeout waiting for reply" << std::endl;
-                break;
-            }
-            unsigned int bytesReceived = client.readAll(buffer);
-            if( bytesWritten != bytesReceived )
-            {
-                std::cout << "Number of bytes sent and received are not the same!" << std::endl;
-            }
-            for(unsigned int i = 0; i < bytesReceived; ++i)
-            {
-                std::cout << buffer[i];
-            }
+                unsigned int bytesWritten = client.write(string2vector(is));
+                std::vector<unsigned char> buffer;
+                Grape::IDataPort::Status st = client.waitForRead(1000);
+                if( st != Grape::IDataPort::PORT_OK )
+                {
+                    std::cout << "Error or timeout waiting for reply" << std::endl;
+                    break;
+                }
+                unsigned int bytesReceived = client.readAll(buffer);
+                if( bytesWritten != bytesReceived )
+                {
+                    std::cout << "Number of bytes sent and received are not the same!" << std::endl;
+                }
+                for(unsigned int i = 0; i < bytesReceived; ++i)
+                {
+                    std::cout << buffer[i];
+                }
+                std::cout << std::endl;
+            } // valid input
         } // while
     }
     catch(Grape::Exception& ex)
