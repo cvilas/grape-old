@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += Joystick 2DGraphics Desktop #Inventor
+SUBDIRS += Joystick SerialPortMonitor 2DGraphics Desktop #Inventor
 
