@@ -31,7 +31,7 @@ public:
     };
 public:
 
-    IDataPort() {}
+    virtual ~IDataPort() throw(/*nothing*/) {}
 
     /// Close the port.
     /// \throw none
@@ -93,7 +93,8 @@ public:
     virtual void flushTx() = 0;
 
 protected:
-    virtual ~IDataPort() throw(/*nothing*/) {}
+    IDataPort() {}
+
 }; // IDataPort
 
 } // Grape
