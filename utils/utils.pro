@@ -12,8 +12,12 @@ include(../grapelibs.pri)
 win32:DEFINES += GRAPEUTILS_DLL GRAPEUTILS_DLL_EXPORT
 #win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
-HEADERS = consoleio.h stringfuncs.h CmdLineArgs.h grapeutils_common.h
-SOURCES = consoleio.cpp CmdLineArgs.cpp
+HEADERS = consoleio.h stringfuncs.h CmdLineArgs.h grapeutils_common.h \
+    Config.h \
+    ConfigFile.h
+SOURCES = consoleio.cpp CmdLineArgs.cpp \
+    Config.cpp \
+    ConfigFile.cpp
 
 win32:HEADERS += guidfuncs.h
 win32:SOURCES += guidfuncs.cpp
