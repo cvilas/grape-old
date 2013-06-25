@@ -35,6 +35,11 @@ public:
     ~Config() {}
     inline Config &operator=(const Config &sec);
 
+    /// print to an output stream
+    /// \param str output stream (example std::cout)
+    /// \param lsp number of leading white spaces to print
+    void print(std::ostream& str, unsigned int lsp = 0) const;
+
     // ------------------ key/value entries --------------------
 
     /// Clear all contents
@@ -49,7 +54,8 @@ public:
     /// \param key    An identifier name for the entry.
     /// \param value  The value assigned to the name.
     /// \param comment An optional comment string
-    template<class T> void setEntry(const std::string &key, const T &value, const std::string& comment="");
+    template<class T>
+    void setEntry(const std::string &key, const T &value, const std::string& comment="");
 
     /// Read an entry by key.
     /// \note The object of type T must have the following istream
@@ -62,7 +68,8 @@ public:
     /// \param comment  The comment associated with the entry
     /// \return true if entry key was found. False is returned if entry key is not found, in which
     /// case the contents of value and comment parameters are undefined.
-    template<class T> bool getEntry(const std::string &key, T &value, std::string& comment) const;
+    template<class T>
+    bool getEntry(const std::string &key, T &value, std::string& comment) const;
 
     /// \return The number of entries held currently
     unsigned int getNumEntries() const { return _entries.size(); }

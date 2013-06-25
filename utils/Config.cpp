@@ -37,5 +37,27 @@ bool Config::removeEntry(unsigned int n)
     return false;
 }
 
+//------------------------------------------------------------------------------
+void Config::print(std::ostream &str, unsigned int lsp) const
+//------------------------------------------------------------------------------
+{
+    ConstEntryIter it = _entries.begin();
+    ConstEntryIter itEnd = _entries.end();
+
+    while( it != itEnd )
+    {
+        unsigned int sp = lsp;
+        while(sp) { str << " "; --sp; }
+
+        str << it->first << " = " << it->second.value << ";";
+        if( it->second.comment.length() )
+        {
+            str << " <!-- " << it->second.comment << " -->";
+        }
+        str << std::endl;
+
+        ++it;
+    }
+}
 
 } // Grape

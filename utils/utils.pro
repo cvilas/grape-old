@@ -14,10 +14,12 @@ win32:DEFINES += GRAPEUTILS_DLL GRAPEUTILS_DLL_EXPORT
 INCLUDEPATH += ./
 HEADERS = consoleio.h stringfuncs.h CmdLineArgs.h grapeutils_common.h \
     Config.h \
-    ConfigFile.h
+    ConfigFile.h \
+    ConfigNode.h
 SOURCES = consoleio.cpp CmdLineArgs.cpp \
     Config.cpp \
-    ConfigFile.cpp
+    ConfigFile.cpp \
+    ConfigNode.cpp
 
 win32:HEADERS += guidfuncs.h
 win32:SOURCES += guidfuncs.cpp

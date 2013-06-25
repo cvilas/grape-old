@@ -25,21 +25,28 @@ int main(int argc, char** argv)
         port.setBaudRate(Grape::SerialPort::B9600);
         port.setDataFormat(Grape::SerialPort::D8N1);
 
-        while( !Grape::kbhit() )
+        while( /*!Grape::kbhit()*/1 )
         {
-            std::vector<unsigned char> buffer;
-            if( port.availableToRead() > 0 )
+            // read input from user
+            std::string userin;
+            std::getline(std::cin, userin);
+
+            // send to remote device
+            std::vector<unsigned char> bb(userin.begin(), userin.end());
+            bb.push_back('\n');
+            port.write(bb);
+
+            // read response from remote device
+            if( Grape::IDataPort::PORT_OK == port.waitForRead(1000) )
             {
+                std::vector<unsigned char> buffer;
                 int nBytes = port.readAll(buffer);
                 for(int i = 0; i < nBytes; ++i)
                 {
-                    std::cout << buffer[i];
+                    std::cout << (char)buffer[i] << std::flush;
                 }
             } // bytes available to read
-            else
-            {
-                Grape::milliSleep(500);
-            }
+
         } // until key hit
     } // try
     catch(Grape::Exception &ex)
