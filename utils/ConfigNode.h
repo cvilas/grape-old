@@ -32,6 +32,25 @@ public:
     /// \param lsp number of leading white spaces to print
     void print(std::ostream &s, unsigned int lsp=0) const;
 
+    /// read in the node key/value/comments and children from a stream.
+    /// The data should be formatted as follows
+    /// \code
+    /// key = value; <!-- comment -->
+    /// <section>
+    ///     key2 = value2;
+    /// </section>
+    /// \endcode
+    /// The comment blocks are optional.
+    /// \param str input stream
+    /// \param errorStream stream to output parse error messages to (default is standard error stream).
+    /// \return true if data read successfully.
+    bool parse(const std::string& str, std::ostream& errorStream = std::cerr);
+
+    // ------------------ node management --------------------
+
+    /// Clear all contents
+    void clear();
+
     /// \return number of children of this node
     unsigned int getNumChildren() const { return children.size(); }
 

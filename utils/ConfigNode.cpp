@@ -65,6 +65,32 @@ void ConfigNode::print(std::ostream &str, unsigned int lsp) const
 }
 
 //------------------------------------------------------------------------------
+bool ConfigNode::parse(const std::string& str, std::ostream& errorStream)
+//------------------------------------------------------------------------------
+{}
+
+//------------------------------------------------------------------------------
+void ConfigNode::clear()
+//------------------------------------------------------------------------------
+{
+    node.clear();
+
+    /*
+    ConstNodeIter it = children.begin();
+    ConstNodeIter itEnd = children.end();
+
+    while( it != itEnd )
+    {
+        it->second.clear();
+        ++it;
+    }
+    */
+    children.clear();
+
+}
+
+
+//------------------------------------------------------------------------------
 bool ConfigNode::removeChild(const std::string& name)
 //------------------------------------------------------------------------------
 {
