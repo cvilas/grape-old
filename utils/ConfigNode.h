@@ -82,7 +82,7 @@ public:
     /// Get the name of a child
     std::string getChildName(unsigned int n) const;
 
-public:
+private:
     Grape::Config node;
     std::map<std::string/*name*/, ConfigNode> children;
 
