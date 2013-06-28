@@ -12,8 +12,9 @@ namespace Grape
 {
 
 //==============================================================================
-ConfigFile::ConfigFile()
+ConfigFile::ConfigFile(std::ostream& errorStream)
 //==============================================================================
+    : _errorStream(errorStream)
 {
 }
 
@@ -21,13 +22,33 @@ ConfigFile::ConfigFile()
 ConfigFile::~ConfigFile()
 //------------------------------------------------------------------------------
 {
-
 }
 
 //------------------------------------------------------------------------------
 bool ConfigFile::load(const std::string &fileName, const std::string &env)
 //------------------------------------------------------------------------------
 {
+    std::ifstream file;
+    std::string cpath, path;
+    char* envPath = getenv( env.c_str() );
+    path = ".:";
+    if( env.length() && (envPath != NULL) )
+    {
+        path += (envPath);
+    }
+
+    cpath = openFileFromPath(path, fileName, file);
+    if( !file.is_open() )
+    {
+        return false;
+    }
+
+    std::string data;
+
+    data.assign( (std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()) );
+    file.close();
+
+    return _root.parse(data, _errorStream);
 }
 
 //------------------------------------------------------------------------------

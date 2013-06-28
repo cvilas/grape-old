@@ -38,6 +38,7 @@ namespace Grape
 /// Rules:
 /// - For a key/value entry, the value must be terminated by ';'
 /// - Comment must be enclosed within /' '/.
+/// - Comment block, if present, must be after the corresponding key/value entry
 /// - Multiline block comments are supported
 /// - Nested comments are not supported
 /// - Sections are named and contained within [name][/name] blocks
@@ -56,7 +57,7 @@ class GRAPEUTILS_DLL_API ConfigFile
 
 public:
 
-    ConfigFile();
+    ConfigFile(std::ostream& errorStream = std::cerr);
     ~ConfigFile();
 
     /// Load configuration data from file into memory.
@@ -98,6 +99,7 @@ private:
 private:
 
     ConfigNode _root;
+    std::ostream& _errorStream;
 
 }; // ConfigFile
 
