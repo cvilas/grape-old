@@ -35,10 +35,10 @@ public:
     /// read in the node key/value/comments and children from a stream.
     /// The data should be formatted as follows
     /// \code
-    /// key = value; <!-- comment -->
-    /// <section>
+    /// key = value; /' comment '/
+    /// [section]
     ///     key2 = value2;
-    /// </section>
+    /// [/section]
     /// \endcode
     /// The comment blocks are optional.
     /// \param str input stream
@@ -83,7 +83,27 @@ public:
     std::string getChildName(unsigned int n) const;
 
 private:
-    Grape::Config node;
+    /// extract the first subsection found in the string. The input string is
+    /// modified to contain the remainder of the string
+    /// \param str input string
+    /// \param name extracted section name
+    /// \param section extracted section string
+    /// \param errorStream output error stream
+    /// \return -1 on error, 0 if no section found, 1 if section found.
+    int extractSection(std::string& str, std::string& name, std::string& section,
+                       std::ostream& errorStream);
+
+    /// Find starting position of footer for a section
+    /// \param str input string
+    /// \param name name of the section
+    /// \param seekPos search start position. on return this is updated to next position
+    ///                after end of footer
+    /// \param errorStream output error stream
+    /// \return std::string::npos on error, otherwise start of footer position
+    std::string::size_type findFooter(const std::string& str, const std::string& name,
+                                      std::string::size_type& seekPos, std::ostream& errorStream);
+private:
+    Grape::Config self;
     std::map<std::string/*name*/, ConfigNode> children;
 
     typedef std::map<std::string/*key*/, ConfigNode>::iterator       NodeIter;

@@ -18,33 +18,31 @@ namespace Grape
 /// \brief configuration file reader/writer
 ///
 /// ConfigFile class provides methods to read a configuration file containing
-/// named sections with key-value pairs and optional comments. The format
-/// for a configuration entry is as follows:
-/// \code
-/// key = value; <!-- comment -->
-/// \endcode
-///
-/// Note the delimiter ';' after the value field and the comment field
-/// enclosed within <!-- -->.
-///
-/// Multiple nested subsections are supported. Sub-sections are contained
-/// in <name></name> blocks where 'name' identifies the sub-section.
-///
-/// The following is an example configuration file:
+/// named sections with key-value pairs and optional comments. The following is
+/// an example:
 ///
 /// \code
-/// float = 0; <!-- entries are allowed outside a section -->
+/// float_val = 0; /' entries are allowed outside a section '/
 ///
-/// <section_name>
-/// 	integer = 2;     <!-- This is a comment string for the entry -->
-/// 	float   = 2.0;
+/// [section_name]
+/// 	integer_val = 2;     /' This is a comment string for the entry '/
+/// 	float_val   = 2.0;
 /// 	float_array = 1.0 2.0 3.0 4.0;
-/// 	string = This is a message;
-/// 	<sub_section_name>
+/// 	string_val = This is a message;
+/// 	[sub_section_name]
 /// 		float  = 3.0;
-///     </sub_section_name>
-/// </section_name>
+///     [/sub_section_name]
+/// [/section_name]
 /// \endcode
+///
+/// Rules:
+/// - For a key/value entry, the value must be terminated by ';'
+/// - Comment must be enclosed within /' '/.
+/// - Multiline block comments are supported
+/// - Nested comments are not supported
+/// - Sections are named and contained within [name][/name] blocks
+///   where 'name' identifies the section.
+/// - Nested sections are supported
 ///
 /// Internally, the data is represented as a hierarchical tree where each node
 /// is a section containing multiple key/value/comment entries and multiple

@@ -9,12 +9,11 @@
 int main(int argc, char** argv)
 //==============================================================================
 {
-    Grape::Config cfg;
+    Grape::ConfigNode cfg;
 
     std::ostringstream str;
 
-    str << "key \n=\nvalue\n;\n <!-- \ncomment\n -->"
-        << "key2 = value2; <!-- comment2 -->";
+    str << "[Section] key1 = value1; /' comment1 '/ key2 = value2; /' comment2 '/ [SubSection] key3 = value3; [/SubSection] [/Section]";
 
     cfg.parse(str.str());
     cfg.print(std::cout);

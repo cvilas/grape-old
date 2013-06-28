@@ -52,7 +52,7 @@ void Config::print(std::ostream &str, unsigned int lsp) const
         str << it->first << " = " << it->second.value << ";";
         if( it->second.comment.length() )
         {
-            str << " <!-- " << it->second.comment << " -->";
+            str << " /' " << it->second.comment << " '/";
         }
         str << std::endl;
 
@@ -114,23 +114,26 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
 
         // do we have a comment block
         std::string comment = "";
-        std::string::size_type commentStart = str.find("<!--", seekPos);
-        std::string testWhiteSpace = str.substr(seekPos, commentStart-seekPos);
-        testWhiteSpace = Grape::removeEndWhiteSpace(testWhiteSpace);
-        if( testWhiteSpace.length() == 0 )
+        std::string::size_type commentStart = str.find("/'", seekPos);
+        if( commentStart != std::string::npos )
         {
-            commentStart += 4U;
-
-            // comment belongs to this key/value
-            std::string::size_type commentEnd = str.find("-->", commentStart);
-            if( commentEnd == std::string::npos )
+            std::string testWhiteSpace = str.substr(seekPos, commentStart-seekPos);
+            testWhiteSpace = Grape::removeEndWhiteSpace(testWhiteSpace);
+            if( testWhiteSpace.length() == 0 )
             {
-                errorStream << "[Config::parse]: comment not terminated properly" << std::endl;
-                return false;
+                commentStart += 2U;
+
+                // comment belongs to this key/value
+                std::string::size_type commentEnd = str.find("'/", commentStart);
+                if( commentEnd == std::string::npos )
+                {
+                    errorStream << "[Config::parse]: comment not terminated properly" << std::endl;
+                    return false;
+                }
+                comment = str.substr(commentStart, commentEnd-commentStart);
+                comment = Grape::removeEndWhiteSpace(comment);
+                seekPos = commentEnd + 2U;
             }
-            comment = str.substr(commentStart, commentEnd-commentStart);
-            comment = Grape::removeEndWhiteSpace(comment);
-            seekPos = commentEnd + 3U;
         }
 
         // add it

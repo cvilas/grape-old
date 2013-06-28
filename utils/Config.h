@@ -44,7 +44,7 @@ public:
     /// read in key/value/comments from a stream. The data should be
     /// formatted as follows
     /// \code
-    /// key = value; <!-- comment -->
+    /// key = value; /'comment'/
     /// \endcode
     /// The comment blocks are optional.
     /// \param str input stream
