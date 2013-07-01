@@ -79,8 +79,7 @@ public:
 
     /// print to an output stream
     /// \param str output stream (example std::cout)
-    /// \param lsp number of leading white spaces to print
-    void print(std::ostream &s) const;
+    void print(std::ostream &str) const;
 
     // ------------------- configuration management -------------------------------
 

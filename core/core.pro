@@ -13,11 +13,9 @@ win32:DEFINES += GRAPECORE_DLL GRAPECORE_DLL_EXPORT
 INCLUDEPATH += ./
 HEADERS += \ 
     Exception.h \
-    Status.h \
     grapecore_common.h
 SOURCES += \
     Exception.cpp \
-    Status.cpp \
     grapecore_common.cpp
 win32:SOURCES +=
 unix:SOURCES +=

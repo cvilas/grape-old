@@ -30,7 +30,7 @@ public:
     /// print to an output stream
     /// \param str output stream (example std::cout)
     /// \param lsp number of leading white spaces to print
-    void print(std::ostream &s, unsigned int lsp=0) const;
+    void print(std::ostream &str, unsigned int lsp=0) const;
 
     /// read in the node key/value/comments and children from a stream.
     /// The data should be formatted as follows

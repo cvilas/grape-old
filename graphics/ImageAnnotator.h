@@ -32,7 +32,7 @@ namespace Grape
 /// - Mechanism to save/load overlay information to/from XML file.
 ///
 /// Example program:
-/// \include 2DGraphics/ImageAnnotationExample.cpp
+/// \include 2DGraphics/AnnotationExample.cpp
 class GRAPEGRAPHICS_DLL_API ImageAnnotator : public QObject
 {
     Q_OBJECT

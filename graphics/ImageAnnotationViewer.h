@@ -26,14 +26,13 @@ namespace Grape
 /// re-position or modify annotations overlayed on the image.
 ///
 /// Example program:
-/// \include 2DGraphics/ImageAnnotationViewerExample.cpp
+/// \include 2DGraphics/AnnotationViewerExample.cpp
 class GRAPEGRAPHICS_DLL_API ImageAnnotationViewer : public QWidget
 {
     Q_OBJECT
 public:
     /// Constructor. Does a few initialisations. setImageAnnotator() must be called
     /// before using the object.
-    /// \param annotator	The annotator object to associate the viewer with.
     /// \param pParent		Pointer to the parent window
     /// \param flgs		Window flags
     explicit ImageAnnotationViewer(QWidget* pParent = 0, Qt::WindowFlags flgs = 0);
@@ -41,7 +40,7 @@ public:
     ~ImageAnnotationViewer();
 
     /// Associates the viewer with a specific annotator.
-    /// \param annotator	(input) The annotator object to associate the viewer with. Can be set to NULL.
+    /// \param pAnnotator	(input) The annotator object to associate the viewer with. Can be set to NULL.
     void setImageAnnotator(ImageAnnotator* pAnnotator);
 
     /// Allow users to interact with the viewer using the mouse.
