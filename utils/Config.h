@@ -159,6 +159,7 @@ bool Config::getEntry(const std::string &key, T &value, std::string& comment) co
     }
     value = Grape::stringAsT<T>(it->second.value);
     comment = it->second.comment;
+    return true;
 }
 
 //------------------------------------------------------------------------------

@@ -82,6 +82,10 @@ public:
     /// Get the name of a child
     std::string getChildName(unsigned int n) const;
 
+    /// Get pointer access to all key/value/comment entries of this node
+    /// \return pointer to entries list
+    Config* getEntries() { return &_entries; }
+
 private:
     /// extract the first subsection found in the string. The input string is
     /// modified to contain the remainder of the string
@@ -103,7 +107,7 @@ private:
     std::string::size_type findFooter(const std::string& str, const std::string& name,
                                       std::string::size_type& seekPos, std::ostream& errorStream);
 private:
-    Grape::Config self;
+    Grape::Config _entries;
     std::map<std::string/*name*/, ConfigNode> children;
 
     typedef std::map<std::string/*key*/, ConfigNode>::iterator       NodeIter;

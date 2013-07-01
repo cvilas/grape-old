@@ -26,7 +26,7 @@ ConfigNode::~ConfigNode()
 ConfigNode::ConfigNode(const ConfigNode &conf)
 //------------------------------------------------------------------------------
 {
-    this->self = conf.self;
+    this->_entries = conf._entries;
     this->children = conf.children;
 }
 
@@ -36,7 +36,7 @@ ConfigNode &ConfigNode::operator=(const ConfigNode &conf)
 {
     if( this != &conf )
     {
-        this->self = conf.self;
+        this->_entries = conf._entries;
         this->children = conf.children;
     }
     return *this;
@@ -46,7 +46,7 @@ ConfigNode &ConfigNode::operator=(const ConfigNode &conf)
 void ConfigNode::print(std::ostream &str, unsigned int lsp) const
 //------------------------------------------------------------------------------
 {
-    this->self.print(str, lsp);
+    this->_entries.print(str, lsp);
 
     ConstNodeIter it = children.begin();
     ConstNodeIter itEnd = children.end();
@@ -105,7 +105,7 @@ bool ConfigNode::parse(const std::string& str, std::ostream& errorStream)
     } // while
 
     // extract entries
-    return self.parse(remainder, errorStream);
+    return _entries.parse(remainder, errorStream);
 }
 
 //------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ std::string::size_type ConfigNode::findFooter(const std::string& str,
 void ConfigNode::clear()
 //------------------------------------------------------------------------------
 {
-    self.clear();
+    _entries.clear();
 
     /*
     ConstNodeIter it = children.begin();

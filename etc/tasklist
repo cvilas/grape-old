@@ -12,7 +12,6 @@ TODO
 - message queues
 - shared memory
 - RW locks
-- Config: move class and add support to add/modify/save comments
 - Timer: Posix: tests for all error return conditions,
   timed wait, interaction between multiple timers, response when period is
   set below timer resolution

@@ -60,6 +60,8 @@ public:
     ConfigFile(std::ostream& errorStream = std::cerr);
     ~ConfigFile();
 
+    // -------------------------------- file IO -------------------------------
+
     /// Load configuration data from file into memory.
     /// \param fileName  The configuration file.
     /// \param env      An optional environment variable (example PATH) containing the
@@ -80,14 +82,83 @@ public:
     /// \param lsp number of leading white spaces to print
     void print(std::ostream &s) const;
 
-    /// get pointer access to a section from its path
+    // ------------------- configuration management -------------------------------
+
+    /// Add a new section node in the configuration tree. Use getSection() to modify section
+    /// after adding.
+    /// \param sectionName Name of the section to add
+    /// \param parentPath  Path to the parent section from the root, separated by ::. For
+    ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
+    ///                     within a section "Toyota" which is itself a subsection of
+    ///                     "Car". Set this to empty string to specify root level of the
+    ///                     configuration.
+    /// \return true on success, false if path is incorrect
+    /// \see getSection.
+    bool addSection(const std::string &sectionName, const std::string &parentPath);
+
+    /// remove a section node in the configuration tree
+    /// \param sectionPath  Path to the section from the root, separated by ::. For
+    ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
+    ///                     within a section "Toyota" which is itself a subsection of
+    ///                     "Car". Set this to empty string to specify root level of the
+    ///                     configuration.
+    /// \return             true on success, false is section doesn't exist.
+    bool removeSection(const std::string &sectionPath);
+
+    /// get pointer access to a section from its path.
     /// \param sectionPath  Path to the section from the root, separated by ::. For
     ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
     ///                     within a section "Toyota" which is itself a subsection of
     ///                     "Car". Set this to empty string to specify root level of the
     ///                     configuration.
     /// \return             Pointer to the section, or NULL if not found.
-    ConfigNode* getConfig(const std::string& sectionPath);
+    ConfigNode* getSection(const std::string& sectionPath);
+
+    /// Set value for an existing key or add a new key/value/comment triplet.
+    /// \note The object of type T must have the following ostream
+    /// redirection operator defined in order for this to work:
+    /// \code
+    /// std::ostream& operator<<(std::ostream &, const T &);
+    /// \endcode
+    /// \param sectionPath  Path to the section from the root, separated by ::. For
+    ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
+    ///                     within a section "Toyota" which is itself a subsection of
+    ///                     "Car". Set this to empty string to specify root level of the
+    ///                     configuration.
+    /// \param key    An identifier name for the entry.
+    /// \param value  The value assigned to the name.
+    /// \param comment An optional comment string
+    /// \return true on success, false if invalid path
+    template<class T>
+    bool setEntry(const std::string &sectionPath, const std::string& key, const T &value, const std::string& comment="");
+
+    /// Read an entry by key.
+    /// \note The object of type T must have the following istream
+    /// redirection operator defined in order for this to work:
+    /// \code
+    /// std::istream& operator>>(std::istream &, const T &);
+    /// \endcode
+    /// \param sectionPath  Path to the section from the root, separated by ::. For
+    ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
+    ///                     within a section "Toyota" which is itself a subsection of
+    ///                     "Car". Set this to empty string to specify root level of the
+    ///                     configuration.
+    /// \param key     The identifier name for the entry.
+    /// \param value   The value associated with the key.
+    /// \param comment  The comment associated with the entry
+    /// \return true if entry key was found. False is returned if entry key is not found, in which
+    /// case the contents of value and comment parameters are undefined.
+    template<class T>
+    bool getEntry(const std::string &sectionPath, const std::string& key, T &value, std::string& comment);
+
+    /// Remove an entry by key
+    /// \param sectionPath  Path to the section from the root, separated by ::. For
+    ///                     instance Car::Toyota::Camry specifies a subsection "Camry"
+    ///                     within a section "Toyota" which is itself a subsection of
+    ///                     "Car". Set this to empty string to specify root level of the
+    ///                     configuration.
+    /// \param key     The identifier name for the entry.
+    bool removeEntry(const std::string &sectionPath, const std::string &key);
 
 private:
     /// search specified path for file, open file, return resolved path.
@@ -103,6 +174,35 @@ private:
 
 }; // ConfigFile
 
+
+//==============================================================================
+template<class T>
+bool ConfigFile::setEntry(const std::string &sectionPath, const std::string& key, const T &value, const std::string& comment)
+//==============================================================================
+{
+    ConfigNode* pNode = getSection(sectionPath);
+    if( pNode == NULL )
+    {
+        _errorStream << "[ConfigFile::setEntry]: Section not found" << std::endl;
+        return false;
+    }
+    pNode->getEntries()->setEntry(key, value, comment);
+    return true;
+}
+
+//------------------------------------------------------------------------------
+template<class T>
+bool ConfigFile::getEntry(const std::string &sectionPath, const std::string& key, T &value, std::string& comment)
+//------------------------------------------------------------------------------
+{
+    ConfigNode* pNode = getSection(sectionPath);
+    if( pNode == NULL )
+    {
+        _errorStream << "[ConfigFile::getEntry]: Section not found" << std::endl;
+        return false;
+    }
+    return pNode->getEntries()->getEntry(key, value, comment);
+}
 
 } // Grape
 
