@@ -6,6 +6,7 @@
 #include "io/SerialPort.h"
 #include "utils/consoleio.h"
 #include <iostream>
+#include <string>
 #include <stdlib.h>
 
 //==============================================================================
