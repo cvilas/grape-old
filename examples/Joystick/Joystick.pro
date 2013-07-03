@@ -1,8 +1,5 @@
+TEMPLATE = subdirs
+CONFIG += ordered
+SUBDIRS += SimpleJoystickExample.pro 
+win32:SUBDIRS += Dx8JoystickManagerExample.pro
 
-TARGET = JoystickExamples
-
-include(../grapeexamples.pri)
-
-HEADERS += JoystickExamples.h
-SOURCES += JoystickExamples.cpp SimpleJoystickExample.cpp
-win32: SOURCES += Dx8JoystickManagerExample.cpp

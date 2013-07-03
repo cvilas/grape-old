@@ -24,7 +24,16 @@ HEADERS = \
     CrosshairAnnotation.h \
     ImageAnnotator.h \
     ImageAnnotationViewer.h \
-    ImageAnnotationViewerP.h
+    ImageAnnotationViewerP.h \
+    SoQtg.h \
+    SoRenderArea.h \
+    SoQtOffscreenRenderer.h \
+    SoScreenAnnotationKit.h \
+    SoScreen2DAnnotationKit.h \
+    SoScreenTextAnnotation.h \
+    SoQtRenderArea.h \
+    SoQtGraphicsScene.h \
+    SoSceneViewer.h
 
 SOURCES = \
     Annotation.cpp \
@@ -35,7 +44,16 @@ SOURCES = \
     CrosshairAnnotation.cpp \
     ImageAnnotator.cpp \
     ImageAnnotationViewer.cpp \
-    ImageAnnotationViewerP.cpp
+    ImageAnnotationViewerP.cpp \
+    SoQtg.cpp \
+    SoRenderArea.cpp \
+    SoQtOffscreenRenderer.cpp \
+    SoScreenAnnotationKit.cpp \
+    SoScreen2DAnnotationKit.cpp \
+    SoScreenTextAnnotation.cpp \
+    SoQtRenderArea.cpp \
+    SoQtGraphicsScene.cpp \
+    SoSceneViewer.cpp
 
 FORMS = \
     forms/crosshair_annotation_edit.ui \

@@ -1,0 +1,18 @@
+
+QProgressBar {
+	border: 2px solid grey;
+	border-radius: 5px;
+	text-align: center;
+}
+
+QProgressBar::chunk {
+	background-color: #8694cf;
+	width: 10px;
+	margin: 0.5px;
+}
+/*
+DtraUI--DashBoard {
+	background-color: #000000;
+}
+*/
+

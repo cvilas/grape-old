@@ -1,5 +1,5 @@
 //==============================================================================
-// File     :   ImageAnnotationExample.cpp
+// File     :   AnnotationExample.cpp
 // Brief    :   Example program for ImageAnnotator class.
 //==============================================================================
 

@@ -1,5 +1,5 @@
 //==============================================================================
-// File     :   ImageViewerExample.cpp
+// File     :   AnnotationViewerExample.cpp
 // Brief    :    Example program for ImageAnnotationViewer class.
 //==============================================================================
 

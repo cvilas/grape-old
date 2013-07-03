@@ -1,8 +1,4 @@
-
-TARGET = TcpEchoServer
-
+TARGET = TcpEchoServerExample
 include(../grapeexamples.pri)
-
 HEADERS +=
-SOURCES += \
-    TcpEchoServerExample.cpp
+SOURCES += TcpEchoServerExample.cpp

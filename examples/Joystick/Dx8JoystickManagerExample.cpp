@@ -7,7 +7,7 @@
 #include <iostream>
 
 //==============================================================================
-bool Dx8JoystickManagerExample()
+int main()
 //==============================================================================
 {
     Grape::Dx8JoystickManager& manager = Grape::Dx8JoystickManager::getSingleton();

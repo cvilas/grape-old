@@ -3,7 +3,6 @@
 // Brief    :   Example program for SimpleJoystick class
 //==============================================================================
 
-#include "JoystickExamples.h"
 #include "io/SimpleJoystick.h"
 #include "utils/consoleio.h"
 
@@ -12,7 +11,7 @@
 #include <stdio.h>
 
 //==============================================================================
-bool SimpleJoystickExample()
+int main()
 //==============================================================================
 {
     HWND hWnd = 0;
