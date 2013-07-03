@@ -9,8 +9,8 @@
 #define GRAPE_SOQTOFFSCREENRENDERER_H
 
 #include "SoQtg.h"
-#include <QGLPixelBuffer>
-#include <QGLFormat>
+#include <QtOpenGL/QGLPixelBuffer>
+#include <QtOpenGL/QGLFormat>
 #include <QImage>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbColor.h>

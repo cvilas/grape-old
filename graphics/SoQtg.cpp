@@ -11,17 +11,13 @@
 namespace Grape
 {
 
-//==============================================================================
-SoQtg::SoQtg()
-//==============================================================================
-{
-}
-
 //------------------------------------------------------------------------------
 void SoQtg::init()
 //------------------------------------------------------------------------------
 {
-    if( SoQtg::_isInit )
+    SoQtg&obj = getSingleton();
+
+    if( obj._isInit )
     {
         return;
     }
@@ -31,7 +27,7 @@ void SoQtg::init()
     SoScreen2DAnnotationKit::initClass();
     SoScreenTextAnnotation::initClass();
 
-    SoQtg::_isInit = true;
+    obj._isInit = true;
 }
 
 } // Grape

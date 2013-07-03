@@ -294,7 +294,7 @@ int main(int argc, char** argv)
 
 	SceneViewerExample appWindow;
 
-    QString modelPath = ("./iv/stackedCylinders.iv");
+    QString modelPath = ("../examples/Inventor/iv/shadowLightsTest.iv");
 	SoNode* pScene = readIvFile(modelPath, "PATH");
 	if( pScene == NULL )
 	{

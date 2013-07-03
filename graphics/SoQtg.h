@@ -39,16 +39,29 @@ public:
     static void init();
 
     /// \return true if top level initialisation routine SoQtg::init() has been called.
-    static bool isInit() { return _isInit; }
+    static bool isInit() { return getSingleton()._isInit; }
 
 private:
-    SoQtg();
-    ~SoQtg();
+    /// \return Reference to single me
+    inline static SoQtg& getSingleton();
+
+    SoQtg() {}
+    ~SoQtg() {}
+    SoQtg(const SoQtg&);
+    SoQtg& operator=(const SoQtg&);
 
 private:
-    static bool _isInit;
+    bool _isInit;
 
 }; // SoQtg
+
+//------------------------------------------------------------------------------
+SoQtg& SoQtg::getSingleton()
+//------------------------------------------------------------------------------
+{
+    static SoQtg s_singleton;
+    return s_singleton;
+}
 
 } // Grape
 
