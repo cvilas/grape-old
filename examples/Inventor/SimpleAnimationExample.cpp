@@ -1,5 +1,5 @@
 //==============================================================================
-// File     :   SimpleAnimationExample.h
+// File     :   SimpleAnimationExample.cpp
 // Brief    :   Example program for SoSceneViewer class.
 //==============================================================================
 
