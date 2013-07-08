@@ -15,8 +15,7 @@ HEADERS += \
     Exception.h \
     grapecore_common.h
 SOURCES += \
-    Exception.cpp \
-    grapecore_common.cpp
+    Exception.cpp
 win32:SOURCES +=
 unix:SOURCES +=
 win32:LIBS +=

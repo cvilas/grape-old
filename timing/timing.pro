@@ -14,7 +14,8 @@ win32:DEFINES -= _UNICODE UNICODE
 INCLUDEPATH += ./
 HEADERS += grapetiming_common.h StopWatch.h Timer.h
 unix:HEADERS += posix.h
-SOURCES +=
+SOURCES += \
+    grapetiming_common.cpp
 win32:SOURCES += StopWatch_windows.cpp Timer_windows2.cpp
 unix:SOURCES += StopWatch_unix.cpp Timer_unix2.cpp
 

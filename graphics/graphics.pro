@@ -24,7 +24,9 @@ HEADERS = \
     CrosshairAnnotation.h \
     ImageAnnotator.h \
     ImageAnnotationViewer.h \
-    ImageAnnotationViewerP.h \
+    ImageAnnotationViewerP.h
+android:HEADERS +=
+else: HEADERS += \
     SoQtg.h \
     SoRenderArea.h \
     SoQtOffscreenRenderer.h \
@@ -44,7 +46,9 @@ SOURCES = \
     CrosshairAnnotation.cpp \
     ImageAnnotator.cpp \
     ImageAnnotationViewer.cpp \
-    ImageAnnotationViewerP.cpp \
+    ImageAnnotationViewerP.cpp
+android:SOURCES +=
+else: SOURCES += \
     SoQtg.cpp \
     SoRenderArea.cpp \
     SoQtOffscreenRenderer.cpp \

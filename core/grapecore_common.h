@@ -31,10 +31,6 @@ namespace Grape
 
 // All Grape classes are contained in this namespace
 
-/// Sleep for specified milliseconds
-/// \ingroup common
-GRAPECORE_DLL_API void milliSleep(unsigned int ms);
-
 } // Grape
 
 #endif // GRAPECORE_COMMON_H

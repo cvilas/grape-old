@@ -1,10 +1,10 @@
 //==============================================================================
 // Project  : Grape
-// Module   : Core
-// File     : grapecore_common.cpp
+// Module   : Timing
+// File     : grapetiming_common.cpp
 //==============================================================================
 
-#include "grapecore_common.h"
+#include "grapetiming_common.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -15,7 +15,9 @@
 namespace Grape
 {
 
+//==============================================================================
 void milliSleep(unsigned int ms)
+//==============================================================================
 {
 
 #ifdef _WIN32

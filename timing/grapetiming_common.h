@@ -31,7 +31,11 @@ namespace Grape
 
 // All Grape classes are contained in this namespace
 
+/// Sleep for specified milliseconds
+/// \ingroup timing
+GRAPETIMING_DLL_API void milliSleep(unsigned int ms);
 
 } // Grape
+
 
 #endif // GRAPETIMING_COMMON_H

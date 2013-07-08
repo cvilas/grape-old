@@ -6,7 +6,7 @@ android:CONFIG += static
 win32: CONFIG += embed_manifest_exe
 
 CONFIG += console qt
-QT += core gui widgets
+QT += core gui widgets opengl
 
 build_pass:CONFIG(debug, release|debug) {
     TARGET = $$join(TARGET,,,d)
@@ -23,10 +23,11 @@ win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL GRAPEUTILS_DLL GRAPETIMING_DLL GRAPEG
 win32:CONFIG(debug, debug|release):DEFINES += _DEBUG
 win32:CONFIG(release, debug|release):LIBS+= -lGrapeGraphics0 -lGrapeIo0 -lGrapeTiming0 -lGrapeUtils0 -lGrapeCore0
 else:win32:CONFIG(debug, debug|release):LIBS+= -lGrapeGraphicsd0 -lGrapeIod0 -lGrapeTimingd0 -lGrapeUtilsd0 -lGrapeCored0
-else:unix: LIBS += -lGrapeGraphics -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore -lpthread -lrt
+else: LIBS += -lGrapeGraphics -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore
+unix:!android: LIBS += -lpthread -lrt
 
 INCLUDEPATH += $$PWD/../
 DEPENDPATH += $$PWD/../
 
-INCLUDEPATH += $$system(coin-config --includedir)
-LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
+unix:!android: INCLUDEPATH += $$system(coin-config --includedir)
+unix:!android: LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)

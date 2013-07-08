@@ -5,6 +5,5 @@ SUBDIRS += ConfigFile \
             SerialPortMonitor \
             2DGraphics \
             Desktop \
-            Inventor \
             TcpEchoServer
-
+unix:!android: SUBDIRS += Inventor

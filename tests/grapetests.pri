@@ -18,7 +18,8 @@ win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL GRAPEUTILS_DLL GRAPETIMING_DLL UNICOD
 win32:CONFIG(debug, debug|release):DEFINES += _DEBUG
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/ -lGrapeIo0 -lGrapeTiming0 -lGrapeUtils0 -lGrapeCore0
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/ -lGrapeIod0 -lGrapeTimingd0 -lGrapeUtilsd0 -lGrapeCored0
-else:unix: LIBS += -L$$PWD/../lib/ -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore -lpthread -lrt
+else: LIBS+= -L$$PWD/../lib/ -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore
+unix:!android: LIBS += -lpthread -lrt
 
 INCLUDEPATH += $$PWD/../
 DEPENDPATH += $$PWD/../
