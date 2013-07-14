@@ -1,9 +1,10 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-	<file>./images/home.png</file>
-	<file>./images/bulb.png</file>
-	<file>./images/persProj.png</file>
-	<file>./images/orthoProj.png</file>
-	<file>./images/pictureCamera.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/home.png</file>
+        <file>images/bulb.png</file>
+        <file>images/persProj.png</file>
+        <file>images/orthoProj.png</file>
+        <file>images/pictureCamera.png</file>
+        <file>iv/shadowLightsTest.iv</file>
+    </qresource>
 </RCC>
