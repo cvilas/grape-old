@@ -11,6 +11,10 @@
 #include "grapegraphics_common.h"
 #include <Inventor/C/basic.h>
 
+#if defined(__ANDROID__)
+#   error Coin support is not available on Android
+#endif
+
 #if !defined(__COIN__)
 #	error Coin library required for OpenInventor support
 #endif
