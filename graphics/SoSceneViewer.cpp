@@ -48,10 +48,11 @@ SoSceneViewer::~SoSceneViewer()
 void SoSceneViewer::setSceneGraph(SoNode* pScene)
 //-----------------------------------------------------------------------------
 {
+    /*
     if( !pScene )
     {
         return;
-    }
+    }*/
     _pViewArea->setSceneGraph(pScene);
 }
 
