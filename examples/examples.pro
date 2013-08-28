@@ -6,4 +6,5 @@ SUBDIRS += ConfigFile \
             2DGraphics \
             Desktop \
             TcpEchoServer
-unix:!android: SUBDIRS += Inventor
+android: SUBDIRS +=
+else: SUBDIRS += Inventor

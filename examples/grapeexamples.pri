@@ -18,16 +18,17 @@ DESTDIR = $${PWD}/../bin
 DLLDESTDIR = $${PWD}/../bin
 
 LIBS += -L$$PWD/../lib/
-win32:LIBS += -lUser32
-win32:DEFINES += GRAPECORE_DLL GRAPEIO_DLL GRAPEUTILS_DLL GRAPETIMING_DLL GRAPEGRAPHICS_DLL UNICODE _UNICODE _CRT_SECURE_NO_WARNINGS
+win32:LIBS += -L$$(COINDIR)/lib -lUser32
+win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEIO_DLL GRAPEUTILS_DLL GRAPETIMING_DLL GRAPEGRAPHICS_DLL UNICODE _UNICODE _CRT_SECURE_NO_WARNINGS
 win32:CONFIG(debug, debug|release):DEFINES += _DEBUG
-win32:CONFIG(release, debug|release):LIBS+= -lGrapeGraphics0 -lGrapeIo0 -lGrapeTiming0 -lGrapeUtils0 -lGrapeCore0
-else:win32:CONFIG(debug, debug|release):LIBS+= -lGrapeGraphicsd0 -lGrapeIod0 -lGrapeTimingd0 -lGrapeUtilsd0 -lGrapeCored0
+win32:CONFIG(release, debug|release):LIBS+= -lGrapeGraphics0 -lGrapeIo0 -lGrapeTiming0 -lGrapeUtils0 -lGrapeCore0 -lcoin3
+else:win32:CONFIG(debug, debug|release):LIBS+= -lGrapeGraphicsd0 -lGrapeIod0 -lGrapeTimingd0 -lGrapeUtilsd0 -lGrapeCored0 -lcoin3d
 else: LIBS += -lGrapeGraphics -lGrapeIo -lGrapeTiming -lGrapeUtils -lGrapeCore
-unix:!android: LIBS += -lpthread -lrt
+unix:!android: LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs) -lpthread -lrt
 
 INCLUDEPATH += $$PWD/../
 DEPENDPATH += $$PWD/../
 
 unix:!android: INCLUDEPATH += $$system(coin-config --includedir)
+else:win32:INCLUDEPATH += $(COINDIR)/include
 unix:!android: LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
