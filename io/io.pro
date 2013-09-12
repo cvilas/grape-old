@@ -37,9 +37,9 @@ unix:SOURCES += SerialPort_unix.cpp
 unix:!android:SOURCES+=SimpleJoystick_unix.cpp
 
 CONFIG(debug, release|debug) {
-    win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0
+    win32:LIBS += -lGrapeCored0 -lGrapeUtilsd0 -ldinput8
     else:unix: LIBS += -lGrapeCored -lGrapeUtilsd
 } else {
-    win32:LIBS += -lGrapeCore0 -lGrapeUtils0
+    win32:LIBS += -lGrapeCore0 -lGrapeUtils0 -ldinput8
     else:unix: LIBS += -lGrapeCore -lGrapeUtilsd
 }
