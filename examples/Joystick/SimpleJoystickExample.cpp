@@ -28,7 +28,7 @@ int main()
         return false;
     }
 #else
-    const std::string DEVICE = "/dev/input/js1";
+    const std::string DEVICE = "/dev/input/js0";
 #endif
 
     Grape::SimpleJoystick* pJoystick = NULL;

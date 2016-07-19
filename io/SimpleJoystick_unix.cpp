@@ -116,7 +116,7 @@ void SimpleJoystickP::processEvent(const struct js_event& jsev, SimpleJoystick::
 {
     state.ms = jsev.time;
 
-    switch( jsev.type & ~JS_EVENT_INIT )
+    switch( jsev.type /*& ~JS_EVENT_INIT*/ )
     {
     case JS_EVENT_AXIS:
         if( jsev.number < state.axes.size() )
