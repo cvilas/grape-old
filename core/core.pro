@@ -13,7 +13,8 @@ win32:DEFINES += GRAPECORE_DLL GRAPECORE_DLL_EXPORT
 INCLUDEPATH += ./
 HEADERS += \ 
     Exception.h \
-    grapecore_common.h
+    grapecore_common.h \
+    IPlottable.h
 SOURCES += \
     Exception.cpp
 win32:SOURCES +=
