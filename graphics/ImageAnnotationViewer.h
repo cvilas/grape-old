@@ -39,7 +39,7 @@
 
 class QMenu;
 
-namespace Grape
+namespace grape
 {
 
 
@@ -162,7 +162,7 @@ void ImageAnnotationViewer::onRotationEnable(bool option)
     }
 }
 
-} // Grape
+} // grape
 
 
 #endif // GRAPE_IMAGEANNOTATIONVIEWER_H

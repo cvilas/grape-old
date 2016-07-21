@@ -33,7 +33,7 @@
 #include "ImageAnnotation.h"
 #include <QPainter>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -57,4 +57,4 @@ void ImageAnnotation::process(QPainter& painter)
     painter.drawImage(boundingBox.value(), image, image.rect());
 }
 
-} // Grape
+} // grape

@@ -36,7 +36,7 @@
 
 #include "Config.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \class ConfigNode
@@ -133,7 +133,7 @@ private:
     std::string::size_type findFooter(const std::string& str, const std::string& name,
                                       std::string::size_type& seekPos, std::ostream& errorStream);
 private:
-    Grape::Config _entries;
+    grape::Config _entries;
     std::map<std::string/*name*/, ConfigNode> children;
 
     typedef std::map<std::string/*key*/, ConfigNode>::iterator       NodeIter;
@@ -141,6 +141,6 @@ private:
 
 }; // ConfigNode
 
-} // Grape
+} // grape
 
 #endif // GRAPE_CONFIGNODE_H

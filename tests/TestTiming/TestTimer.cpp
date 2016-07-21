@@ -22,7 +22,7 @@ void TestTimer::cleanupTestCase()
 void TestTimer::resolution()
 //-----------------------------------------------------------------------------
 {
-    Grape::Timer timer;
+    grape::Timer timer;
     long long int resolution = timer.getResolution();
 
     qDebug() << " Timer resolution is " << resolution << "nanoseconds";
@@ -35,8 +35,8 @@ void TestTimer::period()
 {
     const unsigned long long NANO = 1000000000ULL;
 
-    Grape::Timer timer;
-    Grape::StopWatch watch;
+    grape::Timer timer;
+    grape::StopWatch watch;
 
     // period
     unsigned long long periodNs = 20000000ULL; // 20ms

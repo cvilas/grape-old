@@ -25,7 +25,7 @@ void TestCmdLineArgs::parse()
     char *argv[] = {"program name", "-name", "Paul", "Smith", "-phone", "019081234567"};
     int argc = sizeof(argv) / sizeof(char*);
 
-    Grape::CmdLineArgs parser(argc, argv);
+    grape::CmdLineArgs parser(argc, argv);
     int n = parser.getNumOptions();
 
     QVERIFY2(n==2, "Failed getNumOptions");

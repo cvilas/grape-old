@@ -38,7 +38,7 @@
 #include <QFont>
 #include <QPen>
 
-namespace Grape
+namespace grape
 {
 
 /// \class TextAnnotation
@@ -85,6 +85,6 @@ protected:
 
 }; // TextAnnotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_TEXTANNOTATION_H

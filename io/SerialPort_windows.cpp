@@ -35,7 +35,7 @@
 #include <Windows.h>
 #include <sstream>
 
-namespace Grape
+namespace grape
 {
 
 /// \note For a guide to serial port programming on windows, see
@@ -481,5 +481,5 @@ void SerialPort::flushTx()
 }
 
 
-} // Grape
+} // grape
 

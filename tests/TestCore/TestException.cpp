@@ -26,7 +26,7 @@ void TestException::enterNumberBelowFive(int number)
     // throw an exception for invalid argument
     if(number >= 5)
     {
-        throw Grape::Exception(EINVAL,"[enterNumberBelowFive]");
+        throw grape::Exception(EINVAL,"[enterNumberBelowFive]");
     }
 }
 
@@ -39,7 +39,7 @@ void TestException::tryNoFault()
         enterNumberBelowFive(2);
     }
 
-    catch( Grape::Exception& ex ) // prefer to catch by reference where possible
+    catch( grape::Exception& ex ) // prefer to catch by reference where possible
     {
         qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.code());
         QFAIL("No Exception case");
@@ -56,7 +56,7 @@ void TestException::tryFault()
         QFAIL("Exception not thrown");
     }
 
-    catch( Grape::Exception& ex ) // prefer to catch by reference where possible
+    catch( grape::Exception& ex ) // prefer to catch by reference where possible
     {
         qDebug() << "caught exception: " << ex.what() << ": " << strerror(ex.code());
         return;

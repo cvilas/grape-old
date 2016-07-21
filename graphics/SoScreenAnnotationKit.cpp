@@ -37,7 +37,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 
-namespace Grape
+namespace grape
 {
 
 SO_KIT_SOURCE(SoScreenAnnotationKit)

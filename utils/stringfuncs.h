@@ -40,7 +40,7 @@
 #include <locale>
 #include <algorithm>
 
-namespace Grape
+namespace grape
 {
 
 //------------------------------------------------------------------------------
@@ -103,6 +103,6 @@ template<> inline bool stringAsT<bool>(const std::string &s)
     }
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_STRINGFUNCS_H

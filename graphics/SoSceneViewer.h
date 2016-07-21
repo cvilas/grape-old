@@ -40,7 +40,7 @@
 
 class QGLWidget;
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoSceneViewer
@@ -115,6 +115,6 @@ void SoSceneViewer::setBackgroundColor(const QColor& color)
     _pViewArea->setBackgroundColor(SbColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF()));
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOSCENEVIEWER_H

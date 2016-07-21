@@ -51,7 +51,7 @@
 #include <sstream>
 #include <errno.h>
 
-namespace Grape
+namespace grape
 {
 
 //==========================================================================
@@ -148,4 +148,4 @@ unsigned int TcpSocket::readn(std::vector<unsigned char>& buffer, unsigned int b
 }
 
 
-} // Grape
+} // grape

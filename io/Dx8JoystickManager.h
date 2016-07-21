@@ -42,7 +42,7 @@
 #include <vector>
 #include <string>
 
-namespace Grape
+namespace grape
 {
 
 /// \class Dx8JoystickManager
@@ -163,6 +163,6 @@ bool Dx8JoystickManager::isDeviceConnected(const GUID& guid)
     return false;
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPEIO_DX8JOYSTICKMANAGER_H

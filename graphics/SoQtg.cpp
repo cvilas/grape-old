@@ -34,7 +34,7 @@
 #include "SoRenderArea.h"
 #include "SoScreenTextAnnotation.h"
 
-namespace Grape
+namespace grape
 {
 
 //------------------------------------------------------------------------------
@@ -56,4 +56,4 @@ void SoQtg::init()
     obj._isInit = true;
 }
 
-} // Grape
+} // grape

@@ -44,7 +44,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/nodes/SoNode.h>
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoQtOffscreenRenderer
@@ -163,6 +163,6 @@ private:
     SbBool				_isLocalAction;
 }; // SoQtOffscreenRenderer
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOQTOFFSCREENRENDERER_H

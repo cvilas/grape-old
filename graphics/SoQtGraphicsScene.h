@@ -46,7 +46,7 @@
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-namespace Grape
+namespace grape
 {
 
 /// Read an OpenInventor iv file and return a scene graph.
@@ -349,6 +349,6 @@ private:
     CameraHome			_cameraHome;
 }; // SoQtGraphicsScene
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOQTGRAPHICSSCENE_H

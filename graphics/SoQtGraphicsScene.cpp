@@ -42,7 +42,7 @@
 
 #include <Inventor/projectors/SbSphereSheetProjector.h>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -756,4 +756,4 @@ void SoQtGraphicsScene::soWheelEvent( SoWheelEvent* pEvent )
     };
 }
 
-} // Grape
+} // grape

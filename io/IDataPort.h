@@ -38,7 +38,7 @@
 #include "IoException.h"
 #include <vector>
 
-namespace Grape
+namespace grape
 {
 
 /// \class IDataPort
@@ -123,6 +123,6 @@ protected:
 
 }; // IDataPort
 
-} // Grape
+} // grape
 
 #endif // GRAPEIO_IDATAPORT_H

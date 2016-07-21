@@ -9,7 +9,7 @@
 #include <Inventor/engines/SoElapsedTime.h>
 #include <Inventor/nodes/SoRotationXYZ.h>
 
-using namespace Grape;
+using namespace grape;
 
 //==============================================================================  
 int main(int argc, char** argv)

@@ -37,7 +37,7 @@
 #include "stringfuncs.h"
 #include <map>
 
-namespace Grape
+namespace grape
 {
     
     /// \class CmdLineArgs
@@ -89,7 +89,7 @@ namespace Grape
         {
             return dflt;
         }
-        return Grape::stringAsT<T>(Grape::removeEndWhiteSpace(it->second));
+        return grape::stringAsT<T>(grape::removeEndWhiteSpace(it->second));
     }
     
     //------------------------------------------------------------------------------
@@ -101,13 +101,13 @@ namespace Grape
             ConstEntryIter it = _map.begin();
             std::advance(it, n);
             option = it->first;
-            value = Grape::removeEndWhiteSpace(it->second);
+            value = grape::removeEndWhiteSpace(it->second);
             return true;
         }
         return false;
     }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_CMDLINEARGS_H
 

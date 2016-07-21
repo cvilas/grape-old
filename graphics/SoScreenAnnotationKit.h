@@ -40,7 +40,7 @@
 #include <Inventor/fields/SoSFBool.h>
 #include <Inventor/fields/SoMFString.h>
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoScreenAnnotationKit
@@ -92,6 +92,6 @@ protected:
     virtual void GLRender(SoGLRenderAction *pAction);
 }; // SoScreenAnnotationKit
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOSCREENANNOTATIONKIT_H

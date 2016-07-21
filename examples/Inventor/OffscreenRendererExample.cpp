@@ -17,7 +17,7 @@
 #include <Inventor/nodes/SoText2.h>
 #include <iostream>
 
-using namespace Grape;
+using namespace grape;
 
 //==============================================================================  
 int main(int argc, char** argv)

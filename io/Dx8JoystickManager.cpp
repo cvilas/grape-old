@@ -32,7 +32,7 @@
 
 #include "Dx8JoystickManager.h"
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -242,4 +242,4 @@ void Dx8JoystickManager::detach(LPDIRECTINPUTDEVICE8 &pDevice)
     pDevice = NULL;
 }
 
-} // Grape
+} // grape

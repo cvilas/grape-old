@@ -47,7 +47,7 @@
 #   define FNDELAY  O_NDELAY
 #endif
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -404,4 +404,4 @@ void SerialPort::flushTx()
     tcflush(_pImpl->_portFd, TCOFLUSH);
 }
 
-} // Grape
+} // grape

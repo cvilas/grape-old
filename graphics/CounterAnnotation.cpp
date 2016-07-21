@@ -32,7 +32,7 @@
 
 #include "CounterAnnotation.h"
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================

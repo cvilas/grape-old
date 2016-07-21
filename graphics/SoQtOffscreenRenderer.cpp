@@ -34,7 +34,7 @@
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <QGLFormat>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -193,4 +193,4 @@ void SoQtOffscreenRenderer::makeBuffer()
     _cacheContext = SoGLCacheContextElement::getUniqueCacheContext();
 }
 
-} // Grape
+} // grape

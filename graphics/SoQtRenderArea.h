@@ -42,7 +42,7 @@
 #include <QGraphicsScene>
 #include <QTime>
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoQtRenderArea
@@ -86,6 +86,6 @@ private:
     int		_delaySensorId;
 }; // SoQtRenderArea
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOQTRENDERAREA_H

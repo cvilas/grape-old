@@ -31,9 +31,9 @@ int main()
     const std::string DEVICE = "/dev/input/js0";
 #endif
 
-    Grape::SimpleJoystick* pJoystick = NULL;
+    grape::SimpleJoystick* pJoystick = NULL;
 
-    pJoystick = new Grape::SimpleJoystick(hWnd);
+    pJoystick = new grape::SimpleJoystick(hWnd);
     if( !pJoystick )
     {
         std::cerr << "Unable to create joystick" << std::endl;
@@ -55,7 +55,7 @@ int main()
     pJoystick->setDeadZone(3000);
     std::cout << "Axes dead zone " << pJoystick->getDeadZone() << std::endl;
 
-    while( !Grape::kbhit() )
+    while( !grape::kbhit() )
     {
 		// if we lost connection, try again
         if( !pJoystick->isConnected() )
@@ -74,7 +74,7 @@ int main()
         }
 
 		// print
-        const Grape::SimpleJoystick::JoystickState state = pJoystick->getState();
+        const grape::SimpleJoystick::JoystickState state = pJoystick->getState();
         std::cout << "[" << state.ms << "] Axes: ";
         for( unsigned int i = 0; i < state.axes.size(); ++i )
         {
@@ -99,7 +99,7 @@ int main()
     // cleanup and exit
     pJoystick->disconnect();
     delete pJoystick;
-    std::cout << "\nKey " << Grape::getch() << " pressed. Exiting" << std::endl;
+    std::cout << "\nKey " << grape::getch() << " pressed. Exiting" << std::endl;
 
     return true;
 }

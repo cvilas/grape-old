@@ -37,7 +37,7 @@
 #include "IDataPort.h"
 #include "SerialPortException.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \class SerialPort
@@ -133,6 +133,6 @@ private:
 }; // SerialPort
 
 
-} // Grape
+} // grape
 
 #endif // GRAPEIO_SERIALPORT_H

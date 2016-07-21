@@ -37,7 +37,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 
-namespace Grape
+namespace grape
 {
 
 SO_KIT_SOURCE(SoScreen2DAnnotationKit)
@@ -113,4 +113,4 @@ void SoScreen2DAnnotationKit::GLRender(SoGLRenderAction *pAction)
     inherited::GLRender(pAction);
 }
 
-} // Grape
+} // grape

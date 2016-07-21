@@ -1,24 +1,25 @@
 #ifndef IPLOTTABLE_H
 #define IPLOTTABLE_H
 
-#include "grapecore_common.h"
+#include "grapegraphics_common.h"
 
-namespace Grape
+namespace grape
 {
+
 /// \class IPlottable
 /// \ingroup core
 /// \brief Interface definition for plottable objects
 ///
 /// Generic interface to objects that generate data that can be plotted
-/// on GrapeChart.
+/// on grape::Plot.
 ///
 /// Essentially, I want to be able to do this to update the chart with data
 /// streamed from an object obj
 ///
-/// GrapeChart chart;
+/// grape::Plot chart;
 /// chart << obj;
 
-class GRAPECORE_DLL_API IPlottable
+class GRAPEGRAPHICS_DLL_API IPlottable
 {
 protected:
     IPlottable() {}
@@ -28,6 +29,6 @@ public:
 
 };
 
-} // Grape
+} // grape
 
 #endif // IPLOTTABLE_H

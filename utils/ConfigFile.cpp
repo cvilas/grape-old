@@ -34,7 +34,7 @@
 #include <fstream>
 #include <time.h>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -107,7 +107,7 @@ void ConfigFile::print(std::ostream &s) const
 ConfigNode* ConfigFile::getSection(const std::string& path)
 //------------------------------------------------------------------------------
 {
-    std::string remainingPath( Grape::removeEndWhiteSpace(path) );
+    std::string remainingPath( grape::removeEndWhiteSpace(path) );
     ConfigNode* pNode = &_root;
 
     if( path.length() )
@@ -185,7 +185,7 @@ bool ConfigFile::removeEntry(const std::string &sectionPath, const std::string &
 std::string ConfigFile::openFileFromPath(const std::string &path, const std::string &fname, std::ifstream &file)
 //------------------------------------------------------------------------------
 {
-    std::string testPath, remainingPath( Grape::removeEndWhiteSpace(path) );
+    std::string testPath, remainingPath( grape::removeEndWhiteSpace(path) );
     std::string::size_type loc;
 
     loc = remainingPath.find(":");
@@ -207,4 +207,4 @@ std::string ConfigFile::openFileFromPath(const std::string &path, const std::str
     return openFileFromPath(remainingPath, fname, file);
 }
 
-} // Grape
+} // grape

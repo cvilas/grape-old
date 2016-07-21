@@ -49,7 +49,7 @@
 #include "ui_timestamp_annotation_format.h"
 #include "ui_counter_annotation_format.h"
 
-namespace Grape
+namespace grape
 {
 
 

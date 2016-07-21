@@ -33,7 +33,7 @@
 #include "ImageAnnotator.h"
 #include <QPainter>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -308,4 +308,4 @@ bool ImageAnnotator::getSmoothing()
 }
 
 
-} // Grape
+} // grape

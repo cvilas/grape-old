@@ -20,11 +20,11 @@ int main(int argc, char** argv)
     }
     try
     {
-        Grape::SerialPort port;
+        grape::SerialPort port;
         port.setPortName(argv[1]);
         port.open();
-        port.setBaudRate(Grape::SerialPort::B9600);
-        port.setDataFormat(Grape::SerialPort::D8N1);
+        port.setBaudRate(grape::SerialPort::B9600);
+        port.setDataFormat(grape::SerialPort::D8N1);
 
         int rwOpt = atoi(argv[2]);
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
             if( (rwOpt == 0) || (rwOpt == 3) )
             {
                 // read response from remote device
-                if( Grape::IDataPort::PORT_OK == port.waitForRead(1000) )
+                if( grape::IDataPort::PORT_OK == port.waitForRead(1000) )
                 {
                     std::vector<unsigned char> buffer;
                     int nBytes = port.readAll(buffer);
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 
         } // until key hit
     } // try
-    catch(Grape::Exception &ex)
+    catch(grape::Exception &ex)
     {
         std::cerr << ex.what() << std::endl;
         return -1;

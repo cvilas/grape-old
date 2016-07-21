@@ -41,7 +41,7 @@
 #define HWND void*
 #endif
 
-namespace  Grape
+namespace  grape
 {
 
 /// \class SimpleJoystick
@@ -108,6 +108,6 @@ private:
     class SimpleJoystickP* _pImpl; //!< platform specific private implementation
 };
 
-} // Grape
+} // grape
 
 #endif // GRAPEIO_SIMPLEJOYSTICK_H

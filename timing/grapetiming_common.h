@@ -52,7 +52,7 @@
 #pragma warning( disable : 4251 ) // class X needs to have dll-interface to be used by clients of class Y
 #endif
 
-namespace Grape
+namespace grape
 {
 
 // All Grape classes are contained in this namespace
@@ -61,7 +61,7 @@ namespace Grape
 /// \ingroup timing
 GRAPETIMING_DLL_API void milliSleep(unsigned int ms);
 
-} // Grape
+} // grape
 
 
 #endif // GRAPETIMING_COMMON_H

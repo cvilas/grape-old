@@ -36,7 +36,7 @@
 #include <QGLFormat>
 #include <QResizeEvent>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -127,4 +127,4 @@ void SoSceneViewer::resizeEvent(QResizeEvent *pEvent)
     _pViewArea->resize(width(), height());
 }
 
-} // Grape
+} // grape

@@ -37,7 +37,7 @@
 #include <iostream>
 #endif
 
-namespace Grape
+namespace grape
 {
     /// Windows specific implementation class
     
@@ -168,6 +168,6 @@ namespace Grape
 		return true;
 	}
 
-} // Grape
+} // grape
 
 

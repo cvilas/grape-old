@@ -30,12 +30,12 @@ void TestSerialPort::portName()
 {
     // verify set/get portname
 
-    Grape::SerialPort sp;
+    grape::SerialPort sp;
     try
     {
         sp.setPortName(_portName);
     }
-    catch( Grape::Exception &ex )
+    catch( grape::Exception &ex )
     {
         QFAIL(ex.what());
     }
@@ -47,13 +47,13 @@ void TestSerialPort::portName()
 void TestSerialPort::openClose()
 //-----------------------------------------------------------------------------
 {
-    Grape::SerialPort sp;
+    grape::SerialPort sp;
     sp.setPortName(_portName);
     try
     {
         sp.open();
     }
-    catch(Grape::Exception &ex)
+    catch(grape::Exception &ex)
     {
         QFAIL(ex.what());
     }
@@ -66,16 +66,16 @@ void TestSerialPort::openClose()
 void TestSerialPort::baudRate()
 //-----------------------------------------------------------------------------
 {
-    Grape::SerialPort sp;
+    grape::SerialPort sp;
     sp.setPortName(_portName);
     sp.open();
-    for(int i = 0; i < Grape::SerialPort::BAUD_MAX; ++i)
+    for(int i = 0; i < grape::SerialPort::BAUD_MAX; ++i)
     {
         try
         {
-            sp.setBaudRate((Grape::SerialPort::BaudRate)i);
+            sp.setBaudRate((grape::SerialPort::BaudRate)i);
         }
-        catch(Grape::Exception &ex)
+        catch(grape::Exception &ex)
         {
             QFAIL(ex.what());
         }
@@ -86,16 +86,16 @@ void TestSerialPort::baudRate()
 void TestSerialPort::dataFormat()
 //-----------------------------------------------------------------------------
 {
-    Grape::SerialPort sp;
+    grape::SerialPort sp;
     sp.setPortName(_portName);
     sp.open();
-    for(int i = 0; i < Grape::SerialPort::DATA_FORMAT_MAX; ++i)
+    for(int i = 0; i < grape::SerialPort::DATA_FORMAT_MAX; ++i)
     {
         try
         {
-            sp.setDataFormat((Grape::SerialPort::DataFormat)i);
+            sp.setDataFormat((grape::SerialPort::DataFormat)i);
         }
-        catch(Grape::Exception &ex)
+        catch(grape::Exception &ex)
         {
             QFAIL(ex.what());
         }

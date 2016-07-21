@@ -37,7 +37,7 @@
 #include <errno.h>
 #include <stdio.h> // for fprintf
 
-namespace Grape
+namespace grape
 {
     static const clockid_t CLOCKID = DEFAULT_CLOCK;
 
@@ -298,4 +298,4 @@ namespace Grape
         return _pImpl->getNumTicks();
     }
 
-} // Grape
+} // grape

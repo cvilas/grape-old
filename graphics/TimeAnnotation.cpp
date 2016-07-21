@@ -33,7 +33,7 @@
 #include "TimeAnnotation.h"
 #include <QDateTime>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -57,4 +57,4 @@ void TimeAnnotation::process(QPainter& painter)
     TextAnnotation::process(painter);
 }
 
-} // Grape
+} // grape

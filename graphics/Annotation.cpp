@@ -32,8 +32,8 @@
 
 #include "Annotation.h"
 
-namespace Grape
+namespace grape
 {
 
 
-} // Grape
+} // grape

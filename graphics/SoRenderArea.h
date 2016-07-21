@@ -45,7 +45,7 @@
 #include <Inventor/events/SoLocation2Event.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
 
-namespace Grape
+namespace grape
 {
 
 class SoWheelEvent;
@@ -278,6 +278,6 @@ void SoRenderArea::setAutoClipping(SoRenderManager::AutoClippingStrategy autoCli
 }
 */
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SORENDERAREA_H

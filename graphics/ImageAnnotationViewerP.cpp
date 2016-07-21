@@ -36,7 +36,7 @@
 #include <QVBoxLayout>
 #include <QFontMetrics>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================

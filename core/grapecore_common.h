@@ -52,11 +52,11 @@
 #pragma warning( disable : 4251 ) // class X needs to have dll-interface to be used by clients of class Y
 #endif
 
-namespace Grape
+namespace grape
 {
 
 // All Grape classes are contained in this namespace
 
-} // Grape
+} // grape
 
 #endif // GRAPECORE_COMMON_H

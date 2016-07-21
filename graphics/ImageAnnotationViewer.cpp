@@ -42,7 +42,7 @@
 #define M_PI 3.141592654
 #endif
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -612,4 +612,4 @@ void ImageAnnotationViewer::calculateScaleOffset()
     }
 }
 
-} // Grape
+} // grape

@@ -36,7 +36,7 @@
 
 #include "UdpSocket.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief UDP server
@@ -54,6 +54,6 @@ public:
     ~UdpServer() throw() {}
 };// UdpServer
 
-} // Grape
+} // grape
 
 #endif // GRAPE_UDPSERVER_H

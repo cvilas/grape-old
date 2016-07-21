@@ -42,7 +42,7 @@
 
 #define DEFAULT_CLOCK CLOCK_REALTIME // only clock guaranteed to be available
 
-namespace Grape
+namespace grape
 {
     /// Subtract one timespec data from another and return the difference
     /// \return false if end time is before start time

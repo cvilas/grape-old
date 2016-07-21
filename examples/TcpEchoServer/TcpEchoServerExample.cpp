@@ -15,7 +15,7 @@ class ClientServiceThread : public QThread
 
 public:
 
-    ClientServiceThread(Grape::TcpSocket* socket) : QThread(), _pSocket(socket) {}
+    ClientServiceThread(grape::TcpSocket* socket) : QThread(), _pSocket(socket) {}
 
     ~ClientServiceThread() { delete _pSocket; }
 
@@ -49,10 +49,10 @@ public:
             do
             {
                 // wait until there is something to read
-                Grape::IDataPort::Status st = _pSocket->waitForRead(1000);
+                grape::IDataPort::Status st = _pSocket->waitForRead(1000);
 
                 // read and echo back
-                if( st == Grape::IDataPort::PORT_OK )
+                if( st == grape::IDataPort::PORT_OK )
                 {
                     buffer.clear();
 
@@ -64,7 +64,7 @@ public:
                 //{
                 //    std::cout << "timeout" << std::endl;
                 //}
-                else if( st == Grape::IDataPort::PORT_ERROR )
+                else if( st == grape::IDataPort::PORT_ERROR )
                 {
                     std::cout << "comm error." << std::endl;
                     break;
@@ -72,7 +72,7 @@ public:
             }while(1);
         } // try
 
-        catch(Grape::Exception &ex)
+        catch(grape::Exception &ex)
         {
             std::cout << ex.what() << std::endl;
         }
@@ -83,7 +83,7 @@ public:
     }
 
 private:
-    Grape::TcpSocket* _pSocket;
+    grape::TcpSocket* _pSocket;
 };
 
 //==============================================================================
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     }
     int port = atoi(argv[1]);
 
-    Grape::TcpSocket server;
+    grape::TcpSocket server;
 
     server.allowPortReuse(true);
 
@@ -114,14 +114,14 @@ int main(int argc, char** argv)
         try
         {
             // wait for and accept a new connection from remote host
-            Grape::TcpSocket* client = server.accept();
+            grape::TcpSocket* client = server.accept();
 
             // service the remote host in a separate thread
             ClientServiceThread* serviceThread = new ClientServiceThread(client);
             serviceThread->start();
         }
 
-        catch(Grape::Exception& ex)
+        catch(grape::Exception& ex)
         {
             std::cout << ex.what() << std::endl;
             return -1;

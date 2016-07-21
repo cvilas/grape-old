@@ -51,7 +51,7 @@
 #include <sstream>
 #include <errno.h>
 
-namespace Grape
+namespace grape
 {
 
 //==========================================================================
@@ -143,4 +143,4 @@ unsigned int UdpSocket::readn(std::vector<unsigned char>& buffer, unsigned int b
 }
 
 
-} // Grape
+} // grape

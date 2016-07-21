@@ -35,7 +35,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace Grape
+namespace grape
 {
 
 /// \class SimpleJoystickP
@@ -540,4 +540,4 @@ bool SimpleJoystick::update()
     return true;
 }
 
-} // Grape
+} // grape

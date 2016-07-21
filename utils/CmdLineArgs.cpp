@@ -32,7 +32,7 @@
 
 #include "CmdLineArgs.h"
 
-namespace Grape
+namespace grape
 {
     //------------------------------------------------------------------------------
     CmdLineArgs::CmdLineArgs(int argc, char** argv)
@@ -72,4 +72,4 @@ namespace Grape
         } // for
     }
 
-} // Grape
+} // grape

@@ -37,7 +37,7 @@
 #include "Annotation.h"
 #include <QPen>
 
-namespace Grape
+namespace grape
 {
 
 /// \class CrosshairAnnotation
@@ -72,6 +72,6 @@ private:
 }; // CrosshairAnnotation
 
 
-} // Grape
+} // grape
 
 #endif // GRAPE_CROSSHAIRANNOTATION_H

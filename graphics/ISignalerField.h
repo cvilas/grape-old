@@ -37,7 +37,7 @@
 #include "grapegraphics_common.h"
 #include <QObject>
 
-namespace Grape
+namespace grape
 {
 
 /// \class ISignalerField
@@ -92,6 +92,6 @@ const T& ISignalerFieldT<T>::value() const
     return _value;
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_ISIGNALERFIELD_H

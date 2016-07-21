@@ -36,7 +36,7 @@
 
 #include "TextAnnotation.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \class CounterAnnotation
@@ -68,6 +68,6 @@ protected:
     void process(QPainter& painter);
 }; // CounterAnnotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_COUNTERANNOTATION_H

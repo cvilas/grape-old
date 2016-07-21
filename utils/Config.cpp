@@ -32,7 +32,7 @@
 
 #include "Config.h"
 
-namespace Grape
+namespace grape
 {
 
 //------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
         }
 
         std::string key = keyValPair.substr(0, keyEnd);
-        key = Grape::removeEndWhiteSpace(key);
+        key = grape::removeEndWhiteSpace(key);
         if( key.length() == 0 )
         {
             errorStream << "[Config::parse]: missing key" << std::endl;
@@ -122,7 +122,7 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
         }
 
         std::string value = keyValPair.substr(keyEnd+1U, keyValPair.length() );
-        value = Grape::removeEndWhiteSpace(value);
+        value = grape::removeEndWhiteSpace(value);
         if( value.length() == 0 )
         {
             errorStream << "[Config::parse]: missing value string for (key: "
@@ -144,7 +144,7 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
         if( commentStart != std::string::npos )
         {
             std::string testWhiteSpace = str.substr(seekPos, commentStart-seekPos);
-            testWhiteSpace = Grape::removeEndWhiteSpace(testWhiteSpace);
+            testWhiteSpace = grape::removeEndWhiteSpace(testWhiteSpace);
             if( testWhiteSpace.length() == 0 )
             {
                 commentStart += 2U;
@@ -157,7 +157,7 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
                     return false;
                 }
                 comment = str.substr(commentStart, commentEnd-commentStart);
-                comment = Grape::removeEndWhiteSpace(comment);
+                comment = grape::removeEndWhiteSpace(comment);
                 seekPos = commentEnd + 2U;
             }
         }
@@ -170,4 +170,4 @@ bool Config::parse(const std::string& str, std::ostream& errorStream)
     return true;
 }
 
-} // Grape
+} // grape

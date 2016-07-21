@@ -37,12 +37,12 @@
 #include "grapeio_common.h"
 #include "IoException.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief common base class for exceptions thrown by socket classes
 /// \ingroup io
-class GRAPEIO_DLL_API SocketException : public Grape::IoException
+class GRAPEIO_DLL_API SocketException : public grape::IoException
 {
 public:
     SocketException() throw() : IoException(0, "Unspecified Socket Exception") {}
@@ -77,6 +77,6 @@ public:
 }; // HostnameException
 
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOCKETEXCEPTION_H

@@ -33,7 +33,7 @@
 
 #include "ConfigNode.h"
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -157,7 +157,7 @@ int ConfigNode::extractSection(std::string& str,
     }
 
     // extract section name
-    name = Grape::removeEndWhiteSpace(str.substr(headerBeginLoc+1U, headerEndLoc-headerBeginLoc-1U));
+    name = grape::removeEndWhiteSpace(str.substr(headerBeginLoc+1U, headerEndLoc-headerBeginLoc-1U));
 
     std::string::size_type seekPos = headerEndLoc+1U;
     std::string::size_type footerBeginLoc = findFooter(str, name, seekPos, errorStream);
@@ -203,7 +203,7 @@ std::string::size_type ConfigNode::findFooter(const std::string& str,
         }
 
         // check if this is the footer we seek
-        std::string footerName = Grape::removeEndWhiteSpace(str.substr(beginPos, seekPos-beginPos));
+        std::string footerName = grape::removeEndWhiteSpace(str.substr(beginPos, seekPos-beginPos));
         seekPos = seekPos + 1U;
         if( footerName == name )
         {
@@ -239,7 +239,7 @@ void ConfigNode::clear()
 bool ConfigNode::removeChild(const std::string& name)
 //------------------------------------------------------------------------------
 {
-    return ( 0 != children.erase( Grape::removeEndWhiteSpace(name) ) );
+    return ( 0 != children.erase( grape::removeEndWhiteSpace(name) ) );
 }
 
 //------------------------------------------------------------------------------
@@ -295,4 +295,4 @@ std::string ConfigNode::getChildName(unsigned int n) const
     return "";
 }
 
-} // Grape
+} // grape

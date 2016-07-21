@@ -38,7 +38,7 @@
 #include <QImage>
 #include <QColor>
 
-namespace Grape
+namespace grape
 {
 
 /// \class ImageAnnotator
@@ -280,6 +280,6 @@ float ImageAnnotator::getImageRotationAngle() const
     return _angle;
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_IMAGEANNOTATOR_H

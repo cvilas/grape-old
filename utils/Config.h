@@ -38,7 +38,7 @@
 #include <map>
 #include <iostream>
 
-namespace Grape
+namespace grape
 {
 
 /// \class Config
@@ -167,9 +167,9 @@ void Config::setEntry(const std::string &key, const T &value, const std::string&
 //------------------------------------------------------------------------------
 {
     Entry entry;
-    entry.value = Grape::removeEndWhiteSpace( Grape::TAsString(value) );
+    entry.value = grape::removeEndWhiteSpace( grape::TAsString(value) );
     entry.comment = comment;
-    _entries[ Grape::removeEndWhiteSpace(key) ] = entry;
+    _entries[ grape::removeEndWhiteSpace(key) ] = entry;
 }
 
 
@@ -178,12 +178,12 @@ template<class T>
 bool Config::getEntry(const std::string &key, T &value, std::string& comment) const
 //------------------------------------------------------------------------------
 {
-    ConstEntryIter it = _entries.find( Grape::removeEndWhiteSpace(key) );
+    ConstEntryIter it = _entries.find( grape::removeEndWhiteSpace(key) );
     if( it == _entries.end() )
     {
         return false;
     }
-    value = Grape::stringAsT<T>(it->second.value);
+    value = grape::stringAsT<T>(it->second.value);
     comment = it->second.comment;
     return true;
 }
@@ -192,10 +192,10 @@ bool Config::getEntry(const std::string &key, T &value, std::string& comment) co
 bool Config::removeEntry(const std::string &key)
 //------------------------------------------------------------------------------
 {
-    return ( 0 != _entries.erase( Grape::removeEndWhiteSpace(key) ) );
+    return ( 0 != _entries.erase( grape::removeEndWhiteSpace(key) ) );
 }
 
 
-} // Grape
+} // grape
 
 #endif // GRAPE_CONFIG_H

@@ -34,7 +34,7 @@
 #include <QPainter>
 #include <QApplication>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -60,4 +60,4 @@ void TextAnnotation::process(QPainter& painter)
     painter.drawText(boundingBox.value(), alignFlags, text, &bestBoundingBox);
 }
 
-} // Grape
+} // grape

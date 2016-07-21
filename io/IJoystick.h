@@ -38,7 +38,7 @@
 #include <vector>
 #include <string>
 
-namespace Grape
+namespace grape
 {
 
 /// \class IJoystick
@@ -89,5 +89,5 @@ private:
     IJoystick &operator=(const IJoystick &);            //!< private to disable assignment
 }; // IJoystick
 
-} // Grape
+} // grape
 #endif // GRAPEIO_IJOYSTICK_H

@@ -37,7 +37,7 @@
 #include "grapetiming_common.h"
 #include "core/Exception.h"
 
-namespace Grape 
+namespace grape 
 {
     
     /// \class StopWatch
@@ -96,7 +96,7 @@ namespace Grape
 
     }; // StopWatch
 
-} // Grape
+} // grape
 
 #endif	// GRAPE_STOPWATCH_H
 

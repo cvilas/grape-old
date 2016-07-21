@@ -43,13 +43,13 @@
 const GUID GUID_NULL = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 #endif
 
-namespace Grape
+namespace grape
 {
 
 std::string GRAPEUTILS_DLL_API GuidToString(GUID& guid);
 bool GRAPEUTILS_DLL_API stringToGuid(const std::string &str, GUID& guid);
 bool GRAPEUTILS_DLL_API isGuidEqual(const GUID& id1, const GUID& id2);
 
-} // Grape
+} // grape
 
 #endif // GRAPEUTILS_GUIDFUNCS_H

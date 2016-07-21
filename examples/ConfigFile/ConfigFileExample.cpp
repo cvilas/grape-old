@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 //==============================================================================
 {
-    Grape::ConfigFile file(std::cout);
+    grape::ConfigFile file(std::cout);
 
     // load a configuration
     if( !file.load("../examples/ConfigFile/example_config.cfg", "PATH") )

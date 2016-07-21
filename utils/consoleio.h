@@ -36,7 +36,7 @@
 
 #include "grapeutils_common.h"
 
-namespace Grape
+namespace grape
 {
 
 /// Read a single character from console without echoing.
@@ -48,7 +48,7 @@ int GRAPEUTILS_DLL_API getch();
 /// \return nonzero if key was pressed. use getch() to read the key stroke.
 int GRAPEUTILS_DLL_API kbhit();
 
-} // Grape
+} // grape
 
 #endif	// GRAPE_CONSOLEIO_H
 

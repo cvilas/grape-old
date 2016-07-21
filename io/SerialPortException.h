@@ -37,12 +37,12 @@
 #include "grapeio_common.h"
 #include "IoException.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief common base class for exceptions thrown by serial port classes
 /// \ingroup io
-class GRAPEIO_DLL_API SerialPortException : public Grape::IoException
+class GRAPEIO_DLL_API SerialPortException : public grape::IoException
 {
 public:
     SerialPortException() throw() : IoException(0, "Unspecified SerialPort Exception") {}
@@ -53,7 +53,7 @@ public:
 
 /// \brief Invalid/unsupported baud rate
 /// \ingroup io
-class GRAPEIO_DLL_API InvalidBaudException : public Grape::SerialPortException
+class GRAPEIO_DLL_API InvalidBaudException : public grape::SerialPortException
 {
 public:
     InvalidBaudException() throw() : SerialPortException(0, "Invalid/unsupported baud rate") {}
@@ -64,7 +64,7 @@ public:
 
 /// \brief Invalid/unsupported serial data format
 /// \ingroup io
-class GRAPEIO_DLL_API InvalidSerialDataFormatException : public Grape::SerialPortException
+class GRAPEIO_DLL_API InvalidSerialDataFormatException : public grape::SerialPortException
 {
 public:
     InvalidSerialDataFormatException() throw() : SerialPortException(0, "Invalid/unsupported baud rate") {}
@@ -73,6 +73,6 @@ public:
     InvalidSerialDataFormatException& operator=(const InvalidBaudException& other) throw() { SerialPortException::operator=(other); return *this; }
 }; // SerialPortException
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SERIALPORTEXCEPTION_H

@@ -37,7 +37,7 @@
 #include "grapetiming_common.h"
 #include "core/Exception.h"
 
-namespace Grape
+namespace grape
 {
     /// \class Timer
     /// \ingroup timing
@@ -99,7 +99,7 @@ class GRAPETIMING_DLL_API Timer
         
     }; // Timer
 
-} // Grape
+} // grape
 
 #endif	// GRAPE_TIMER_H
 

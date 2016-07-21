@@ -39,7 +39,7 @@
 #include <Inventor/SoInteraction.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 
-namespace Grape
+namespace grape
 {
 
 SO_EVENT_SOURCE(SoWheelEvent);
@@ -187,4 +187,4 @@ void SoRenderArea::renderCallback(void *pUserData, SoRenderManager*)
     ((SoRenderArea*)pUserData)->soRenderCallback();
 }
 
-} // Grape
+} // grape

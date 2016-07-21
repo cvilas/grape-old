@@ -5,7 +5,7 @@
 
 #include "graphics/SoSceneViewer.h"
 
-using namespace Grape;
+using namespace grape;
 
 //==============================================================================  
 class TemperatureOverlay : public QWidget

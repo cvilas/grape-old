@@ -38,7 +38,7 @@
 #include <stdexcept>
 #include <string.h>
 
-namespace Grape
+namespace grape
 {
 
     /// \class Exception
@@ -88,6 +88,6 @@ namespace Grape
 
     }; // Exception
     
-} // Grape
+} // grape
 
 #endif	// GRAPE_EXCEPTION_H

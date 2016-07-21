@@ -36,7 +36,7 @@
 
 #include "ConfigNode.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \class ConfigFile
@@ -229,6 +229,6 @@ bool ConfigFile::getEntry(const std::string &sectionPath, const std::string& key
     return pNode->getEntries()->getEntry(key, value, comment);
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_CONFIGFILE_H

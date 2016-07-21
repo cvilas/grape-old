@@ -15,7 +15,7 @@
 
 #include <QApplication>
 
-using namespace Grape;
+using namespace grape;
 
 //==============================================================================  
 int main(int argc, char** argv)

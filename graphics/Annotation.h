@@ -40,7 +40,7 @@
 
 class QPainter;
 
-namespace Grape
+namespace grape
 {
 
 /// \class Annotation
@@ -75,6 +75,6 @@ protected:
     virtual ~Annotation() {}
 }; // Annotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_ANNOTATION_H

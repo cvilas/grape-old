@@ -37,12 +37,12 @@
 #include "grapeio_common.h"
 #include "core/Exception.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief common base class for exceptions thrown by IO classes
 /// \ingroup io
-class GRAPEIO_DLL_API IoException : public Grape::Exception
+class GRAPEIO_DLL_API IoException : public grape::Exception
 {
 public:
     IoException() throw() : Exception(0, "Unspecified IO Exception") {}
@@ -95,6 +95,6 @@ public:
     IoEventHandlingException& operator=(const IoEventHandlingException& other) throw() { IoException::operator=(other); return *this; }
 }; // IoEventException
 
-} // Grape
+} // grape
 
 #endif // GRAPE_IOEXCEPTION_H

@@ -32,8 +32,8 @@
 
 #include "IJoystick.h"
 
-namespace Grape
+namespace grape
 {
 
 
-} // Grape
+} // grape

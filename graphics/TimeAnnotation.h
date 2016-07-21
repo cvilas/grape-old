@@ -36,7 +36,7 @@
 
 #include "TextAnnotation.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \class TimeAnnotation
@@ -67,6 +67,6 @@ protected:
     void process(QPainter& painter);
 }; // TimeAnnotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_TIMEANNOTATION_H

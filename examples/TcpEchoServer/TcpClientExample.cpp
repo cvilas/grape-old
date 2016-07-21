@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
     try
     {
-        Grape::TcpSocket client;
+        grape::TcpSocket client;
         std::string remoteIp(argv[1]);
         int port = atoi(argv[2]);
 
@@ -54,8 +54,8 @@ int main(int argc, char** argv)
 
                 // wait for server to reply
                 std::vector<unsigned char> buffer;
-                Grape::IDataPort::Status st = client.waitForRead(1000);
-                if( st != Grape::IDataPort::PORT_OK )
+                grape::IDataPort::Status st = client.waitForRead(1000);
+                if( st != grape::IDataPort::PORT_OK )
                 {
                     std::cout << "Error or timeout waiting for reply" << std::endl;
                     break;
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         } // while
     }
 
-    catch(Grape::Exception& ex)
+    catch(grape::Exception& ex)
     {
         std::cout << ex.what() << std::endl;
         return -1;

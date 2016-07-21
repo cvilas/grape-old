@@ -10,7 +10,7 @@
 int main()
 //==============================================================================
 {
-    Grape::Dx8JoystickManager& manager = Grape::Dx8JoystickManager::getSingleton();
+    grape::Dx8JoystickManager& manager = grape::Dx8JoystickManager::getSingleton();
 
     // collect the list of attached devices
     if( manager.enumerateDevices() == false )
@@ -32,7 +32,7 @@ int main()
         GUID gid = manager.getDeviceGuid(i);
         std::cout << "Index: " << i << std::endl
                   << "\tName: " << manager.getDeviceName(i) << std::endl
-                  << "\tGUID: " << Grape::GuidToString(gid) << std::endl;
+                  << "\tGUID: " << grape::GuidToString(gid) << std::endl;
     }
 
     return true;

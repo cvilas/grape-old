@@ -49,7 +49,7 @@
 #	error Coin Version 3.0 and above is required
 #endif
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoQtg
@@ -93,6 +93,6 @@ SoQtg& SoQtg::getSingleton()
     return s_singleton;
 }
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOQTG_H

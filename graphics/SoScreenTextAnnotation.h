@@ -37,7 +37,7 @@
 #include "SoScreen2DAnnotationKit.h"
 #include <Inventor/sensors/SoFieldSensor.h>
 
-namespace Grape
+namespace grape
 {
 
 /// \class SoScreenTextAnnotation
@@ -82,6 +82,6 @@ private:
     SoFieldSensor* _pFontSizeSensor;
 }; // SoScreenTextAnnotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_SOSCREENTEXTANNOTATION_H

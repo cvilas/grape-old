@@ -36,7 +36,7 @@
 #ifdef DEBUG
 #       include <iostream>
 #endif
-namespace Grape
+namespace grape
 {
     /// posix specific implementation class
     
@@ -188,6 +188,6 @@ namespace Grape
         return ( 0 == nanosleep(&t, NULL) );
     }
     
-} // Grape
+} // grape
 
 

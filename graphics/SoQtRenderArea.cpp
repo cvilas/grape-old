@@ -42,7 +42,7 @@
 #define GL_MULTISAMPLE  0x809D
 #endif
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -435,4 +435,4 @@ SoKeyboardEvent::Key SoQtRenderArea::translateKey( QKeyEvent * pEvent )
     return ev;
 }
 
-} // Grape
+} // grape

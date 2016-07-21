@@ -38,7 +38,7 @@
 #include <unistd.h>
 #endif
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -54,6 +54,6 @@ void milliSleep(unsigned int ms)
 
 }
 
-} // Grape
+} // grape
 
 

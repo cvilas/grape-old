@@ -33,7 +33,7 @@
 #include "Exception.h"
 
 
-namespace Grape
+namespace grape
 {
     //--------------------------------------------------------------------------
     Exception::Exception(int code, const char* msg) throw(/*nothing*/)

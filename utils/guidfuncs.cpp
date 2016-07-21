@@ -32,7 +32,7 @@
 
 #include "guidfuncs.h"
 
-namespace Grape
+namespace grape
 {
 
 //-------------------------------------------------------------------------
@@ -83,4 +83,4 @@ bool isGuidEqual(const GUID &id1, const GUID &id2 )
     return true;
 }
 
-} // Grape
+} // grape

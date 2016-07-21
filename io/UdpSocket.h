@@ -36,7 +36,7 @@
 
 #include "IpSocket.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief UDP socket
@@ -84,6 +84,6 @@ private:
 
 };// UdpSocket
 
-} // Grape
+} // grape
 
 #endif // GRAPE_UDPSOCKET_H

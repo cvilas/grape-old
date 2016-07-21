@@ -16,6 +16,7 @@ INCLUDEPATH += ./
 HEADERS = \
     grapegraphics_common.h \
     ISignalerField.h \
+    IPlottable.h \
     Annotation.h \
     TextAnnotation.h \
     TimeAnnotation.h \
@@ -70,9 +71,9 @@ FORMS = \
 
 RESOURCES = graphics.qrc
 
-unix:INCLUDEPATH += $$system(coin-config --includedir)
+unix:INCLUDEPATH +=
 else:win32:INCLUDEPATH += $(COINDIR)/include
-unix:LIBS += $$system(coin-config --ldflags) $$system(coin-config --libs)
+unix:LIBS += -lCoin
 else:win32:LIBS += -L$$(COINDIR)/lib
 
 CONFIG(debug, release|debug) {

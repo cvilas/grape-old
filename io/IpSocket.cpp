@@ -52,7 +52,7 @@
 #include <sstream>
 #include <errno.h>
 
-namespace Grape
+namespace grape
 {
 
 //==========================================================================
@@ -297,4 +297,4 @@ IDataPort::Status IpSocket::waitForRead(int timeoutMs)
 }
 
 
-} // Grape
+} // grape

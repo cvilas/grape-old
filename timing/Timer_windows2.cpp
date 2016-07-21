@@ -35,7 +35,7 @@
 #include "Timer.h"
 #include <mmsystem.h>
 
-namespace Grape
+namespace grape
 {
     //==============================================================================
     /// \class TimerP
@@ -238,4 +238,4 @@ namespace Grape
 		return nTicks;
 	}
 
-} // Grape
+} // grape

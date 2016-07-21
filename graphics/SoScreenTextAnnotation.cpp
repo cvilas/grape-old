@@ -39,7 +39,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 //#include <Inventor/actions/SoWriteAction.h>
 
-namespace Grape
+namespace grape
 {
 
 SO_KIT_SOURCE(SoScreenTextAnnotation)
@@ -108,4 +108,4 @@ void SoScreenTextAnnotation::fontSizeChangedCB(void *pData, SoSensor *)
     pObject->touch();
 }
 
-} // Grape
+} // grape

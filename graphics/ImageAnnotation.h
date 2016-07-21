@@ -37,7 +37,7 @@
 #include "Annotation.h"
 #include <QImage>
 
-namespace Grape
+namespace grape
 {
 
 /// \class ImageAnnotation
@@ -63,6 +63,6 @@ protected:
     void process(QPainter& painter);
 }; // ImageAnnotation
 
-} // Grape
+} // grape
 
 #endif // GRAPE_IMAGEANNOTATION_H

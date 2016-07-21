@@ -48,7 +48,7 @@ typedef unsigned int SOCKET;
 #include "IDataPort.h"
 #include "SocketException.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief Base class for BSD sockets
@@ -137,6 +137,6 @@ protected:
 
 }; // IpSocket
 
-} // Grape
+} // grape
 
 #endif // GRAPE_IPSOCKET_H

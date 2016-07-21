@@ -33,7 +33,7 @@
 #include "CrosshairAnnotation.h"
 #include <QPainter>
 
-namespace Grape
+namespace grape
 {
 
 //==============================================================================
@@ -78,4 +78,4 @@ void CrosshairAnnotation::process(QPainter& painter)
     painter.drawLines(_pLines, 2);
 }
 
-} // Grape
+} // grape

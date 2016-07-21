@@ -36,7 +36,7 @@
 
 #include "IpSocket.h"
 
-namespace Grape
+namespace grape
 {
 
 /// \brief TCP socket
@@ -93,6 +93,6 @@ public:
 
 }; // TcpSocket
 
-} // Grape
+} // grape
 
 #endif // GRAPE_TCPSOCKET_H
