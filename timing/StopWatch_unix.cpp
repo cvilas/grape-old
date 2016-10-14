@@ -187,7 +187,7 @@ namespace grape
         t.tv_nsec = (long)(ns%_NANO);
         return ( 0 == nanosleep(&t, NULL) );
     }
-    
+
 } // grape
 
 

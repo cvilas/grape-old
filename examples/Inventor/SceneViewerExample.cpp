@@ -13,6 +13,8 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QOpenGLFramebufferObjectFormat>
+#include <QOpenGLPaintDevice>
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/SbColor.h>
@@ -249,13 +251,25 @@ void SceneViewerExample::onCamTypBtn()
 void SceneViewerExample::onSnapBtn()
 //------------------------------------------------------------------------------  
 {
-    QPixmap picture = QPixmap::grabWindow(_pSceneView->winId());
+    QOpenGLFramebufferObjectFormat format;
+    format.setSamples(16);
+    format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+
+    QOpenGLFramebufferObject renderFbo(_pSceneView->width(), _pSceneView->height(), format);
+    renderFbo.bind();
+
+    QOpenGLPaintDevice fboPaintDev(_pSceneView->width(), _pSceneView->height());
+    QPainter fboPainter(&fboPaintDev);
+    fboPainter.setRenderHint(QPainter::Antialiasing);
+    fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
+    _pSceneView->getRenderArea()->render(&fboPainter);
+    fboPainter.end();
 
 	QString filePath = QFileDialog::getSaveFileName(this, "Save Image File", "untitiled.png", 
 		"Images (*.bmp *.jpg *.png)");
 	if( filePath.length() )
 	{
-		picture.save(filePath);
+        renderFbo.toImage().save(filePath);
 	}
 }
 
