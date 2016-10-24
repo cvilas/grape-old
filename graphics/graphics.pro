@@ -16,7 +16,6 @@ INCLUDEPATH += ./
 HEADERS = \
     grapegraphics_common.h \
     ISignalerField.h \
-    IPlottable.h \
     Annotation.h \
     TextAnnotation.h \
     TimeAnnotation.h \

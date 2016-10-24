@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include "grapegraphics_common.h"
 #include "algorithms/SlidingMinMax.h"
 #include <QtCharts/QChartView>
 #include <Eigen/Core>
@@ -34,7 +35,7 @@
 namespace grape
 {
 
-class Plot : public QtCharts::QChartView
+class GRAPEGRAPHICS_DLL_API Plot : public QtCharts::QChartView
 {
     Q_OBJECT
 public:
