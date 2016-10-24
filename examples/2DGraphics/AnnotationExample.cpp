@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
 	// Input image
 	QImage image;
-    if( !image.load("/home/vilas/Projects/mine/grape/examples/2DGraphics/images/inspection.bmp") )
+    if( !image.load("../examples/2DGraphics/images/inspection.bmp") )
 	{
 		std::cout << "Failed opening input image" << std::endl;
 		return -1;
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	pTextAnnot->alignFlags = Qt::AlignCenter;
 	pTextAnnot->text = QDateTime::currentDateTime().toString();
 
-    pImageAnnot->image = QImage("/home/vilas/Projects/mine/grape/examples/2DGraphics/images/dk_med.png");
+    pImageAnnot->image = QImage("../examples/2DGraphics/images/dk_med.png");
 	pImageAnnot->name = "logo";
 	pImageAnnot->boundingBox = QRect(OUT_WIDTH - 150,
 								   OUT_HEIGHT - 75,

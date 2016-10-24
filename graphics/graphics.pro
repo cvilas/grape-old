@@ -7,10 +7,10 @@ VERSION = $${GRAPHICS_VERSION}
 
 # common settings
 include(../grapelibs.pri)
-QT += opengl
+QT += opengl charts
 
 # library specific settings
-win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEGRAPHICS_DLL GRAPEGRAPHICS_DLL_EXPORT
+win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEALGO_DLL GRAPEGRAPHICS_DLL GRAPEGRAPHICS_DLL_EXPORT
 INCLUDEPATH += ./
 
 HEADERS = \
@@ -25,7 +25,8 @@ HEADERS = \
     CrosshairAnnotation.h \
     ImageAnnotator.h \
     ImageAnnotationViewer.h \
-    ImageAnnotationViewerP.h
+    ImageAnnotationViewerP.h \
+    Plot.h
 android:HEADERS +=
 else: HEADERS += \
     SoQtg.h \
@@ -47,7 +48,8 @@ SOURCES = \
     CrosshairAnnotation.cpp \
     ImageAnnotator.cpp \
     ImageAnnotationViewer.cpp \
-    ImageAnnotationViewerP.cpp
+    ImageAnnotationViewerP.cpp \
+    Plot.cpp
 android:SOURCES +=
 else: SOURCES += \
     SoQtg.cpp \

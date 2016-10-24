@@ -37,7 +37,7 @@ CONFIG(debug, release|debug) {
 
 # don't want linking against qtmain.lib
 QMAKE_LIBS_QT_ENTRY=
-INCLUDEPATH += $${PWD}
+INCLUDEPATH += $${PWD} -I /usr/include/eigen3
 DEPENDPATH += ./
 LIBS += -L$${PWD}/lib/
 win32:LIBS += -lrpcrt4 -lws2_32 -lUser32
