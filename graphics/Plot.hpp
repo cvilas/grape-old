@@ -25,12 +25,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //==============================================================================
 
-
-#include "Plot.h"
-
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
-#include <QDebug>
 
 #include <inttypes.h>
 #include <limits>
@@ -38,12 +34,11 @@
 namespace grape
 {
 
-
 //---------------------------------------------------------------------------------------------------------------------
-Plot::Plot(int numTraces, QWidget* pParent)
+template<int numTraces>
+Plot<numTraces>::Plot(QWidget* pParent)
 //---------------------------------------------------------------------------------------------------------------------
     : QtCharts::QChartView(pParent),
-      m_data(numTraces),
       m_numVisibleSamples(10),
       m_xTickWidth(std::numeric_limits<float>::max()),
       m_yTickWidth(std::numeric_limits<float>::max()),
@@ -68,26 +63,25 @@ Plot::Plot(int numTraces, QWidget* pParent)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-bool Plot::addData(float timestamp, const Eigen::ArrayXd& data)
+template<int numTraces>
+bool Plot<numTraces>::addData(float timestamp, const std::array<double, numTraces>& data)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    int nTraces = getNumTraces();
-    if( data.size() != nTraces )
-    {
-        return false;
-    }
-
     // append data to show
     QList<QtCharts::QAbstractSeries*> pSeriesList = chart()->series();
-    for(int i = 0; i < nTraces; ++i )
+    float dataMin = std::numeric_limits<float>::max();
+    float dataMax = std::numeric_limits<float>::min();
+    for(int i = 0; i < numTraces; ++i )
     {
         const float& value = static_cast<float>(data[i]);
         m_data[i].append(QPointF(timestamp, value));
         static_cast<QtCharts::QLineSeries*>(pSeriesList[i])->replace(m_data[i]);
+        if( value < dataMin) dataMin = value;
+        if( value > dataMax) dataMax = value;
     }
 
     // clear data we aren't showing anymore
-    for(int i = 0; i < nTraces; ++i )
+    for(int i = 0; i < numTraces; ++i )
     {
         std::size_t sz = m_data[i].size();
         if( sz > m_numVisibleSamples )
@@ -104,8 +98,8 @@ bool Plot::addData(float timestamp, const Eigen::ArrayXd& data)
     decorateXAxis();
     if(m_autoYRange)
     {
-        m_maxY = m_slidingMinMax.computeMax(data.maxCoeff());
-        m_minY = m_slidingMinMax.computeMin(data.minCoeff());
+        m_maxY = m_slidingMinMax.computeMax(dataMax);
+        m_minY = m_slidingMinMax.computeMin(dataMin);
         m_slidingMinMax.step();
         decorateYAxis();
     }
@@ -113,7 +107,8 @@ bool Plot::addData(float timestamp, const Eigen::ArrayXd& data)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::clear()
+template<int numTraces>
+void Plot<numTraces>::clear()
 //---------------------------------------------------------------------------------------------------------------------
 {
     for(auto& it : m_data )
@@ -123,7 +118,8 @@ void Plot::clear()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setNumVisibleSamples(std::size_t samples)
+template<int numTraces>
+void Plot<numTraces>::setNumVisibleSamples(std::size_t samples)
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_numVisibleSamples = samples;
@@ -131,34 +127,38 @@ void Plot::setNumVisibleSamples(std::size_t samples)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setTitle(const QString& title)
+template<int numTraces>
+void Plot<numTraces>::setTitle(const QString& title)
 //---------------------------------------------------------------------------------------------------------------------
 {
     chart()->setTitle(title);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setXLabel(const QString& str)
+template<int numTraces>
+void Plot<numTraces>::setXLabel(const QString& str)
 //---------------------------------------------------------------------------------------------------------------------
 {
     static_cast<QtCharts::QValueAxis*>(chart()->axisX())->setTitleText(str);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setYLabel(const QString& str)
+template<int numTraces>
+void Plot<numTraces>::setYLabel(const QString& str)
 //---------------------------------------------------------------------------------------------------------------------
 {
     static_cast<QtCharts::QValueAxis*>(chart()->axisY())->setTitleText(str);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setLegend(const QStringList& strList)
+template<int numTraces>
+void Plot<numTraces>::setLegend(const QStringList& strList)
 //---------------------------------------------------------------------------------------------------------------------
 {
     QtCharts::QChart* pChart = chart();
     QList<QtCharts::QAbstractSeries*> pSeriesList = pChart->series();
 
-    int nLegends = std::min(getNumTraces(), strList.size());
+    int nLegends = std::min(numTraces, strList.size());
     for(int i = 0; i < nLegends; ++i)
     {
         pSeriesList[i]->setName(strList[i]);
@@ -169,7 +169,8 @@ void Plot::setLegend(const QStringList& strList)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setYRange(float minY, float maxY)
+template<int numTraces>
+void Plot<numTraces>::setYRange(float minY, float maxY)
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_autoYRange = false;
@@ -179,21 +180,24 @@ void Plot::setYRange(float minY, float maxY)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setYRangeAuto()
+template<int numTraces>
+void Plot<numTraces>::setYRangeAuto()
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_autoYRange = true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setXTickWidth(float w)
+template<int numTraces>
+void Plot<numTraces>::setXTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_xTickWidth = w;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::setYTickWidth(float w)
+template<int numTraces>
+void Plot<numTraces>::setYTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
     if( fabs(m_yTickWidth - w) > 1e-6 )
@@ -204,7 +208,8 @@ void Plot::setYTickWidth(float w)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::decorateYAxis()
+template<int numTraces>
+void Plot<numTraces>::decorateYAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
@@ -215,7 +220,8 @@ void Plot::decorateYAxis()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-void Plot::decorateXAxis()
+template<int numTraces>
+void Plot<numTraces>::decorateXAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
     QtCharts::QValueAxis* axisX = static_cast<QtCharts::QValueAxis*>(chart()->axisX());

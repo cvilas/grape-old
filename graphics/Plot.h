@@ -30,26 +30,24 @@
 #include "grapegraphics_common.h"
 #include "algorithms/SlidingMinMax.h"
 #include <QtCharts/QChartView>
-#include <Eigen/Core>
+#include <array>
 
 namespace grape
 {
 
+template<int numTraces>
 class GRAPEGRAPHICS_DLL_API Plot : public QtCharts::QChartView
 {
-    Q_OBJECT
 public:
-    explicit Plot(int numTraces, QWidget* pParent = nullptr);
+    explicit Plot(QWidget* pParent = nullptr);
 
-    virtual ~Plot() = default;
+    ~Plot() {}
 
     void setNumVisibleSamples(std::size_t samples);
 
-    int getNumTraces() const { return m_data.size(); }
-
     void clear();
 
-    bool addData(float timestamp, const Eigen::ArrayXd& data);
+    bool addData(float timestamp, const std::array<double, numTraces>& data);
 
     void setTitle(const QString& title);
 
@@ -72,7 +70,7 @@ private:
     void decorateYAxis();
 
 private:
-    QVector< QVector<QPointF> > m_data;
+    std::array< QVector<QPointF>, numTraces > m_data;
 
     SlidingMinMax   m_slidingMinMax;
     std::size_t     m_numVisibleSamples;
@@ -86,3 +84,5 @@ private:
 };
 
 } // grape
+
+#include "Plot.hpp"

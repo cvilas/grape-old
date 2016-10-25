@@ -25,7 +25,8 @@ HEADERS = \
     ImageAnnotator.h \
     ImageAnnotationViewer.h \
     ImageAnnotationViewerP.h \
-    Plot.h
+    Plot.h \
+    Plot.hpp
 android:HEADERS +=
 else: HEADERS += \
     SoQtg.h \
@@ -47,8 +48,7 @@ SOURCES = \
     CrosshairAnnotation.cpp \
     ImageAnnotator.cpp \
     ImageAnnotationViewer.cpp \
-    ImageAnnotationViewerP.cpp \
-    Plot.cpp
+    ImageAnnotationViewerP.cpp
 android:SOURCES +=
 else: SOURCES += \
     SoQtg.cpp \
