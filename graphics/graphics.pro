@@ -7,7 +7,7 @@ VERSION = $${GRAPHICS_VERSION}
 
 # common settings
 include(../grapelibs.pri)
-QT += opengl
+QT += opengl charts
 
 # library specific settings
 win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEGRAPHICS_DLL GRAPEGRAPHICS_DLL_EXPORT
