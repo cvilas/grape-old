@@ -1,3 +1,8 @@
+//==============================================================================
+// File     :   PlotExample
+// Brief    :   Example program for Plot class.
+//==============================================================================
+
 #pragma once
 
 #include "graphics/Plot.h"
@@ -8,11 +13,15 @@ class PlotExample : public QWidget
     Q_OBJECT
 public:
     static constexpr double TIMEOUT_MS = 10;
+
     PlotExample(QWidget *pParent = nullptr);
+
     ~PlotExample();
-private slots:
+
+private slots:    
     void onTimer();
+
 private:
-    grape::Plot<2> _view;
-    QTimer _timer;
+    grape::Plot<2>  _view;
+    QTimer          _timer;
 };
