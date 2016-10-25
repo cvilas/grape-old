@@ -11,7 +11,7 @@ void TestStopWatch::resolution()
 //-----------------------------------------------------------------------------
 {
     grape::StopWatch watch;
-    long long int resolution = watch.getResolution();
+    long long int resolution = watch.getResolutionNanoseconds();
 
     qDebug() << " Watch resolution is " << resolution << "nanoseconds";
     QVERIFY(resolution > 0);
@@ -29,7 +29,7 @@ void TestStopWatch::period()
     grape::StopWatch::nanoSleep(sleepNs);
     watch.stop();
 
-    unsigned long long ns = watch.getTime();
+    unsigned long long ns = watch.getAccumulatedNanoseconds();
     unsigned long long errNs = ((ns > sleepNs)?(ns - sleepNs):(sleepNs - ns));
 
     qDebug() << "Elapsed Time: " << ns << " ns. (error: " << errNs << " ns)";

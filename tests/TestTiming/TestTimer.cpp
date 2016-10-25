@@ -61,7 +61,7 @@ void TestTimer::period()
     timer.stop();
 
     // stats
-    unsigned long long avgNs = watch.getTime()/nTicks;
+    unsigned long long avgNs = watch.getAccumulatedNanoseconds()/nTicks;
     unsigned long long err = ((avgNs > periodNs)?(avgNs - periodNs):(periodNs - avgNs));
 
     qDebug() << "Average (" << nTicks << " ticks): " << avgNs << " ns. (error: " << err << " ns)";

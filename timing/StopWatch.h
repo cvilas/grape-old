@@ -76,10 +76,10 @@ namespace grape
         /// \return The accumulated time interval in nano-seconds between multiple start-stop
         /// calls since the the last call to reset().
         /// \note Time measurement within each start-stop is only as good as getResolution()
-        long long getTime() const throw(Exception);
+        long long getAccumulatedNanoseconds() const throw(Exception);
         
         /// \return Clock resolution in nano-seconds. 
-        long long getResolution() const throw(Exception);
+        long long getResolutionNanoseconds() const throw(Exception);
 
         /// Sleep for specified time in nano-seconds.
         /// Note: Sleep time resolution is only as good as getResolution()

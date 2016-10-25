@@ -6,7 +6,7 @@ android:CONFIG += static
 win32: CONFIG += embed_manifest_exe
 
 CONFIG += console qt
-QT += core gui widgets opengl
+QT += core gui widgets opengl charts
 
 build_pass:CONFIG(debug, release|debug) {
     TARGET = $$join(TARGET,,,d)

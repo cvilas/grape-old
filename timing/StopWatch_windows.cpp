@@ -128,7 +128,7 @@ namespace grape
     }
 
     //--------------------------------------------------------------------------
-    long long StopWatch::getTime() const throw(Exception)
+    long long StopWatch::getAccumulatedNanoseconds() const throw(Exception)
     //--------------------------------------------------------------------------
     {
         if( _pImpl->_countsPerSec == 0 )
@@ -149,7 +149,7 @@ namespace grape
     }
     
     //--------------------------------------------------------------------------
-    long long StopWatch::getResolution() const throw(Exception)
+    long long StopWatch::getResolutionNanoseconds() const throw(Exception)
     //--------------------------------------------------------------------------
     {
         if( _pImpl->_countsPerSec == 0 )

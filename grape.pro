@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += core utils io timing graphics tests examples
+SUBDIRS += core utils io timing graphics algorithms tests examples
 timing.depends = core
 utils.depends = core
 io.depends = utils core

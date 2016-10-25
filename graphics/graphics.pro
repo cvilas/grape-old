@@ -10,13 +10,12 @@ include(../grapelibs.pri)
 QT += opengl charts
 
 # library specific settings
-win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEGRAPHICS_DLL GRAPEGRAPHICS_DLL_EXPORT
+win32:DEFINES += COIN_DLL GRAPECORE_DLL GRAPEUTILS_DLL GRAPEALGO_DLL GRAPEGRAPHICS_DLL GRAPEGRAPHICS_DLL_EXPORT
 INCLUDEPATH += ./
 
 HEADERS = \
     grapegraphics_common.h \
     ISignalerField.h \
-    IPlottable.h \
     Annotation.h \
     TextAnnotation.h \
     TimeAnnotation.h \
@@ -25,7 +24,9 @@ HEADERS = \
     CrosshairAnnotation.h \
     ImageAnnotator.h \
     ImageAnnotationViewer.h \
-    ImageAnnotationViewerP.h
+    ImageAnnotationViewerP.h \
+    Plot.h \
+    Plot.hpp
 android:HEADERS +=
 else: HEADERS += \
     SoQtg.h \
