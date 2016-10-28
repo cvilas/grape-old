@@ -28,7 +28,8 @@
 #pragma once
 
 #include "grapegraphics_common.h"
-#include "algorithms/SlidingMinMax.h"
+#include "algorithms/SlidingMax.h"
+#include "algorithms/SlidingMin.h"
 #include <QtCharts/QChartView>
 #include <array>
 
@@ -72,15 +73,16 @@ private:
 private:
     std::array< QVector<QPointF>, numTraces > m_data;
 
-    SlidingMinMax   m_slidingMinMax;
-    std::size_t     m_numVisibleSamples;
-    float           m_xTickWidth;
-    float           m_yTickWidth;
-    float           m_minY;
-    float           m_maxY;
-    float           m_minX;
-    float           m_maxX;
-    float           m_autoYRange;
+    SlidingMin  m_slidingMin;
+    SlidingMax  m_slidingMax;
+    std::size_t m_numVisibleSamples;
+    float       m_xTickWidth;
+    float       m_yTickWidth;
+    float       m_minY;
+    float       m_maxY;
+    float       m_minX;
+    float       m_maxX;
+    float       m_autoYRange;
 };
 
 } // grape

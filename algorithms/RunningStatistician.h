@@ -35,8 +35,6 @@ namespace grape
 /**
  * Compute statistics online as new data is added.
  *
- * The template parameter is Eigen::Matrix type
- *
  * See Knuth TAOCP vol 2, 3rd edition, page 232
  * See 'online algorithm' in https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
  */

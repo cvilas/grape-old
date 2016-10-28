@@ -98,9 +98,8 @@ bool Plot<numTraces>::addData(float timestamp, const std::array<double, numTrace
     decorateXAxis();
     if(m_autoYRange)
     {
-        m_maxY = m_slidingMinMax.computeMax(dataMax);
-        m_minY = m_slidingMinMax.computeMin(dataMin);
-        m_slidingMinMax.step();
+        m_maxY = m_slidingMax.push(dataMax);
+        m_minY = m_slidingMin.push(dataMin);
         decorateYAxis();
     }
     return true;
@@ -123,7 +122,8 @@ void Plot<numTraces>::setNumVisibleSamples(std::size_t samples)
 //---------------------------------------------------------------------------------------------------------------------
 {
     m_numVisibleSamples = samples;
-    m_slidingMinMax.reset(m_numVisibleSamples);
+    m_slidingMin.reset(m_numVisibleSamples);
+    m_slidingMax.reset(m_numVisibleSamples);
 }
 
 //---------------------------------------------------------------------------------------------------------------------

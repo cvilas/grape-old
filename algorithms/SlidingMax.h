@@ -34,80 +34,56 @@ namespace grape
 {
 
 /**
- * Fast sliding window minimum and maximum
+ * Fast sliding window maximum
  * https://people.cs.uct.ac.za/~ksmith/articles/sliding_window_minimum.html
  *
  * Usage:
  * - call reset to set window size
- * - push data into computeMin() and/or computeMax() following by step()
+ * - push() data to compute max() value within window
  */
-class SlidingMinMax
+class SlidingMax
 {
 public:
 
-    SlidingMinMax() : _index(0), _windowSize(1) {}
+    SlidingMax() : _index(0), _windowSize(1) {}
 
-    ~SlidingMinMax() {}
+    ~SlidingMax() {}
 
     inline void reset(int64_t windowSize);
 
-    void step() { ++_index; }
-
-    inline double computeMin(double d);
-
-    inline double computeMax(double d);
+    inline double push(double d);
 
 private:
     int64_t _index;
     int64_t _windowSize;
-    std::deque< std::pair<double, int> > _minWindow;
-    std::deque< std::pair<double, int> > _maxWindow;
+    std::deque< std::pair<double, int> > _window;
 };
 
 //---------------------------------------------------------------------------------------------------------------------
-void SlidingMinMax::reset(int64_t windowSize)
+void SlidingMax::reset(int64_t windowSize)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    _minWindow.clear();
-    _maxWindow.clear();
+    _window.clear();
     _index = 0;
     _windowSize = windowSize;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-double SlidingMinMax::computeMin(double d)
+double SlidingMax::push(double d)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    while (!_minWindow.empty() && _minWindow.back().first >= d)
+    while (!_window.empty() && _window.back().first <= d)
     {
-        _minWindow.pop_back();
+        _window.pop_back();
     }
-    _minWindow.push_back(std::make_pair(d, _index));
+    _window.push_back(std::make_pair(d, _index));
 
-    while(_minWindow.front().second <= _index - _windowSize)
+    while(_window.front().second <= _index - _windowSize)
     {
-        _minWindow.pop_front();
+        _window.pop_front();
     }
-
-   return _minWindow.front().first;
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-double SlidingMinMax::computeMax(double d)
-//---------------------------------------------------------------------------------------------------------------------
-{
-    while (!_maxWindow.empty() && _maxWindow.back().first <= d)
-    {
-        _maxWindow.pop_back();
-    }
-    _maxWindow.push_back(std::make_pair(d, _index));
-
-    while(_maxWindow.front().second <= _index - _windowSize)
-    {
-        _maxWindow.pop_front();
-    }
-
-    return _maxWindow.front().first;
+    ++_index;
+    return _window.front().first;
 }
 
 
