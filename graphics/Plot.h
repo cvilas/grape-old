@@ -66,6 +66,14 @@ public:
 
     void setYTickWidth(float w);
 
+    float getYMax() const { return m_maxY; }
+
+    float getYMin() const { return m_minY; }
+
+    float getXMax() const { return m_maxX; }
+
+    float getXMin() const { return m_minX; }
+
 private:
     void decorateXAxis();
     void decorateYAxis();
