@@ -212,8 +212,8 @@ template<int numTraces>
 void Plot<numTraces>::decorateYAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
-    float maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
-    float minY = floor(m_minY/m_yTickWidth)*m_yTickWidth;
+    const float maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
+    const float minY = floor(m_minY/m_yTickWidth)*m_yTickWidth;
     QtCharts::QValueAxis* axisY = static_cast<QtCharts::QValueAxis*>(chart()->axisY());
     axisY->setRange(minY, maxY);
     axisY->setTickCount( static_cast<int>(1+(maxY - minY)/m_yTickWidth) );
