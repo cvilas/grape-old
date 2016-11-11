@@ -75,20 +75,17 @@ bool Plot<numTraces>::addData(float timestamp, const std::array<double, numTrace
     {
         const float& value = static_cast<float>(data[i]);
         m_data[i].append(QPointF(timestamp, value));
-        static_cast<QtCharts::QLineSeries*>(pSeriesList[i])->replace(m_data[i]);
-        if( value < dataMin) dataMin = value;
-        if( value > dataMax) dataMax = value;
-    }
 
-    // clear data we aren't showing anymore
-    for(int i = 0; i < numTraces; ++i )
-    {
-        std::size_t sz = m_data[i].size();
+        // clear data we aren't showing anymore
+        const std::size_t sz = m_data[i].size();
         if( sz > m_numVisibleSamples )
         {
             const auto& it = m_data[i].begin();
             m_data[i].erase(it, it+(sz-m_numVisibleSamples));
         }
+        static_cast<QtCharts::QLineSeries*>(pSeriesList[i])->replace(m_data[i]);
+        if( value < dataMin) dataMin = value;
+        if( value > dataMax) dataMax = value;
     }
 
     m_minX = m_data[0][0].x();
@@ -121,7 +118,7 @@ template<int numTraces>
 void Plot<numTraces>::setNumVisibleSamples(std::size_t samples)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_numVisibleSamples = samples;
+    m_numVisibleSamples = std::max(std::size_t(1), samples);
     m_slidingMin.reset(m_numVisibleSamples);
     m_slidingMax.reset(m_numVisibleSamples);
 }
