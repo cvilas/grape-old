@@ -43,7 +43,7 @@ Plot<numTraces>::Plot(QWidget* pParent)
       m_xTickWidth(std::numeric_limits<float>::max()),
       m_yTickWidth(std::numeric_limits<float>::max()),
       m_minY(std::numeric_limits<float>::max()),
-      m_maxY(-std::numeric_limits<float>::max()),
+      m_maxY(std::numeric_limits<float>::lowest()),
       m_minX(0),
       m_maxX(0),
       m_autoYRange(false)
@@ -189,7 +189,7 @@ template<int numTraces>
 void Plot<numTraces>::setXTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_xTickWidth = w;
+    m_xTickWidth = fabs(w);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -197,11 +197,8 @@ template<int numTraces>
 void Plot<numTraces>::setYTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    if( fabs(m_yTickWidth - w) > 1e-6 )
-    {
-        m_yTickWidth = w;
-        decorateYAxis();
-    }
+    m_yTickWidth = fabs(w);
+    decorateYAxis();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -209,11 +206,19 @@ template<int numTraces>
 void Plot<numTraces>::decorateYAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
-    const float maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
-    const float minY = floor(m_minY/m_yTickWidth)*m_yTickWidth;
     QtCharts::QValueAxis* axisY = static_cast<QtCharts::QValueAxis*>(chart()->axisY());
-    axisY->setRange(minY, maxY);
-    axisY->setTickCount( static_cast<int>(1+(maxY - minY)/m_yTickWidth) );
+    if((m_yTickWidth > fabs(m_maxY)) && (m_yTickWidth > fabs(m_minY)))
+    {
+        axisY->setRange(m_minY, m_maxY);
+        axisY->setTickCount( static_cast<int>(2) );
+    }
+    else
+    {
+        const float maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
+        const float minY = floor(m_minY/m_yTickWidth)*m_yTickWidth;
+        axisY->setRange(minY, maxY);
+        axisY->setTickCount( static_cast<int>(1+(maxY - minY)/m_yTickWidth) );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
