@@ -13,10 +13,12 @@ win32:DEFINES += GRAPECORE_DLL GRAPEUTILS_DLL GRAPEALGO_DLL GRAPEALGO_DLL_EXPORT
 INCLUDEPATH += ./
 
 HEADERS = \
-    RunningStatistician.h \
-    RunningStatistician.hpp \
     SlidingMin.h \
-    SlidingMax.h
+    SlidingMax.h \
+    SlidingMean.h \
+    RollingMean.hpp \
+    RollingMean.h \
+    SlidingMean.hpp
 SOURCES =
 
 CONFIG(debug, release|debug) {

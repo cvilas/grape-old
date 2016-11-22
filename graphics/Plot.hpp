@@ -39,14 +39,14 @@ template<int numTraces>
 Plot<numTraces>::Plot(QWidget* pParent)
 //---------------------------------------------------------------------------------------------------------------------
     : QtCharts::QChartView(pParent),
-      m_numVisibleSamples(10),
-      m_xTickWidth(std::numeric_limits<float>::max()),
-      m_yTickWidth(std::numeric_limits<float>::max()),
-      m_minY(std::numeric_limits<float>::max()),
-      m_maxY(std::numeric_limits<float>::lowest()),
-      m_minX(0),
-      m_maxX(0),
-      m_autoYRange(false)
+      _numVisibleSamples(10),
+      _xTickWidth(std::numeric_limits<float>::max()),
+      _yTickWidth(std::numeric_limits<float>::max()),
+      _minY(std::numeric_limits<float>::max()),
+      _maxY(std::numeric_limits<float>::lowest()),
+      _minX(0),
+      _maxX(0),
+      _autoYRange(false)
 {
     QtCharts::QChart* pChart = chart();
     QtCharts::QValueAxis* pAxisX = new QtCharts::QValueAxis;
@@ -58,7 +58,7 @@ Plot<numTraces>::Plot(QWidget* pParent)
         pChart->addSeries(pSeries);
         pChart->setAxisX(pAxisX, pSeries);
         pChart->setAxisY(pAxisY, pSeries);
-        m_data[i].reserve(m_numVisibleSamples);
+        _data[i].reserve(_numVisibleSamples);
     }
 }
 
@@ -74,29 +74,29 @@ bool Plot<numTraces>::addData(float timestamp, const std::array<double, numTrace
     for(int i = 0; i < numTraces; ++i )
     {
         const float& value = static_cast<float>(data[i]);
-        m_data[i].append(QPointF(timestamp, value));
+        _data[i].append(QPointF(timestamp, value));
 
         // clear data we aren't showing anymore
-        const std::size_t sz = m_data[i].size();
-        if( sz > m_numVisibleSamples )
+        const std::size_t sz = _data[i].size();
+        if( sz > _numVisibleSamples )
         {
-            const auto& it = m_data[i].begin();
-            m_data[i].erase(it, it+(sz-m_numVisibleSamples));
+            const auto& it = _data[i].begin();
+            _data[i].erase(it, it+(sz-_numVisibleSamples));
         }
-        static_cast<QtCharts::QLineSeries*>(pSeriesList[i])->replace(m_data[i]);
+        static_cast<QtCharts::QLineSeries*>(pSeriesList[i])->replace(_data[i]);
         if( value < dataMin) dataMin = value;
         if( value > dataMax) dataMax = value;
     }
 
-    m_minX = m_data[0][0].x();
-    m_maxX = timestamp;
+    _minX = _data[0][0].x();
+    _maxX = timestamp;
 
     // set grid lines etc
     decorateXAxis();
-    if(m_autoYRange)
+    if(_autoYRange)
     {
-        m_maxY = m_slidingMax.push(dataMax);
-        m_minY = m_slidingMin.push(dataMin);
+        _maxY = _slidingMax.push(dataMax);
+        _minY = _slidingMin.push(dataMin);
         decorateYAxis();
     }
     return true;
@@ -107,7 +107,7 @@ template<int numTraces>
 void Plot<numTraces>::clear()
 //---------------------------------------------------------------------------------------------------------------------
 {
-    for(auto& it : m_data )
+    for(auto& it : _data )
     {
         it.clear();
     }
@@ -118,9 +118,9 @@ template<int numTraces>
 void Plot<numTraces>::setNumVisibleSamples(std::size_t samples)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_numVisibleSamples = std::max(std::size_t(1), samples);
-    m_slidingMin.reset(m_numVisibleSamples);
-    m_slidingMax.reset(m_numVisibleSamples);
+    _numVisibleSamples = std::max(std::size_t(1), samples);
+    _slidingMin.reset(_numVisibleSamples);
+    _slidingMax.reset(_numVisibleSamples);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -170,9 +170,9 @@ template<int numTraces>
 void Plot<numTraces>::setYRange(float minY, float maxY)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_autoYRange = false;
-    m_minY = minY;
-    m_maxY = maxY;
+    _autoYRange = false;
+    _minY = minY;
+    _maxY = maxY;
     decorateYAxis();
 }
 
@@ -181,7 +181,7 @@ template<int numTraces>
 void Plot<numTraces>::setYRangeAuto()
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_autoYRange = true;
+    _autoYRange = true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ template<int numTraces>
 void Plot<numTraces>::setXTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_xTickWidth = fabs(w);
+    _xTickWidth = fabs(w);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ template<int numTraces>
 void Plot<numTraces>::setYTickWidth(float w)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_yTickWidth = fabs(w);
+    _yTickWidth = fabs(w);
     decorateYAxis();
 }
 
@@ -207,17 +207,17 @@ void Plot<numTraces>::decorateYAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
     QtCharts::QValueAxis* axisY = static_cast<QtCharts::QValueAxis*>(chart()->axisY());
-    if((m_yTickWidth > fabs(m_maxY)) && (m_yTickWidth > fabs(m_minY)))
+    if((_yTickWidth > fabs(_maxY)) && (_yTickWidth > fabs(_minY)))
     {
-        axisY->setRange(m_minY, m_maxY);
+        axisY->setRange(_minY, _maxY);
         axisY->setTickCount( static_cast<int>(2) );
     }
     else
     {
-        const float maxY = ceil(m_maxY/m_yTickWidth)*m_yTickWidth;
-        const float minY = floor(m_minY/m_yTickWidth)*m_yTickWidth;
+        const float maxY = ceil(_maxY/_yTickWidth)*_yTickWidth;
+        const float minY = floor(_minY/_yTickWidth)*_yTickWidth;
         axisY->setRange(minY, maxY);
-        axisY->setTickCount( static_cast<int>(1+(maxY - minY)/m_yTickWidth) );
+        axisY->setTickCount( static_cast<int>(1+(maxY - minY)/_yTickWidth) );
     }
 }
 
@@ -227,8 +227,8 @@ void Plot<numTraces>::decorateXAxis()
 //---------------------------------------------------------------------------------------------------------------------
 {
     QtCharts::QValueAxis* axisX = static_cast<QtCharts::QValueAxis*>(chart()->axisX());
-    axisX->setRange(m_minX, m_maxX);
-    axisX->setTickCount( static_cast<int>(2+(m_maxX - m_minX)/m_xTickWidth) );
+    axisX->setRange(_minX, _maxX);
+    axisX->setTickCount( static_cast<int>(2+(_maxX - _minX)/_xTickWidth) );
 }
 
 } // grape

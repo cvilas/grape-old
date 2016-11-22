@@ -39,18 +39,18 @@ namespace grape
  * See 'online algorithm' in https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
  */
 template<typename scalar, int nRows, int nColumns>
-class RunningStatistician
+class RollingMean
 {
 public:
-    RunningStatistician();
+    RollingMean();
 
-    ~RunningStatistician() {}
+    ~RollingMean() {}
 
-    inline void clear();
+    inline void reset();
 
     inline void addData(const Eigen::Array<scalar, nRows, nColumns>& data, double timestamp);
 
-    unsigned long long int numData() const { return m_numData; }
+    unsigned long long int numData() const { return _numData; }
 
     inline double secondsSinceLastData(double tstamp) const;
 
@@ -58,18 +58,18 @@ public:
 
     inline double spanSeconds() const;
 
-    const Eigen::Array<scalar, nRows, nColumns>& getMean() const { return m_mean; }
+    const Eigen::Array<scalar, nRows, nColumns>& mean() const { return _mean; }
 
-    Eigen::Array<scalar, nRows, nColumns> getVariance() const { return m_scaledVariance / ((double)m_numData - 1); }
+    Eigen::Array<scalar, nRows, nColumns> variance() const { return _scaledVariance / ((double)_numData - 1); }
 
 private:
-    unsigned long long int m_numData;
-    Eigen::Array<scalar, nRows, nColumns> m_mean;
-    Eigen::Array<scalar, nRows, nColumns> m_scaledVariance;
-    double m_firstTimestamp;
-    double m_lastTimestamp;
+    unsigned long long int                  _numData;
+    Eigen::Array<scalar, nRows, nColumns>   _mean;
+    Eigen::Array<scalar, nRows, nColumns>   _scaledVariance;
+    double                                  _firstTimestamp;
+    double                                  _lastTimestamp;
 };
 
 } // grape
 
-#include "RunningStatistician.hpp"
+#include "RollingMean.hpp"

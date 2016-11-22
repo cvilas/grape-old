@@ -25,93 +25,72 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //==============================================================================
 
+
 namespace grape
 {
 
 //---------------------------------------------------------------------------------------------------------------------
 template<typename scalar, int nR, int nC>
-RunningStatistician<scalar, nR, nC>::RunningStatistician()
+SlidingMean<scalar, nR, nC>::SlidingMean()
 //---------------------------------------------------------------------------------------------------------------------
-    : m_firstTimestamp(0),
-      m_lastTimestamp(0)
+    : _windowSize(1)
+{}
+
+//---------------------------------------------------------------------------------------------------------------------
+template<typename scalar, int nR, int nC>
+SlidingMean<scalar, nR, nC>::~SlidingMean()
+//---------------------------------------------------------------------------------------------------------------------
+{}
+
+//---------------------------------------------------------------------------------------------------------------------
+template<typename scalar, int nR, int nC>
+void SlidingMean<scalar, nR, nC>::reset(unsigned long long int windowSize)
+//---------------------------------------------------------------------------------------------------------------------
 {
-    clear();
+    _windowSize = windowSize;
+    _window.clear();
+    _mean.setZero();
+    _scaledVariance.setZero();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 template<typename scalar, int nR, int nC>
-void RunningStatistician<scalar, nR, nC>::clear()
+void SlidingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nRows, nColumns>& d)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    m_numData = 0;
-    m_mean.setZero();
-    m_scaledVariance.setZero();
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-double RunningStatistician<scalar, nR, nC>::secondsSinceLastData(double tstamp) const
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if(m_numData == 0)
+    unsigned long long int sz = _window.size();
+    _window.push_back(d);
+    if(sz < _windowSize)
     {
-        return 0;
+        // See Knuth TAOCP vol 2, 3rd edition, page 232
+        // See 'online algorithm' in https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
+
+        // m(k) = m(k-1) + { x(k) - m(k-1) } / k
+        const Eigen::Array<scalar, nR, nC> delta = d - _mean;
+        const Eigen::Array<scalar, nR, nC> newMean = _mean + delta/((double)sz+1);
+
+        // s(k) = s(k-1) + { x(k) - m(k-1) } * { x(k) - m(k) }
+        _scaledVariance += delta * (d - newMean);
+
+        _mean = newMean;
     }
     else
     {
-        return tstamp - m_lastTimestamp;
+        // See http://jonisalonen.com/2014/efficient-and-accurate-rolling-standard-deviation/
+
+        const Eigen::Array<scalar, nR, nC> x0 = _window.front();
+        const Eigen::Array<scalar, nR, nC> delta = d - x0;
+
+        // m(k) = m(k-1) + { x(k) - x(0) } / k
+        const Eigen::Array<scalar, nR, nC> newMean = _mean + delta/((double)sz);
+
+        // s(k) = s(k-1) + { x(k) - x(0) } * { x(k) - m(k) + x(0) - m(k-1) }
+        _scaledVariance += delta * (d - newMean + x0 - _mean);
+
+        _mean = newMean;
+
+        _window.pop_front();
     }
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-double RunningStatistician<scalar, nR, nC>::secondsSinceFirstData(double tstamp) const
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if(m_numData == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        return tstamp - m_firstTimestamp;
-    }
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-double RunningStatistician<scalar, nR, nC>::spanSeconds() const
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if(m_numData == 0)
-    {
-        return 0;
-    }
-    return m_lastTimestamp - m_firstTimestamp;
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-void RunningStatistician<scalar, nR, nC>::addData(const Eigen::Array<scalar, nR, nC>& data,
-                                                                           double tstamp)
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if( m_numData == 0 )
-    {
-        m_firstTimestamp = tstamp;
-    }
-
-    m_numData++;
-    m_lastTimestamp = tstamp;
-
-    // m(k) = m(k-1) + { x(k) - m(k-1) } / k
-    Eigen::Array<scalar, nR, nC> newMean = m_mean + (data - m_mean) / ((double)m_numData);
-
-    // s(k) = s(k-1) + { x(k) - m(k-1) } * { x(k) - m(k) }
-    Eigen::Array<scalar, nR, nC> scaledVar = m_scaledVariance + (data - m_mean) * (data - newMean);
-
-    m_mean = newMean;
-    m_scaledVariance = scaledVar;
 }
 
 } // grape

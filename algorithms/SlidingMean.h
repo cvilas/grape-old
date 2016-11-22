@@ -27,72 +27,43 @@
 
 #pragma once
 
-#include "grapegraphics_common.h"
-#include "algorithms/SlidingMax.h"
-#include "algorithms/SlidingMin.h"
-#include <QtCharts/QChartView>
-#include <array>
+#include <Eigen/Core>
+
+#include <deque>
+#include <inttypes.h>
 
 namespace grape
 {
 
-template<int numTraces>
-class GRAPEGRAPHICS_DLL_API Plot : public QtCharts::QChartView
+/**
+ * Compute statistics over a sliding window
+ */
+template<typename scalar, int nRows, int nColumns>
+class SlidingMean
 {
 public:
-    explicit Plot(QWidget* pParent = nullptr);
+    SlidingMean();
 
-    ~Plot() {}
+    ~SlidingMean();
 
-    void setNumVisibleSamples(std::size_t samples);
+    void reset(unsigned long long int windowSize);
 
-    void clear();
+    void addData(const Eigen::Array<scalar, nRows, nColumns>& data);
 
-    bool addData(float timestamp, const std::array<double, numTraces>& data);
+    unsigned long long int numData() const { return _window.size(); }
 
-    void setTitle(const QString& title);
+    const Eigen::Array<scalar, nRows, nColumns>& mean() const { return _mean; }
 
-    void setXLabel(const QString& str);
-
-    void setYLabel(const QString& str);
-
-    void setLegend(const QStringList& strList);
-
-    void setYRange(float minY, float maxY);
-
-    void setYRangeAuto();
-
-    void setXTickWidth(float w);
-
-    void setYTickWidth(float w);
-
-    float getYMax() const { return _maxY; }
-
-    float getYMin() const { return _minY; }
-
-    float getXMax() const { return _maxX; }
-
-    float getXMin() const { return _minX; }
+    Eigen::Array<scalar, nRows, nColumns> variance() const { return ((numData() > 1) ? (_scaledVariance/((double)numData() - 1)) : (0)); }
 
 private:
-    void decorateXAxis();
-    void decorateYAxis();
-
-private:
-    std::array< QVector<QPointF>, numTraces > _data;
-
-    SlidingMin  _slidingMin;
-    SlidingMax  _slidingMax;
-    std::size_t _numVisibleSamples;
-    float       _xTickWidth;
-    float       _yTickWidth;
-    float       _minY;
-    float       _maxY;
-    float       _minX;
-    float       _maxX;
-    bool        _autoYRange;
+    unsigned long long int                  _windowSize;
+    Eigen::Array<scalar, nRows, nColumns>   _mean;
+    Eigen::Array<scalar, nRows, nColumns>   _scaledVariance;
+    using WindowList = std::deque<Eigen::Array<scalar, nRows, nColumns>>;
+    WindowList                              _window;
 };
 
 } // grape
 
-#include "Plot.hpp"
+#include "SlidingMean.hpp"
