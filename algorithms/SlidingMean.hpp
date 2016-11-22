@@ -55,7 +55,7 @@ void SlidingMean<scalar, nR, nC>::reset(unsigned long long int windowSize)
 
 //---------------------------------------------------------------------------------------------------------------------
 template<typename scalar, int nR, int nC>
-void SlidingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nRows, nColumns>& d)
+void SlidingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nR, nC>& d)
 //---------------------------------------------------------------------------------------------------------------------
 {
     unsigned long long int sz = _window.size();

@@ -54,7 +54,7 @@ public:
 
     const Eigen::Array<scalar, nRows, nColumns>& mean() const { return _mean; }
 
-    Eigen::Array<scalar, nRows, nColumns> variance() const { return ((numData() > 1) ? (_scaledVariance/((double)numData() - 1)) : (0)); }
+    Eigen::Array<scalar, nRows, nColumns> variance() const { return _scaledVariance/((double)numData() - 1); }
 
 private:
     unsigned long long int                  _windowSize;
