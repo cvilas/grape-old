@@ -32,8 +32,6 @@ namespace grape
 template<typename scalar, int nR, int nC>
 RollingMean<scalar, nR, nC>::RollingMean()
 //---------------------------------------------------------------------------------------------------------------------
-    : _firstTimestamp(0),
-      _lastTimestamp(0)
 {
     reset();
 }
@@ -50,59 +48,10 @@ void RollingMean<scalar, nR, nC>::reset()
 
 //---------------------------------------------------------------------------------------------------------------------
 template<typename scalar, int nR, int nC>
-double RollingMean<scalar, nR, nC>::secondsSinceLastData(double tstamp) const
+void RollingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nR, nC>& data)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    if(_numData == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        return tstamp - _lastTimestamp;
-    }
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-double RollingMean<scalar, nR, nC>::secondsSinceFirstData(double tstamp) const
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if(_numData == 0)
-    {
-        return 0;
-    }
-    else
-    {
-        return tstamp - _firstTimestamp;
-    }
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-double RollingMean<scalar, nR, nC>::spanSeconds() const
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if(_numData == 0)
-    {
-        return 0;
-    }
-    return _lastTimestamp - _firstTimestamp;
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-template<typename scalar, int nR, int nC>
-void RollingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nR, nC>& data,
-                                                                           double tstamp)
-//---------------------------------------------------------------------------------------------------------------------
-{
-    if( _numData == 0 )
-    {
-        _firstTimestamp = tstamp;
-    }
-
     _numData++;
-    _lastTimestamp = tstamp;
 
     // m(k) = m(k-1) + { x(k) - m(k-1) } / k
     const Eigen::Array<scalar, nR, nC> delta = data - _mean;

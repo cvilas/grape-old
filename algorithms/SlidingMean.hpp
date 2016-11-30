@@ -44,10 +44,10 @@ SlidingMean<scalar, nR, nC>::~SlidingMean()
 
 //---------------------------------------------------------------------------------------------------------------------
 template<typename scalar, int nR, int nC>
-void SlidingMean<scalar, nR, nC>::reset(unsigned long long int windowSize)
+void SlidingMean<scalar, nR, nC>::reset(long long int windowSize)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    _windowSize = windowSize;
+    _windowSize = fabs(windowSize);
     _window.clear();
     _mean.setZero();
     _scaledVariance.setZero();
@@ -58,7 +58,7 @@ template<typename scalar, int nR, int nC>
 void SlidingMean<scalar, nR, nC>::addData(const Eigen::Array<scalar, nR, nC>& d)
 //---------------------------------------------------------------------------------------------------------------------
 {
-    unsigned long long int sz = _window.size();
+    long long int sz = _window.size();
     _window.push_back(d);
     if(sz < _windowSize)
     {

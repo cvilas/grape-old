@@ -48,26 +48,18 @@ public:
 
     inline void reset();
 
-    inline void addData(const Eigen::Array<scalar, nRows, nColumns>& data, double timestamp);
+    inline void addData(const Eigen::Array<scalar, nRows, nColumns>& data);
 
-    unsigned long long int numData() const { return _numData; }
-
-    inline double secondsSinceLastData(double tstamp) const;
-
-    inline double secondsSinceFirstData(double tstamp) const;
-
-    inline double spanSeconds() const;
+    long long int numData() const { return _numData; }
 
     const Eigen::Array<scalar, nRows, nColumns>& mean() const { return _mean; }
 
     Eigen::Array<scalar, nRows, nColumns> variance() const { return _scaledVariance / ((double)_numData - 1); }
 
 private:
-    unsigned long long int                  _numData;
+    long long int                           _numData;
     Eigen::Array<scalar, nRows, nColumns>   _mean;
     Eigen::Array<scalar, nRows, nColumns>   _scaledVariance;
-    double                                  _firstTimestamp;
-    double                                  _lastTimestamp;
 };
 
 } // grape

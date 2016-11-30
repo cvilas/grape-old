@@ -46,18 +46,18 @@ public:
 
     ~SlidingMean();
 
-    void reset(unsigned long long int windowSize);
+    void reset(long long int windowSize);
 
     void addData(const Eigen::Array<scalar, nRows, nColumns>& data);
 
-    unsigned long long int numData() const { return _window.size(); }
+    long long int numData() const { return _window.size(); }
 
     const Eigen::Array<scalar, nRows, nColumns>& mean() const { return _mean; }
 
     Eigen::Array<scalar, nRows, nColumns> variance() const { return _scaledVariance/((double)numData() - 1); }
 
 private:
-    unsigned long long int                  _windowSize;
+    long long int                           _windowSize;
     Eigen::Array<scalar, nRows, nColumns>   _mean;
     Eigen::Array<scalar, nRows, nColumns>   _scaledVariance;
     using WindowList = std::deque<Eigen::Array<scalar, nRows, nColumns>>;

@@ -49,23 +49,23 @@ public:
 
     ~SlidingMin() {}
 
-    inline void reset(int64_t windowSize);
+    inline void reset(long long int windowSize);
 
     inline double push(double d);
 
 private:
-    int64_t _index;
-    int64_t _windowSize;
-    std::deque< std::pair<double, int> > _window;
+    long long int _index;
+    long long int _windowSize;
+    std::deque< std::pair<double, long long int> > _window;
 };
 
 //---------------------------------------------------------------------------------------------------------------------
-void SlidingMin::reset(int64_t windowSize)
+void SlidingMin::reset(long long int windowSize)
 //---------------------------------------------------------------------------------------------------------------------
 {
     _window.clear();
     _index = 0;
-    _windowSize = windowSize;
+    _windowSize = abs(windowSize);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
