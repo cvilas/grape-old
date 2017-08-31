@@ -38,6 +38,7 @@ in the c++98 era, to todays standards. My design guides are (see docs folder):
 - Extendable: Can be used as a basis to develop complex applications
 
 ## Technologies
+
 - Language: C++14
 - Messaging backbone: FastRTPS
 - Graphics and 3D: Qt
@@ -52,3 +53,9 @@ in the c++98 era, to todays standards. My design guides are (see docs folder):
 - Coding standard: https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md
 - C++ coding style guide - http://wiki.ros.org/CppStyleGuide
 
+## Core Functionality
+- Distributed messaging system
+- Logging system
+- Configuration files
+- Timed control loop
+- Graphing
