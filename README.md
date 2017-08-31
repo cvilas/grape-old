@@ -1,34 +1,25 @@
 grape
 =====
 
-GRAPE stands for Graphical Real-time Application Prototyping Environment (Sounds ambitious, I know). I essentially 
-started this project to collect various bits of useful code I have written over many years into a single repository. 
+GRAPE stands for Graphical Real-time Application Prototyping Environment. This is forever work-in-progress as I tend to
+use this repository to collect useful bits of code I have written over time  
 
 Goals
 -----
-- A core set of software building blocks for robotics (threading, logging, messaging, algebra)
-- Portable (Windows, Linux, Android, ..)
-- Lightweight (can be installed on embedded platforms such as Arm)
-- Simple - able to develop a realtime control loop very easily - QMotor model
-- Leverages existing high-quality and stable libraries such as Qt, Coin3D, OpenCV, PCL, etc.
+- A core set of software building blocks for real-time control 
+- Supports Linux and Android
+- Lightweight: can be installed on embedded platforms such as Arm
+- Simple: able to develop a realtime control loop very easily
+- Leverages existing high-quality and stable libraries such as Qt.
 - Open source and unrestrictive licensing
 
-Core Libraries
---------------
-- Config files
-- Messaging (IPC)
-- Timing
-- Logging
-- Realtime Control loop
-- License handling
-- Input device handling (joysticks, etc)
-- Sensors (GPS, INS)
-- Communication (sockets, serial port)
-- Robotics: trajectory generators, path planning, maths
-- Filters (Sensor fusion - INS/GPS, kalman filter)
-- Scripting
-- Multimedia (audio and video recording, playback)
-- Graphics (plotting, 3D visualisation)
-
-A lot of the stuff above is not currently in the library - as this is something that I work on in my free time, 
-this library is probably going to be eternally in work-in-progress state. 
+Design
+------
+C++11 has features that make it much easier to build real-time software, especially the _soft_ variety. Given careful
+usage of the language features, it also benefits design of hard-real-time software that must run at several kHz. My
+inspiration for this project is QMotor - an excellent QNX-based hard-realtime control system developed at Clemson 
+University during my grad school days. What I am trying to do here is bring some of the features of QMotor, developed 
+in the c++98 era, to todays standards. My design guides are (see docs folder):
+- QMotor 3.0 and the QMotor Robotic Toolkit: A PC-Based Control Platform
+- Design and Implementation of the Robotic Platform
+- NSTX-U Advances in Real-time C++11 on Linux
