@@ -30,6 +30,7 @@
 
 #include <inttypes.h>
 #include <limits>
+#include <cmath>
 
 namespace grape
 {
