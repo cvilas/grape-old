@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 
 	// Input image
 	QImage image;
-    if( !image.load("../examples/2DGraphics/images/inspection.bmp") )
+    if( !image.load("../examples/2DGraphics/images/dk_med.png") )
 	{
 		std::cout << "Failed opening input image" << std::endl;
 		return -1;
