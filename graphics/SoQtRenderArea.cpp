@@ -37,6 +37,7 @@
 #include <QTimerEvent>
 #include <QWheelEvent>
 #include <QtOpenGL>
+#include <GL/gl.h>
 
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE  0x809D
