@@ -38,6 +38,7 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/select.h>
 #endif
 
 
