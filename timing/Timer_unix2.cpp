@@ -36,6 +36,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <stdio.h> // for fprintf
+#include <pthread.h>
 
 namespace grape
 {
@@ -48,15 +49,15 @@ namespace grape
     class TimerP
     {
     public:
-        static void TimerEventHandler(union sigval sv) throw(Exception);
+        static void TimerEventHandler(union sigval sv) ;
         static const long long _NANO = 1000000000LL;
         static const long long _NS_IN_TEN_YEARS = 10*365*24*60*60*_NANO;
     public:
-        explicit TimerP() throw(Exception); /* prio between 0 and RTSIG_MAX */
+        explicit TimerP() ; /* prio between 0 and RTSIG_MAX */
         ~TimerP() throw();
-        void start(long long ns, bool isOneShot) throw(Exception);
-        void stop() throw(Exception);
-        long long getNumTicks() throw(Exception);
+        void start(long long ns, bool isOneShot) ;
+        void stop() ;
+        long long getNumTicks() ;
         bool wait(long long ns);
         timer_t             _timerId;
         clockid_t           _clockId;
@@ -68,7 +69,7 @@ namespace grape
     };
 
     //==============================================================================
-    TimerP::TimerP() throw(Exception)
+    TimerP::TimerP()
     //==============================================================================
     :   _timerId(0),
         _clockId(CLOCKID),
@@ -104,7 +105,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    void TimerP::start(long long ns, bool isOneShot) throw(Exception)
+    void TimerP::start(long long ns, bool isOneShot)
     //------------------------------------------------------------------------------
     {
         _nTicks = 0;
@@ -128,7 +129,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    void TimerP::stop() throw(Exception)
+    void TimerP::stop()
     //------------------------------------------------------------------------------
     {
         //disarm...
@@ -142,7 +143,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    long long TimerP::getNumTicks() throw(Exception)
+    long long TimerP::getNumTicks()
     //------------------------------------------------------------------------------
     {
         long long n = 0;
@@ -200,7 +201,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    void TimerP::TimerEventHandler(sigval sv) throw(Exception)
+    void TimerP::TimerEventHandler(sigval sv)
     //------------------------------------------------------------------------------
     {
         int status = 0;
@@ -220,7 +221,7 @@ namespace grape
     }
 
     //==============================================================================
-    Timer::Timer() throw(Exception, std::bad_alloc)
+    Timer::Timer()
     //==============================================================================
     : _pImpl( new TimerP )
     {
@@ -234,28 +235,28 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    void Timer::start(long long ns, bool isOneShot) throw(Exception)
+    void Timer::start(long long ns, bool isOneShot)
     //------------------------------------------------------------------------------
     {
         _pImpl->start(ns, isOneShot);
     }
 
     //------------------------------------------------------------------------------
-    void Timer::stop() throw(Exception)
+    void Timer::stop()
     //------------------------------------------------------------------------------
     {
         _pImpl->stop();
     }
 
     //------------------------------------------------------------------------------
-    bool Timer::wait() const throw(Exception)
+    bool Timer::wait() const
     //------------------------------------------------------------------------------
     {
         return _pImpl->wait(TimerP::_NS_IN_TEN_YEARS);
     }
 
     //------------------------------------------------------------------------------
-    bool Timer::timedWait(long long ns) const throw(Exception)
+    bool Timer::timedWait(long long ns) const
     //------------------------------------------------------------------------------
     {
         return _pImpl->wait(ns);
@@ -278,7 +279,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    long long Timer::getResolution() const throw(Exception)
+    long long Timer::getResolution() const
     //------------------------------------------------------------------------------
     {
         struct timespec res;
@@ -292,7 +293,7 @@ namespace grape
     }
 
     //------------------------------------------------------------------------------
-    long long int Timer::getNumTicks() const throw(Exception)
+    long long int Timer::getNumTicks() const
     //------------------------------------------------------------------------------
     {
         return _pImpl->getNumTicks();

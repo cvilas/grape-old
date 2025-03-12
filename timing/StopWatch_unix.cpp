@@ -43,9 +43,9 @@ namespace grape
     class StopWatchP
     {
     public:
-        StopWatchP() throw() { zeroAll(); }
-        ~StopWatchP() throw() {}
-        void zeroAll() throw();
+        StopWatchP() { zeroAll(); }
+        ~StopWatchP() {}
+        void zeroAll();
         
     private:
         StopWatchP(const StopWatchP&);                //!< prevent copy construction
@@ -61,7 +61,7 @@ namespace grape
     }; // StopWatchP
 
     //==========================================================================
-    void StopWatchP::zeroAll() throw()
+    void StopWatchP::zeroAll()
     //==========================================================================
     {
         _isRunning = false;
@@ -74,21 +74,21 @@ namespace grape
     } 
     
     //==========================================================================
-    StopWatch::StopWatch() throw(Exception, std::bad_alloc)
+    StopWatch::StopWatch()
     //==========================================================================
     : _pImpl(new StopWatchP)
     {
     }
 
     //--------------------------------------------------------------------------
-    StopWatch::~StopWatch() throw()
+    StopWatch::~StopWatch()
     //--------------------------------------------------------------------------
     {
         delete _pImpl;
     }
     
     //--------------------------------------------------------------------------
-    void StopWatch::start() throw(Exception)
+    void StopWatch::start()
     //--------------------------------------------------------------------------
     {
         if( _pImpl->_isRunning )
@@ -107,7 +107,7 @@ namespace grape
     }
     
     //--------------------------------------------------------------------------
-    void StopWatch::stop() throw(Exception)
+    void StopWatch::stop()
     //--------------------------------------------------------------------------
     {
         if( !_pImpl->_isRunning )
@@ -133,14 +133,14 @@ namespace grape
     }
     
     //--------------------------------------------------------------------------
-    void StopWatch::reset() throw()
+    void StopWatch::reset()
     //--------------------------------------------------------------------------
     {
         _pImpl->zeroAll();
     }
 
     //--------------------------------------------------------------------------
-    long long StopWatch::getAccumulatedNanoseconds() const throw(Exception)
+    long long StopWatch::getAccumulatedNanoseconds() const
     //--------------------------------------------------------------------------
     {
         if( _pImpl->_isRunning )
@@ -165,7 +165,7 @@ namespace grape
     }
     
     //--------------------------------------------------------------------------
-    long long StopWatch::getResolutionNanoseconds() const throw(Exception)
+    long long StopWatch::getResolutionNanoseconds() const
     //--------------------------------------------------------------------------
     {
         struct timespec res;
@@ -179,7 +179,7 @@ namespace grape
     }
     
     //--------------------------------------------------------------------------
-    bool StopWatch::nanoSleep(long long ns) throw()
+    bool StopWatch::nanoSleep(long long ns)
     //--------------------------------------------------------------------------
     {
         struct timespec t;

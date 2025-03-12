@@ -59,32 +59,32 @@ namespace grape
     class GRAPETIMING_DLL_API StopWatch
     {
     public:
-        StopWatch() throw(Exception, std::bad_alloc);
+        StopWatch();
 
-        ~StopWatch() throw();
+        ~StopWatch() ;
 
         /// Start counting time. 
-        void start() throw(Exception);
+        void start() ;
 
         /// Stop counting time. On calling start() again, the counter continues
         /// from where it stopped, rather than starting from 0. 
-        void stop() throw(Exception);
+        void stop() ;
 
         /// Reset watch. On calling start() again, the time starts from 0.
-        void reset() throw();
+        void reset() ;
 
         /// \return The accumulated time interval in nano-seconds between multiple start-stop
         /// calls since the the last call to reset().
         /// \note Time measurement within each start-stop is only as good as getResolution()
-        long long getAccumulatedNanoseconds() const throw(Exception);
+        long long getAccumulatedNanoseconds() const ;
         
         /// \return Clock resolution in nano-seconds. 
-        long long getResolutionNanoseconds() const throw(Exception);
+        long long getResolutionNanoseconds() const ;
 
         /// Sleep for specified time in nano-seconds.
         /// Note: Sleep time resolution is only as good as getResolution()
         /// \return true on successfully sleeping for the specified interval.
-        static bool nanoSleep(long long ns) throw();
+        static bool nanoSleep(long long ns) ;
 
     private:
         StopWatch(const StopWatch&);                //!< prevent copy construction

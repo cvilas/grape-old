@@ -55,7 +55,7 @@ class GRAPETIMING_DLL_API Timer
     public:
         
         /// Create the timer. The timer is unarmed until a call to start().
-        explicit Timer() throw(Exception, std::bad_alloc);
+        explicit Timer() ;
         
         /// Destroy the timer.
         ~Timer() throw();
@@ -64,31 +64,31 @@ class GRAPETIMING_DLL_API Timer
         /// time interval that can be distinguished by this timer. This should 
         /// be better than 20,000 ns (50Hz) on a POSIX.4 compliant platform.
         /// \return resolution in ns.
-        long long getResolution() const throw(Exception);
+        long long getResolution() const ;
         
         /// Arm the timer. 
         /// \param ns           (input) Timer tick period in nanoseconds.
         /// \param isOneShot    (input) true if one shot timer, else repeating (default)
-        void start(long long ns, bool isOneShot = false) throw(Exception);
+        void start(long long ns, bool isOneShot = false) ;
         
         /// Disarm the timer.
-        void stop() throw(Exception);
+        void stop() ;
         
         /// Wait until a single tick of the timer.
         /// \return true if wait exited due to timer tick.
-        bool wait() const throw(Exception);
+        bool wait() const ;
         
         /// Wait until a single tick of the timer, or until timed out.
         /// \param ns (input) Time out period in nanoseconds. If set to 0, the method
         ///           will return immediately (same as polling for a timer tick).
         /// \return true if wait exited due to timer tick, false on timeout.
-        bool timedWait(long long ns) const throw(Exception);
+        bool timedWait(long long ns) const ;
         
         /// Force a timer tick. May use this to unblock wait()
         void forceTimerTick() const throw();
         
         /// Get the number of times the timer has ticked until now.
-        long long int getNumTicks() const throw(Exception);
+        long long int getNumTicks() const ;
 	
 	private:
         Timer(const Timer&);                //!< prevent copy
